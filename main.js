@@ -1142,7 +1142,7 @@ game.custom.points_needed = Number(5000);
 game.custom.win = false;
 game.custom.number_player_t2 = 0;
 game.custom.number_player_t2 = 0;
-
+const seconds_beifre_hiding = 20;
 var start = function(ship) {
   ship.set({x:0,y:0,idle: true});
 };
@@ -1203,13 +1203,17 @@ var gameover = function(ship) {
     ship.gameover({
       "Congratulations" : "You won!",
       "Your team" : ship.custom.team,
-      "Your points" : ship.custom.points + " ( " + Number((ship.custom.points * 100)/game.custom.points_needed) +"% )"
+      "Your points" : ship.custom.points + " ( " + Number((ship.custom.points * 100)/game.custom.points_needed) +"% )",
+      "Deaths" : ship.custom.deaths,
+      "Frags" : ship.custom.frags
     });
   } else if (ship.team !== game.custom.winner){
     ship.gameover({
       "Well..." : "You lose!",
       "Your team" : ship.custom.team,
-      "Your points" : ship.custom.points + " ( " + Number((Number(ship.custom.points) * 100)/Number(game.custom.points_needed)) +"% )"
+      "Your points" : ship.custom.points + " ( " + Number((Number(ship.custom.points) * 100)/Number(game.custom.points_needed)) +"% )",
+      "Deaths" : ship.custom.deaths,
+      "Frags" : ship.custom.frags
     });
   }
 };
@@ -1362,7 +1366,9 @@ this.tick = function(game) {
         actualize_team_info(ship, "Your team is " + ship.custom.team);
         check(ship);
         ship.custom.time_start_before_hiding = true;
-        ship.custom.timeZ = 10;
+        ship.custom.timeZ = seconds_beifre_hiding;
+        ship.custom.frags = 0;
+        ship.custom.deaths = 0;
         if (game.custom.timer_finished === true) {
             unblock(ship);
             team_assign(ship);
@@ -1598,6 +1604,7 @@ this.event = function(event, game) {
       break ;
     case "ship_destroyed":
       if (ship !== null) {
+        ship.custom.deaths++;
           if (ship.team === 0) {
             if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5)) >= 0) {
               game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5))
@@ -1616,6 +1623,7 @@ this.event = function(event, game) {
             }
           }
         if (killer !== null) {
+          killer.custom.frags++;
           if (killer.custom.team === "Orgono") {
             game.custom.team_score_1 += 100
             killer.custom.points += 350;
@@ -1654,4 +1662,35 @@ game.setObject({
   rotation: {x:0,y:0,z:0},
   scale: {x:10,y:10,z:10}
 }) ;
+
+
+
+var pdc = {
+  id: "pdc",
+  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/barrer.obj",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
+  emissiveColor: 0xff8c00,
+  transparent: false,
+  physics: {
+    mass: 500,
+    shape : [0.66,0.713,0.723,0.724,0.773,0.843,0.892,0.891,0.807,0.747,0.704,0.688,0.675,0.668,0.677,0.704,0.747,0.807,0.891,0.892,0.843,0.773,0.724,0.691,0.668,0.66,0.668,0.691,0.724,0.773,0.843,0.892,0.891,0.807,0.747,0.704,0.677,0.662,0.662,0.677,0.704,0.747,0.807,0.891,0.892,0.843,0.773,0.724,0.723,0.713],
+    fixed: true
+  }
+} ;
+
+
+game.setObject({
+  id: "pdc",
+  type: pdc,
+  position: {x:
+  (Math.random() - 0.5) * 180 * 10,
+  y:(Math.random() - 0.5) * 180 * 10,z:0},
+  rotation: {x:0,y:0,z:0},
+  scale: {x:15,y:15,z:15}
+}) ;
+
+
+
+
 
