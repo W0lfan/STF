@@ -671,7 +671,7 @@ var score = function(ship) {
     if (ship.custom.points - Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5)) >= 0) {
       ship.custom.points -= Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5));
     }
-    else {
+    else if (ship.custom.points - Math.trunc(((Math.trunc(ship.tier / 100)*100)/1.5)) < 0) {
       ship.custom.points = 0;
     }
 };
