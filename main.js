@@ -1,3 +1,4 @@
+
 /*
 * Special thanks to: Megalodon, Serendibite, Endersult for their ships!
 * Modding commands available:
@@ -332,7 +333,7 @@ var check = function(ship) {
       ship.set({hue: 120})
       game.custom.number_player_t1++;
       ship.custom.team = "Orgono";
-    } else {
+    } else if (ship.team === 1) {
       ship.set({hue: 240})
       game.custom.number_player_t2++;
       ship.custom.team = "Volgauf";
@@ -490,7 +491,6 @@ this.tick = function(game) {
         ship.custom.alien_killed = 0;
         if (game.custom.timer_finished === true && ship.custom.t !== true) {
             unblock(ship);
-            team_assign(ship);
             ship.setUIComponent(bar);
             ship.setUIComponent({id:"timer", visible:false});
             ship.custom.tped = true
@@ -498,8 +498,8 @@ this.tick = function(game) {
             ship.custom.points = 0;
             ship.setUIComponent(info);
             ship.setUIComponent(info2);
-          actualize_team_info(ship, "Your team is " + ship.custom.team);
-          ship.custom.t = true;
+            actualize_team_info(ship, "Your team is " + ship.custom.team);
+            ship.custom.t = true;
           }
         }
     }
