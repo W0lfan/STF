@@ -14,7 +14,6 @@
 
 
 const seconds_beifre_hiding = 20;
-const timer_time_start = 59 ;
 const points = 25000;
 const alien_shield = 20000;
 const point_per_kills = 450;
@@ -280,11 +279,6 @@ game.modding.commands.ap = function(req) {
 var lol = [11,42];
 var kek = [0,1];
 
-var accepted = function(ship) {
-  ship.setUIComponent({id:"info", visible: false});
-  ship.setUIComponent({id:"info2", visible: false});
-  ship.set({idle:false})
-};
 
 var reset_ship = function(ship) {
   if (ship.custom.reset !== 0) {
@@ -357,10 +351,16 @@ var boss_set = function(alien) {
     })
 }
 
+var score = function(ship) {
+      ship.custom.points = ship.custom.points -  Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5));
+      ship.set({
+        score: ship.score -  Math.trunc(ship.score /  1.7 )
+      })
+};
+
 
 this.tick = function(game) {
   if (game.step === 0) {
-      game.custom.time = timer_time_start;
       game.custom.trigger = 0;
       game.custom.bar_width = 70;
       game.custom.bar_x = 10;
@@ -378,10 +378,12 @@ this.tick = function(game) {
       game.custom.win = false;
       game.custom.number_player_t1 = 0;
       game.custom.number_player_t2 = 0;
+          game.custom.boss_creation = true;
+          game.custom.start = true;
+          echo("game started")
   }
   if (game.step % 200 === 0) {
     for (let ship of game.ships) {
-      if (game.custom.timer_finished === true) {
         if (game.custom.team_name === game.custom.team_name1) {
           game.custom.team_name = game.custom.team_name2;
           actualize_scoreboard(ship, game.custom.team_name2, game.custom.team_score_2, "#0766B5");
@@ -389,10 +391,8 @@ this.tick = function(game) {
         else if (game.custom.team_name === game.custom.team_name2) {
           game.custom.team_name = game.custom.team_name1;
           actualize_scoreboard(ship, game.custom.team_name1, game.custom.team_score_1, "#3FB42F")
-        }
       }
     }
-    if (game.custom.timer_finished === true ) {
       for (let ae=0;ae<5;ae++) {
         game.addCollectible({
           x: (Math.random() - 0.5) * game.options.map_size * 10,
@@ -406,7 +406,6 @@ this.tick = function(game) {
             code: 16,
             level: 1
           })
-        }
       }
     }
   }
@@ -459,6 +458,12 @@ this.tick = function(game) {
       game.custom.team_score_2=0;
     }
     for (let ship of game.ships) {
+      if (ship.alive !== true && ship.custom.e === true) {
+        score(ship);
+        echo(ship.name + " lost some points")
+      } else if (ship.alive === true && ship.custom.e === false) {
+        ship.custom.e = true
+      }
         if (game.custom.aliens === 4) {
           change_bar(ship, [10,5,70,0.1], "#35BC0D");
           actualize_boss_infos(ship, "4 bosses left");
@@ -481,15 +486,11 @@ this.tick = function(game) {
       }
       if (ship.custom.init !== true) {
         ship.custom.init = true;
-        ship.setUIComponent(info);
         ship.setUIComponent(info2);
-        start(ship);
         ship.setUIComponent(scoreboard);
         team_assign(ship);
         ship.custom.points = 0;
-        ship.setUIComponent(timer);
         ship.setUIComponent(heal);
-        actualize_team_info(ship, "Your team is " + ship.custom.team);
         check(ship);
         ship.custom.time_start_before_hiding = true;
         ship.custom.timeZ = seconds_beifre_hiding;
@@ -498,19 +499,10 @@ this.tick = function(game) {
         ship.custom.boss_killed = 0;
         ship.custom.alien_killed = 0;
         ship.custom.reset = 3;
+        ship.setUIComponent(bar);
+        ship.setUIComponent(bosses);
         ship.setUIComponent(reset);
-        if (game.custom.timer_finished === true && ship.custom.t !== true) {
-            unblock(ship);
-            ship.setUIComponent(bar);
-            ship.setUIComponent({id:"timer", visible:false});
-            ship.custom.tped = true
-            ship.setUIComponent(bosses);
-            ship.custom.points = 0;
-            ship.setUIComponent(info);
-            ship.setUIComponent(info2);
-            actualize_team_info(ship, "Your team is " + ship.custom.team);
-            ship.custom.t = true;
-          }
+        ship.custom.tped = true;
         }
       if (ship.custom.reset !== 0) {
           var reset = {
@@ -567,7 +559,7 @@ this.tick = function(game) {
         ship.custom.timeZ--;
         if (ship.custom.timeZ === 0) {
           ship.custom.time_start_before_hiding = false;
-          accepted(ship);
+          ship.setUIComponent({id:"info2", visible: false});
         }
       }
       if (ship.custom.time_start_before_hiding === false && ship.custom.timeZ === 0) {
@@ -582,32 +574,9 @@ this.tick = function(game) {
         };
       ship.setUIComponent(pointsship);
       }
-      if (game.custom.time !== -1) {
-          var timer = {
-              id: "timer",
-              position: [40,39,70,50],
-              visible: true,
-              components: [
-                { type:  "text",position:[5,75,80,30],value: game.custom.time,color:"#1CECEC"},
-                ]
-            };
-          ship.setUIComponent(timer);
-      } 
-      if (game.custom.time === -1 && game.custom.timer_finished !== true){
-          unblock(ship);
-          game.custom.boss_creation = true;
-          ship.setUIComponent(bar);
-          ship.setUIComponent({id:"timer", visible:false});
-          ship.setUIComponent(bosses);
-          game.custom.timer_finished = true;
-          game.custom.start = true;
-          ship.custom.tped = true;
-        echo("game started")
-      }
     }
   }
   if (game.step % 6000 === 0) {
-    if (game.custom.timer_finished === true) {
       if (game.aliens.length <= 100) {
         for (m=0;m<5;m++) {
           game.addCollectible({
@@ -618,7 +587,6 @@ this.tick = function(game) {
           game.addAlien({
             x:0,y:0, code: 16, level: 2
           })
-        }
       }
     }
   }
@@ -626,19 +594,7 @@ this.tick = function(game) {
 
 
 
-var actualize_team_info = function(ship, text) {
-  info.components[0].value = text;
-  ship.setUIComponent(info);
-};
 
-var info = {
-  id: "info",
-  position: [27,10,65,20],
-  visible: true,
-  components: [
-    { type: "text",position:[15,40,40,40],value:" ",color:"#CDE"},
-    ]
-};
 var info2 = {
   id: "info2",
   position: [27,-2,70,70],
@@ -681,7 +637,7 @@ var healing = function(ship) {
         crystals: ship.crystals - 100
       })
   } else {
-    shoip.set({
+    ship.set({
       shield: ship.shield + ship.crystals,
       crystals: 0
     })
@@ -689,20 +645,7 @@ var healing = function(ship) {
 };
 
 
-var score = function(ship) {
-    if (ship.custom.points - Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5)) >= 0) {
-      ship.custom.points = ship.custom.points -  Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5));
-      ship.set({
-        score: ship.score -  Math.trunc(ship.score /  1.7 )
-      })
-    }
-    else if (ship.custom.points - Math.trunc(((Math.trunc(ship.tier / 100)*100)/1.5)) < 0) {
-      ship.custom.points = 0;
-      ship.set({
-        score: ship.score -  Math.trunc(ship.score /  1.7 )
-      })
-    }
-};
+
 
 this.event = function(event, game) {
   let ship = event.ship;
@@ -739,7 +682,6 @@ this.event = function(event, game) {
       break ;
     case "ship_destroyed":
       if (ship !== null) {
-        score(ship);
         echo(ship.name + " died.")
           if (ship.custom.team === "Orgono") {
             if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5)) >= 0) {
@@ -804,4 +746,3 @@ game.setObject({
 
 
 
- 
