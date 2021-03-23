@@ -35,7 +35,7 @@ game.modding.commands.ect = function(req) {
 };
 game.modding.commands.list = function(req) {
   for (k=0;k<game.ships.length;k++) {
-    echo(game.ships[k].name + " : " + game.ships[k].custom.team + "," + game.ships[0].custom.team
+    echo(game.ships[k].name + " : " + game.ships[k].custom.team + "," + game.ships[k].team + "," + game.ships[k].hue
     );
   }
 };
@@ -328,7 +328,7 @@ var team_assign = function(ship) {
   }
 };
 
-var check = function(ship) {
+var check_team = function(ship) {
     if (ship.team === 0) {
       ship.set({hue: 120})
       game.custom.number_player_t1++;
@@ -351,8 +351,8 @@ var boss_set = function(alien) {
     })
 }
 
-var score = function(ship) {
-      ship.custom.points = ship.custom.points -  Math.trunc(((Math.trunc(ship.tier / 100) * 100) / 1.5));
+var change_score = function(ship) {
+      ship.custom.points = ship.custom.points - Math.trunc((ship.type / 100) * 100);
       ship.set({
         score: ship.score -  Math.trunc(ship.score /  1.7 )
       })
@@ -383,14 +383,18 @@ this.tick = function(game) {
           echo("game started")
   }
   if (game.step % 200 === 0) {
+  game.custom.y = true;
     for (let ship of game.ships) {
-        if (game.custom.team_name === game.custom.team_name1) {
-          game.custom.team_name = game.custom.team_name2;
-          actualize_scoreboard(ship, game.custom.team_name2, game.custom.team_score_2, "#0766B5");
-        }
-        else if (game.custom.team_name === game.custom.team_name2) {
-          game.custom.team_name = game.custom.team_name1;
-          actualize_scoreboard(ship, game.custom.team_name1, game.custom.team_score_1, "#3FB42F")
+          if (game.custom.team_name === "Orgono" && game.custom.y !== false) {
+            game.custom.team_name = "Volgauf";
+            actualize_scoreboard(ship, game.custom.team_name2, game.custom.team_score_2, "#0766B5");
+            game.custom.y = false;
+          }
+          else if (game.custom.team_name === "Volgauf" && game.custom.y !== false) {
+            game.custom.team_name = "Orgono";
+            actualize_scoreboard(ship, game.custom.team_name1, game.custom.team_score_1, "#3FB42F");
+            game.custom.y = false;
+
       }
     }
       for (let ae=0;ae<5;ae++) {
@@ -451,19 +455,7 @@ this.tick = function(game) {
       }
       game.custom.win = true;
     }
-    if (game.custom.team_score_1 === null) {
-      game.custom.team_score_1=0;
-    }
-    if (game.custom.team_score_2 === null) {
-      game.custom.team_score_2=0;
-    }
     for (let ship of game.ships) {
-      if (ship.alive !== true && ship.custom.e === true) {
-        score(ship);
-        echo(ship.name + " lost some points")
-      } else if (ship.alive === true && ship.custom.e === false) {
-        ship.custom.e = true
-      }
         if (game.custom.aliens === 4) {
           change_bar(ship, [10,5,70,0.1], "#35BC0D");
           actualize_boss_infos(ship, "4 bosses left");
@@ -491,7 +483,7 @@ this.tick = function(game) {
         team_assign(ship);
         ship.custom.points = 0;
         ship.setUIComponent(heal);
-        check(ship);
+        ship.custom.check = false
         ship.custom.time_start_before_hiding = true;
         ship.custom.timeZ = seconds_beifre_hiding;
         ship.custom.frags = 0;
@@ -504,6 +496,10 @@ this.tick = function(game) {
         ship.setUIComponent(reset);
         ship.custom.tped = true;
         }
+      if (ship.custom.check === false) {
+        check_team(ship);
+        ship.custom.test = true;
+      }
       if (ship.custom.reset !== 0) {
           var reset = {
             id: "reset",
@@ -683,6 +679,7 @@ this.event = function(event, game) {
     case "ship_destroyed":
       if (ship !== null) {
         echo(ship.name + " died.")
+        change_score(ship);
           if (ship.custom.team === "Orgono") {
             if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5)) >= 0) {
               game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5));
