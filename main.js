@@ -1,6 +1,6 @@
 
 /*
-* Special thanks to: Megalodon, Serendibite, Endersult for their ships!
+* Special thanks to: Megalodon, Serendibite, Endersult, Nova for their ships!
 * Modding commands available:
     `t1 [NUMBER]` => gives number points to orgono team
     `t1 [NUMBER]` => gives number points to volgauf team
@@ -154,7 +154,7 @@ this.options = {
   survival_level: 8,
   crystal_value: 50 /* crystal_value[~~(Math.random()*crystal_value.length)] */,
   ships: ships,
-  map_size: 120,
+  map_size: 130,
   reset_tree:true, 
   map_id: map_id[~~(Math.random()*map_id.length)],
   crystal_drop: 1.1,
@@ -200,7 +200,6 @@ var scoreboard = {
   visible: true,
   components: [
     { type: "box",position:[-10,26,0.1,50],stroke:"#7A7A7A",width:120},
-    { type: "box",position:[60,45,0,10],stroke:"#7A7A7A",width:120},
     { type: "text",position:[28,0,60,40],value: " ",color:" "},
     { type: "text",position:[30,60,60,40],value: " ",color:" "},
     ]
