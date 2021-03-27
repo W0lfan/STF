@@ -7,7 +7,7 @@
     `ap [NUMBER]` => gives a certain number of points to the first player (id:0)
     `list` => shows player name + ship faction
 * Mod made by Wolfan, idea by Wolfan.
-* Thanks to Glitch for this help and suggestions.
+* Thanks to Glitch for his help and suggestions.
 * Thanks to Lotus and Bhpsngum, who are always here to help me.
 */
 
@@ -313,7 +313,7 @@ var boss_set = function(alien) {
 
 var change_score = function(ship) {
   if (ship.custom.points - Math.trunc((ship.type / 100) * 100) >= 0) {
-      ship.custom.points = ship.custom.points - Math.trunc((ship.type / 100) * 100);
+    ship.custom.points = ship.custom.points - Math.trunc((ship.type / 100) * 100);
   }
   else if (ship.custom.points - Math.trunc((ship.type / 100)*100) < 0){
     ship.custom.points = 0;
@@ -373,6 +373,29 @@ var actualize_scores = function(ship, orgono, volgauf) {
               { type: "text",position: [0,55,100,50], value: " ",color:"#3440B8"},
             ]
           };
+
+
+
+
+var actualize_player_number = function(ship, orgonoPlayer, volgaufPlayer) {
+  player_number.components[1].value = orgonoPlayer;
+  player_number.components[2].value = volgaufPlayer;
+  ship.setUIComponent(player_number);
+};
+
+var player_number = {
+  id: "player_number",
+  position: [82,40,15,15],
+  visible: true,
+  components: [
+    { type: "text",position:[10,0,75,30],value:"Players:",color:"#CDE"},
+    { type: "text",position:[10,25,75,30],value:" ",color:"#119304"},
+    { type: "text",position:[10,50,75,30],value:" ",color:"#3440B8"},
+  ]
+};
+
+
+
 this.tick = function(game) { 
   if (game.step === 0) {
       game.custom.trigger = 0;
@@ -383,7 +406,6 @@ this.tick = function(game) {
       game.custom.team_name1 = "Orgono";
       game.custom.team_name = "Orgono";
       game.custom.team_name2 = "Volgauf";
-
       game.custom.team_1_id = 0;
       game.custom.team_2_id = 1;
       game.custom.boss_aliens = [];
@@ -453,8 +475,21 @@ this.tick = function(game) {
       game.custom.win = true;
     }
     for (let ship of game.ships) {
+      ship.setUIComponent(player_number);
       score_set_points(ship);
-       actualize_scores(ship, "Orgono    (" + game.custom.team_score_1 + ")", "Volgauf    (" + game.custom.team_score_2 + ")");
+      actualize_scores(ship, "Orgono    (" + game.custom.team_score_1 + ")", "Volgauf    (" + game.custom.team_score_2 + ")");
+      if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
+        actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
+      }
+      else if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 >= 10) {
+        actualize_player_number(ship, "Orgono: 0" + game.custom.number_player_t1, "Volgauf: " + game.custom.number_player_t2);
+      } 
+      else if (game.custom.number_player_t2 < 10 && game.custom.number_player_t1 >= 10) {
+        actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1, "Volgauf: 0"+ game.custom.number_player_t2);
+      }
+      else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
+        actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
+      }
           if (ship.custom.team === "Orgono") {
             actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
           }
@@ -502,6 +537,7 @@ this.tick = function(game) {
         ship.setUIComponent(bar);
         ship.setUIComponent(bosses);
         ship.setUIComponent(reset);
+        ship.setUIComponent(player_number);
         ship.custom.tped = true;
         ship.custom.AE = false;
         ship.custom.ae = true;
@@ -615,6 +651,7 @@ this.tick = function(game) {
     }
   }
 };
+
 
 
 var info2 = {
