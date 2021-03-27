@@ -403,7 +403,14 @@ var player_number = {
   ]
 };
 
-
+var check_hue_team = function(ship) {
+  if (ship.team === 0 && ship.hue === 240) {
+    ship.set({hue: 120});
+  }
+  else if (ship.team === 1 && ship.hue === 120) {
+    ship.set({hue: 240});
+  }
+}
 
 this.tick = function(game) { 
   if (game.step === 0) {
@@ -486,6 +493,7 @@ this.tick = function(game) {
     for (let ship of game.ships) {
       ship.setUIComponent(player_number);
       score_set_points(ship);
+      check_hue_team(ship);
       actualize_scores(ship, "Orgono    (" + game.custom.team_score_1 + ")", "Volgauf    (" + game.custom.team_score_2 + ")");
       if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
         actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
