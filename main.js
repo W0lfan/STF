@@ -113,7 +113,10 @@ for (let ship in s) ships.push(s[ship]);
 
 
 
-var map_name = ["Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2"];
+var map_name = [
+  "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
+  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5"
+];
 
 
 var mod_vocabulary = [
@@ -165,7 +168,7 @@ this.options = {
   starting_ship: 800,
   starting_ship_maxed: true,
   boucing_lasers: false,
-  map_name: "Fitz Arena - " + map_name[~~(Math.random()*map_name.length)],
+  map_name: map_name[~~(Math.random()*map_name.length)],
   vocabulary: mod_vocabulary,
   max_players: 60,
   release_crystal:true,
@@ -541,6 +544,7 @@ this.tick = function(game) {
         ship.custom.tped = true;
         ship.custom.AE = false;
         ship.custom.ae = true;
+        echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
         }
       if (ship.custom.check !== true) {
         check_team(ship);
