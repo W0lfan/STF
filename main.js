@@ -143,7 +143,7 @@ var mod_vocabulary = [
 
 
 
-var crystal_value = [2,2.1,2.2,2.3,2.4,2.5,2.6];
+var crystal_value = [2.5,2.6, 2.7,2.8];
 var crystal_drop = [1,1.1,1.2];
 var map_id = [2739,2742,2817,2865,2900,2961];
 var soundtrack = [
@@ -159,7 +159,7 @@ this.options = {
   // see documentation for options reference
   root_mode: " ",
   survival_level: 8,
-  crystal_value: 50 /* crystal_value[~~(Math.random()*crystal_value.length)] */,
+  crystal_value: crystal_value[~~(Math.random()*crystal_value.length)],
   ships: ships,
   map_size: 130,
   reset_tree:true, 
@@ -804,7 +804,6 @@ game.setObject({
   rotation: {x:0,y:0,z:0},
   scale: {x:10,y:10,z:10}
 }) ;
-
 
 
 
