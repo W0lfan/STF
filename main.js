@@ -290,16 +290,22 @@ var reset_ship = function(ship) {
   }
 }
 
-
+var teams_infos = {
+  0: 120,
+  1: 240
+}
+console.log(teams_infos.0)
 var team_assign = function(ship) {
   if (game.custom.number_player_t1 === game.custom.number_player_t2) {
+    ship.custom.j = kek[~~(Math.random()*kek.length)];
+    ship.custom.e = teams_infos.ship.custom.j
     ship.set({team: kek[~~(Math.random()*kek.length)]});
   }
   else if (game.custom.number_player_t1 < game.custom.number_player_t2) {
-    ship.set({team: 0});
+    ship.set({team: 0, hue: 120});
   } 
   else if (game.custom.number_player_t1 > game.custom.number_player_t2) {
-    ship.set({team: 1})
+    ship.set({team: 1, hue: 240})
   }
 }
 
@@ -448,7 +454,7 @@ this.tick = function(game) {
             y: (Math.random() - 0.5) * game.options.map_size * 10,
             code: alien_code[~~(Math.random()*alien_code.length)],
             level: alien_type[~~(Math.random()*alien_type.length)],
-            crystal_drop: 20
+            crystal_drop: 70
           })
         }
       }
@@ -492,6 +498,18 @@ this.tick = function(game) {
       }
       else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
         actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
+      }
+      
+      if (game.custom.number_player_t1 + game.custom.player_number_t2 !== game.ships.length) {
+        game.custom.number_player_t1 = 0;
+        game.custom.number_player_t2 = 0;
+        for (let t=0;t<game.ships.length; t++) {
+          if (ship.team === 0) {
+            game.custom.number_player_t1++;
+          } else {
+            game.custom.number_player_t2++;
+          }
+        } 
       }
           if (ship.custom.team === "Orgono") {
             actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
@@ -804,6 +822,7 @@ game.setObject({
   rotation: {x:0,y:0,z:0},
   scale: {x:10,y:10,z:10}
 }) ;
+
 
 
 
