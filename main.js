@@ -858,15 +858,15 @@ this.event = function(event, game) {
         echo(ship.name + " died.")
         change_score(ship);
           if (ship.custom.team === "Orgono") {
-            if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5)) >= 0) {
-              game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5));
+            if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) >= 0) {
+              game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100)));
               echo('Orgono lost some points: ' + game.custom.team_score_1);
             } else {
               game.custom.team_score_1 = 0;
             }
           } else if (ship.custom.team === "Volgauf") {
-            if (game.custom.team_score_2 - Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5)) >= 0) {
-              game.custom.team_score_2 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) / 1.5));
+            if (game.custom.team_score_2 - Math.trunc(((Math.trunc(ship.type / 100) * 100) )) >= 0) {
+              game.custom.team_score_2 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) ));
               echo('Volgauf lost some points: ' + game.custom.team_score_2);
             } else {
               game.custom.team_score_2 = 0;
