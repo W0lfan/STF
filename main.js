@@ -181,7 +181,6 @@ this.options = {
 
 
 
-
 var change_bar = function(ship, h, stroke) {
   bar.components[1].position = h;
   bar.components[1].stroke = stroke;
@@ -290,22 +289,33 @@ var reset_ship = function(ship) {
   }
 }
 
-var teams_infos = {
-  0: 120,
-  1: 240
-}
-console.log(teams_infos.0)
+
 var team_assign = function(ship) {
   if (game.custom.number_player_t1 === game.custom.number_player_t2) {
-    ship.custom.j = kek[~~(Math.random()*kek.length)];
-    ship.custom.e = teams_infos.ship.custom.j
     ship.set({team: kek[~~(Math.random()*kek.length)]});
+    if (ship.team === 0) {
+      ship.set({hue: 120});
+      game.custom.number_player_t1++;
+      ship.custom.team = "Orgono";
+      ship.custom.ennemies = "Volgauf";
+    } else {
+      ship.set({hue: 240});
+      game.custom.number_player_t2++;
+      ship.custom.team = "Volgauf";
+      ship.custom.ennemies = "Orgono";
+    }
   }
   else if (game.custom.number_player_t1 < game.custom.number_player_t2) {
-    ship.set({team: 0, hue: 120});
+      ship.set({team: 0, hue: 120});
+      game.custom.number_player_t1++;
+      ship.custom.team = "Orgono";
+      ship.custom.ennemies = "Volgauf";
   } 
   else if (game.custom.number_player_t1 > game.custom.number_player_t2) {
-    ship.set({team: 1, hue: 240})
+      ship.set({team: 1, hue: 240})
+      game.custom.number_player_t2++;
+      ship.custom.team = "Volgauf";
+      ship.custom.ennemies = "Orgono";
   }
 }
 
@@ -342,20 +352,7 @@ game.custom.number_player_t1 = 0;
 game.custom.number_player_t2 = 0;
   
   
-var check_team = function(ship) {
-    if (ship.team == 0) {
-      ship.set({hue: 120})
-      game.custom.number_player_t1++;
-      ship.custom.team = "Orgono";
-      ship.custom.ennemies = "Volgauf";
-    } else if (ship.team == 1) {
-      ship.set({hue: 240})
-      game.custom.number_player_t2++;
-      ship.custom.team = "Volgauf";
-      ship.custom.ennemies = "Orgono";
-    }
-    echo(ship.name + " checked.")
-};
+
 
 
 var actualize_ennemies_and_friends = function(ship, a, b) {
@@ -410,9 +407,52 @@ var check_hue_team = function(ship) {
   else if (ship.team === 1 && ship.hue === 120) {
     ship.set({hue: 240});
   }
+  else if (ship.custom.team === "Volgauf" && ship.team === 0 ) {
+    ship.set({team:1, hue: 240})
+  }
+  else if (ship.custom.team === "Orgono" && ship.team === 1 ) {
+    ship.set({team:0,hue: 120})
+  }
 }
 
-this.tick = function(game) { 
+var crystals_set = function(ship) {
+  ship.set({crystals: 700})
+}
+
+
+var internals_init = function() {
+  if (game.custom.internals_init) {
+    return;
+  }
+  const modding = game.modding;
+  const internals = Object.values(modding).find(val => val && typeof val.shipDisconnected === "function");
+  if (!internals) {
+    modding.terminal.error("Error: modding internals object not found");
+    return;
+  }
+  if (!internals.shipDisconnected.old) {
+    function shipDisconnected({id} = {}) {
+      if (modding.context.event && id) {
+        var ship = game.findShip(id);
+        if (ship) {
+          modding.context.event({ name: "ship_disconnected", ship }, game);
+        }
+      }
+      return shipDisconnected.old.apply(this, arguments);
+    }
+    shipDisconnected.old = internals.shipDisconnected;
+    internals.shipDisconnected = shipDisconnected;
+  }
+  game.custom.internals_init = true;
+};
+
+this.tick = function(game) {
+  this.tick = tick;
+  internals_init();
+  this.tick(game);
+};
+
+var tick = function(game) {
   if (game.step === 0) {
       game.custom.trigger = 0;
       game.custom.bar_width = 70;
@@ -519,6 +559,18 @@ this.tick = function(game) {
           }
         } 
       }
+      if (ship.crystals >= 700 && game.custom.team_score_1 < 18000 && game.custom.team_score_2 < 18000 || 
+        ship.crystals >= 700 && game.custom.team_score_1 > 18000 && game.custom.team_score_2 < 18000 ||
+        ship.crystals >= 700 && game.custom.team_score_1 < 18000 && game.custom.team_score_2 > 18000 ) {
+          ship.setUIComponent(t7_lock);
+          ship.setUIComponent(bruh);
+          ship.setUIComponent(lol);
+      } else if (ship.crystals < 690 || game.custom.team_score_1 >= 18000 && game.custom.team_score_2 >= 18000) {
+        ship.setUIComponent({id:"t7_lock", visible: false});
+        ship.setUIComponent({id:"lol", visible: false});
+        ship.setUIComponent({id:"bruh", visible: false});
+
+      }
           if (ship.custom.team === "Orgono") {
             actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
           }
@@ -569,13 +621,8 @@ this.tick = function(game) {
         ship.setUIComponent(player_number);
         ship.custom.tped = true;
         ship.custom.AE = false;
-        ship.custom.ae = true;
-        echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
+        echo(`${ship.ame} joined: ${ship.custom.team}, ${ship.team}`)
         }
-      if (ship.custom.check !== true) {
-        check_team(ship);
-        ship.custom.check = true;
-      }
       if (ship.custom.reset !== 0) {
           var reset = {
             id: "reset",
@@ -590,7 +637,7 @@ this.tick = function(game) {
               ]
           };
           ship.setUIComponent(reset);
-      }
+      }/*
       if (ship.alive !== true  && ship.custom.AE === false && ship.custom.ae === true) {
         ship.custom.AE = true;
         ship.custom.ae = false;
@@ -608,7 +655,7 @@ this.tick = function(game) {
           } else if (ship.team === 1) {
             game.custom.number_player_t2++;
           }
-      }
+      }*/
     }
       if (game.custom.boss_creation === true) {
           for (let i=0;i<4;i++) {
@@ -679,7 +726,9 @@ this.tick = function(game) {
       }
     }
   }
+  
 };
+
 
 
 
@@ -694,13 +743,49 @@ var info2 = {
 };
 
 
+var t7_lock = {
+  id: "t7_lock",
+  position: [25,0,50,10],
+  visible: true,
+  clickable:true,
+  shortcut: "0",
+  components: [
+    { type: "box",position:[0,0,80,96],stroke:"#939393", fill: "#939393",width:5},
+    { type: "text",align:"center", position:[8,0,65,65],value:"Every team has to get 18K+ points",color:"#CDE"},
+    { type: "text",align:"center", position:[20,50,40,40],value:"To unlock T7s",color:"#CDE"},
+    ]
+};
+
+
+var bruh = {
+  id: "bruh",
+  position: [24,0,10,10],
+  visible: true,
+  shortcut: "0",
+  clickable: true,
+  components: [
+    { type: "box",position:[0,0,10,100],stroke:"#119304", fill: "#119304",width:5},
+    ]
+};
+//119304
+//3440B8
+var lol = {
+  id: "lol",
+  position: [22.8,0,10,10],
+  visible: true,
+  shortcut: "9",
+  clickable: true,
+  components: [
+    { type: "box",position:[0,0,10,100],stroke:"#3440B8", fill: "#3440B8",width:5},
+    ]
+};
 
 var bar = {
   id: "bar",
   position: [27,10,50,2],
   visible: true,
   components: [
-    { type: "box",position:[10,0,70,50],stroke:"#7A7A7A",width:120},
+    { type: "box",position:[0,30,10,96],stroke:"#7A7A7A",width:120},
     { type: "box",position:[],stroke:"",width:120},
     ]
 };
@@ -799,6 +884,14 @@ this.event = function(event, game) {
         ship.custom.deaths++;
       }
       break;
+    case "ship_disconnected":
+      echo(`Player left: ${event.ship.name}`);
+      if (ship.team === 0) {
+        game.custom.number_player_t1--;
+      } else {
+        game.custom.number_player_t2--;
+      }
+    break;
     case "ui_component_clicked":
       switch (event.id) {
         case "heal":
