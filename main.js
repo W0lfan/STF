@@ -551,18 +551,6 @@ var tick = function(game) {
       else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
         actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
       }
-      
-      if (game.custom.number_player_t1 + game.custom.player_number_t2 !== game.ships.length) {
-        game.custom.number_player_t1 = 0;
-        game.custom.number_player_t2 = 0;
-        for (let t=0;t<game.ships.length; t++) {
-          if (ship.team === 0) {
-            game.custom.number_player_t1++;
-          } else {
-            game.custom.number_player_t2++;
-          }
-        } 
-      }
       if (ship.crystals >= 700 && game.custom.team_score_1 < 18000 && game.custom.team_score_2 < 18000 || 
         ship.crystals >= 700 && game.custom.team_score_1 > 18000 && game.custom.team_score_2 < 18000 ||
         ship.crystals >= 700 && game.custom.team_score_1 < 18000 && game.custom.team_score_2 > 18000 ) {
@@ -932,4 +920,3 @@ game.setObject({
 
 
 
- 
