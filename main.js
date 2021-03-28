@@ -1,14 +1,17 @@
 
 /*
 * Special thanks to: Megalodon, Serendibite, Endersult, Nova for their ships!
+    Endersult, Nova, Megalodon made one ship for this mod.
+    Serendibite made 6 ships for this mod.
+    Wolfan made 21 ships for this made.
+* Mod made by Wolfan, idea by Wolfan.
+* Thanks to Glitch for his help and suggestions.
+* Thanks to Lotus and Bhpsngum, who are always here to help me.
 * Modding commands available:
     `t1 [NUMBER]` => gives number points to orgono team
     `t1 [NUMBER]` => gives number points to volgauf team
     `ap [NUMBER]` => gives a certain number of points to the first player (id:0)
     `list` => shows player name + ship faction
-* Mod made by Wolfan, idea by Wolfan.
-* Thanks to Glitch for his help and suggestions.
-* Thanks to Lotus and Bhpsngum, who are always here to help me.
 */
 
 
@@ -885,12 +888,14 @@ this.event = function(event, game) {
       }
       break;
     case "ship_disconnected":
-      echo(`Player left: ${event.ship.name}`);
       if (ship.team === 0) {
         game.custom.number_player_t1--;
+        echo('Orgono - 1 ')
       } else {
         game.custom.number_player_t2--;
+        echo('Volgauf - 1')
       }
+      echo(ship.name + " left")
     break;
     case "ui_component_clicked":
       switch (event.id) {
