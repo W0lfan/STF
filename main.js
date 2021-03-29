@@ -47,20 +47,7 @@ game.modding.commands.score_test = function(req) {
           echo(Math.max(ship.score));
         }
 };
-game.modding.commands.kill_aliens = function(req) {
-    for (let alien of game.aliens) {
-        for (ye=0;ye<game.aliens.length;ye++) {
-          game.aliens[ye].set({kill:true});
-        }
-    }
-};
 
-
-/*
-Ship balance: 
-https://docs.google.com/spreadsheets/d/19y5gAcgcKvf0CwuJLxZMmngBejOmxH6bPBkau-Ql9v0/edit#gid=0
-
-*/
 
 
 var s={};
