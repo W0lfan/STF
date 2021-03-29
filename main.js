@@ -47,6 +47,13 @@ game.modding.commands.score_test = function(req) {
           echo(Math.max(ship.score));
         }
 };
+game.modding.commands.kill_aliens = function(req) {
+    for (let alien of game.aliens) {
+        for (ye=0;ye<game.aliens.length;ye++) {
+          game.aliens[ye].set({kill:true});
+        }
+    }
+};
 
 
 /*
@@ -590,7 +597,7 @@ var tick = function(game) {
         else if (game.custom.aliens === 0) {
            change_bar(ship, [10,5,0,0.1], "#FFFFFF");
           actualize_boss_infos(ship, "No bosses left");
-      }
+        }
       if (ship.custom.init !== true) {
         ship.custom.init = true;
         ship.setUIComponent(info2);
@@ -704,17 +711,10 @@ var tick = function(game) {
     }
   }
   if (game.step % 2400 === 0) {
-      if (game.aliens.length <= 100) {
         for (m=0;m<5;m++) {
           game.addCollectible({
             x:0,y:0, code: lol[~~(Math.random()*lol.length)]
           })
-        }
-        for (t=0;t<4;t++) {
-          game.addAlien({
-            x:0,y:0, code: 16, level: 2
-          })
-      }
     }
   }
   
