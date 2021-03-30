@@ -1,4 +1,8 @@
 
+
+
+
+
 /*
 * Special thanks to: Megalodon, Serendibite, Endersult, Nova for their ships!
     Endersult, Nova, Megalodon made one ship for this mod.
@@ -199,19 +203,13 @@ var unblock = function(ship) {
 
 
 
+var timer_change = function(ship, minuts) {
+  timer.components[0].value = minuts;
+  ship.setUIComponent(timer);
+};
 
-        var heal = {
-          id: "heal",
-          position: [5,30,10,20],
-          clickable: true,
-          shortcut: "H",
-          visible: true,
-          components: [
-            { type: "box",position:[0,1,100,35],stroke:"#CDE",width:5},
-            { type: "text",position:[10,5,75,30],value:"Heal [H]",color:"#CDE"},
-            { type: "text",position:[15,35,75,35],value:"100 💎",color:"#CDE"},
-        ]
-        };
+
+
 
 
 var actualize_scoreboard = function(ship, name, score, color) {
@@ -287,6 +285,10 @@ var reset_ship = function(ship) {
 }
 
 
+
+
+
+
 var team_assign = function(ship) {
   if (game.custom.number_player_t1 === game.custom.number_player_t2) {
     ship.set({team: kek[~~(Math.random()*kek.length)]});
@@ -295,11 +297,19 @@ var team_assign = function(ship) {
       game.custom.number_player_t1++;
       ship.custom.team = "Orgono";
       ship.custom.ennemies = "Volgauf";
+      ship.set({
+        x: (Math.random() - 0.5) * game.options.map_size * 10,
+        y: (Math.random() - 0.5) * game.options.map_size * 10,
+      })
     } else {
       ship.set({hue: 240});
       game.custom.number_player_t2++;
       ship.custom.team = "Volgauf";
       ship.custom.ennemies = "Orgono";
+      ship.set({
+        x: (Math.random() - 0.5) * game.options.map_size * 10,
+        y: (Math.random() - 0.5) * game.options.map_size * 10,
+      })
     }
   }
   else if (game.custom.number_player_t1 < game.custom.number_player_t2) {
@@ -307,12 +317,20 @@ var team_assign = function(ship) {
       game.custom.number_player_t1++;
       ship.custom.team = "Orgono";
       ship.custom.ennemies = "Volgauf";
+       ship.set({
+        x: (Math.random() - 0.5) * game.options.map_size * 10,
+        y: (Math.random() - 0.5) * game.options.map_size * 10,
+      })
   } 
   else if (game.custom.number_player_t1 > game.custom.number_player_t2) {
       ship.set({team: 1, hue: 240})
       game.custom.number_player_t2++;
       ship.custom.team = "Volgauf";
       ship.custom.ennemies = "Orgono";
+      ship.set({
+        x: (Math.random() - 0.5) * game.options.map_size * 10,
+        y: (Math.random() - 0.5) * game.options.map_size * 10,
+      })
   }
 }
 
@@ -364,18 +382,18 @@ var actualize_scores = function(ship, orgono, volgauf) {
   ship.setUIComponent(scoreboard);
 };
 
-          var scoreboard = {
-            id: "scoreboard",
-            visible: true,
-            components: [
-              {type: "box",position:[0,0,100,10],stroke:"#119304", fill:"#119304",width:5},
-              {type: "box",position:[0,50,100,10],stroke:"#3440B8", fill:"#3440B8",width:5},
-              { type: "text",position: [0,0,100,10], value: " ",color:"#CDE"},
-              { type: "text",position: [0,50,100,10], value: " ",color:"#CDE"},
-              { type: "text",position: [0,20,100,20], value: " ",color:"#119304"},
-              { type: "text",position: [0,55,100,50], value: " ",color:"#3440B8"},
-            ]
-          };
+var scoreboard = {
+  id: "scoreboard",
+  visible: true,
+  components: [
+    {type: "box",position:[0,0,100,10],stroke:"#119304", fill:"#119304",width:5},
+    {type: "box",position:[0,50,100,10],stroke:"#3440B8", fill:"#3440B8",width:5},
+    { type: "text",position: [0,0,100,10], value: " ",color:"#CDE"},
+    { type: "text",position: [0,50,100,10], value: " ",color:"#CDE"},
+    { type: "text",position: [0,20,100,20], value: " ",color:"#119304"},
+    { type: "text",position: [0,55,100,50], value: " ",color:"#3440B8"},
+  ]
+};
 
 
 
@@ -443,11 +461,20 @@ var internals_init = function() {
   game.custom.internals_init = true;
 };
 
+
+var spawn = function(ship) {
+  ship.set({hue: 60, team: 1});
+}
+
 this.tick = function(game) {
   this.tick = tick;
   internals_init();
   this.tick(game);
 };
+game.custom.status =  "Mining";
+game.custom.seconds = 59; // 59
+game.custom.minuts_1 = 5; // 1
+
 
 var tick = function(game) {
   if (game.step === 0) {
@@ -469,6 +496,7 @@ var tick = function(game) {
       echo("game started")
   }
  if (game.step % 200 === 0) {
+   if (game.custom.status === "Aliens") {
       for (let ae=0;ae<5;ae++) {
         game.addCollectible({
           x: (Math.random() - 0.5) * game.options.map_size * 10,
@@ -482,11 +510,12 @@ var tick = function(game) {
             code: 16,
             level: 1
           })
+        }
       }
     }
   }
   if (game.step % 15 == 0) {
-    if (game.custom.start === true) {
+    if (game.custom.status === "Aliens") {
       var alien_code = [10,11,17,18];
       var alien_type = [0,1,2,3];
       var minAs = [50,51,52,53,54,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70];
@@ -529,21 +558,52 @@ var tick = function(game) {
       game.custom.win = true;
     }
     for (let ship of game.ships) {
-      ship.setUIComponent(player_number);
-      score_set_points(ship);
-      check_hue_team(ship);
-      actualize_scores(ship, "Orgono    (" + game.custom.team_score_1 + ")", "Volgauf    (" + game.custom.team_score_2 + ")");
-      if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
-        actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
-      }
-      else if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 >= 10) {
-        actualize_player_number(ship, "Orgono: 0" + game.custom.number_player_t1, "Volgauf: " + game.custom.number_player_t2);
-      } 
-      else if (game.custom.number_player_t2 < 10 && game.custom.number_player_t1 >= 10) {
-        actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1, "Volgauf: 0"+ game.custom.number_player_t2);
-      }
-      else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
-        actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
+      if (game.custom.status === "Aliens") {
+        ship.setUIComponent(player_number);
+        score_set_points(ship);
+        check_hue_team(ship);
+        actualize_scores(ship, "Orgono    (" + game.custom.team_score_1 + ")", "Volgauf    (" + game.custom.team_score_2 + ")");
+        if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
+          actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
+        }
+        else if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 >= 10) {
+          actualize_player_number(ship, "Orgono: 0" + game.custom.number_player_t1, "Volgauf: " + game.custom.number_player_t2);
+        } 
+        else if (game.custom.number_player_t2 < 10 && game.custom.number_player_t1 >= 10) {
+          actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1, "Volgauf: 0"+ game.custom.number_player_t2);
+        }
+        else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
+          actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
+        }
+          if (ship.custom.team === "Orgono") {
+            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
+          }
+          else if (ship.custom.team === "Volgauf") {
+            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
+          }
+          if (ship.custom.score > 1000 && ship.custom.score < 10000) {
+            ship.custom.pointsPos = [70,10,20,20]
+          }
+          if (game.custom.aliens === 4) {
+            change_bar(ship, [10,5,70,0.1], "#35BC0D");
+            actualize_boss_infos(ship, "4 bosses left");
+          }
+          else if (game.custom.aliens === 3) {
+            change_bar(ship, [10,5,47,0.1], "#FADB29");
+            actualize_boss_infos(ship, "3 bosses left" );
+          }
+          else if (game.custom.aliens === 2) {
+            change_bar(ship, [10,5,25,0.1], "#CF0202");
+            actualize_boss_infos(ship, "2 bosses left");
+          }
+          else if (game.custom.aliens === 1) {
+             change_bar(ship, [10,5,2,0.1], "#FFFFFF");
+            actualize_boss_infos(ship, "1 bosses left");
+          }
+          else if (game.custom.aliens === 0) {
+             change_bar(ship, [10,5,0,0.1], "#FFFFFF");
+            actualize_boss_infos(ship, "No bosses left");
+          }
       }
       if (ship.crystals >= 700 && game.custom.team_score_1 < 18000 && game.custom.team_score_2 < 18000 || 
         ship.crystals >= 700 && game.custom.team_score_1 > 18000 && game.custom.team_score_2 < 18000 ||
@@ -556,92 +616,55 @@ var tick = function(game) {
         ship.setUIComponent({id:"lol", visible: false});
         ship.setUIComponent({id:"bruh", visible: false});
         }
-          if (ship.custom.team === "Orgono") {
-            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
-          }
-          else if (ship.custom.team === "Volgauf") {
-            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
-          }
-        if (ship.custom.score > 1000 && ship.custom.score < 10000) {
-          ship.custom.pointsPos = [70,10,20,20]
-        }
-        if (game.custom.aliens === 4) {
-          change_bar(ship, [10,5,70,0.1], "#35BC0D");
-          actualize_boss_infos(ship, "4 bosses left");
-        }
-        else if (game.custom.aliens === 3) {
-          change_bar(ship, [10,5,47,0.1], "#FADB29");
-          actualize_boss_infos(ship, "3 bosses left" );
-        }
-        else if (game.custom.aliens === 2) {
-          change_bar(ship, [10,5,25,0.1], "#CF0202");
-          actualize_boss_infos(ship, "2 bosses left");
-        }
-        else if (game.custom.aliens === 1) {
-           change_bar(ship, [10,5,2,0.1], "#FFFFFF");
-          actualize_boss_infos(ship, "1 bosses left");
-        }
-        else if (game.custom.aliens === 0) {
-           change_bar(ship, [10,5,0,0.1], "#FFFFFF");
-          actualize_boss_infos(ship, "No bosses left");
-        }
       if (ship.custom.init !== true) {
         ship.custom.init = true;
-        ship.setUIComponent(info2);
-        ship.setUIComponent(scoreboard);
-        team_assign(ship);
         ship.custom.points = 0;
-        ship.setUIComponent(heal);
         ship.custom.check = false;
-        ship.custom.time_start_before_hiding = true;
-        ship.custom.timeZ = seconds_beifre_hiding;
         ship.custom.frags = 0;
         ship.custom.deaths = 0;
         ship.custom.boss_killed = 0;
         ship.custom.alien_killed = 0;
         ship.custom.reset = 3;
-        ship.setUIComponent(bar);
-        ship.setUIComponent(bosses);
-        ship.setUIComponent(reset);
-        ship.setUIComponent(player_number);
         ship.custom.tped = true;
         ship.custom.AE = false;
+        ship.custom.init = true;
+        if (game.custom.status === "Mining") {
+          spawn(ship);
+        } 
+        else if (game.custom.status === "Aliens") {
+          team_assign(ship);
+          ship.set({id: 'timer', visible: false});
+          ship.setUIComponent(info2);
+          ship.setUIComponent(scoreboard);
+          ship.setUIComponent(bar);
+          ship.setUIComponent(bosses);
+          ship.setUIComponent(reset);
+          ship.setUIComponent(player_number);
+          ship.setUIComponent(timer);
+          ship.custom.time_start_before_hiding = true;
+          ship.custom.timeZ = seconds_beifre_hiding;
+        }
         echo(`${ship.ame} joined: ${ship.custom.team}, ${ship.team}`)
         }
-      if (ship.custom.reset !== 0) {
-          var reset = {
-            id: "reset",
-            position: [5,50,10,20],
-            clickable: true,
-            shortcut: "R",
-            visible: true,
-            components: [
-              { type: "box",position:[0,2,100,35],stroke:"#4D4D4D", fill:"#7F7F7F",width:5},
-              { type: "text",position:[11,5,75,30],value:"Reset [R]",color:"#CDE"},
-              { type: "text",position:[15,35,65,35],value:ship.custom.reset + " left",color:"#CDE"},
-              ]
-          };
-          ship.setUIComponent(reset);
-      }/*
-      if (ship.alive !== true  && ship.custom.AE === false && ship.custom.ae === true) {
-        ship.custom.AE = true;
-        ship.custom.ae = false;
-          if (ship.team === 0) {
-            game.custom.number_player_t1--;
-          } else if (ship.team === 1) {
-            game.custom.number_player_t2--;
+        if (game.custom.status === "Aliens") {
+          if (ship.custom.reset !== 0) {
+              var reset = {
+                id: "reset",
+                position: [5,50,10,20],
+                clickable: true,
+                shortcut: "R",
+                visible: true,
+                components: [
+                  { type: "box",position:[0,2,100,35],stroke:"#4D4D4D", fill:"#7F7F7F",width:5},
+                  { type: "text",position:[11,5,75,30],value:"Reset [R]",color:"#CDE"},
+                  { type: "text",position:[15,35,65,35],value:ship.custom.reset + " left",color:"#CDE"},
+                  ]
+              };
+              ship.setUIComponent(reset);
           }
+        }
       }
-      if (ship.alive === true && ship.custom.AE === true && ship.custom.ae === false) {
-        ship.custom.AE = false;
-        ship.custom.ae = true;
-          if (ship.team === 0) {
-            game.custom.number_player_t1++;
-          } else if (ship.team === 1) {
-            game.custom.number_player_t2++;
-          }
-      }*/
-    }
+    if (game.custom.status === "Aliens") {
       if (game.custom.boss_creation === true) {
           for (let i=0;i<4;i++) {
             game.custom.boss_aliens.push(game.addAlien({
@@ -671,12 +694,50 @@ var tick = function(game) {
         }
         game.custom.boss_creation = false;
       }
+    }
   }
   if (game.step % 60 == 0 ) {
     if (game.custom.time !== -1) {
       game.custom.time--;
     }
-    for (let ship of game.ships) {
+      if (game.custom.status === "Mining") {
+        if (game.custom.minuts_1 >= 0 && game.custom.minuts !== -1) {
+              if (game.custom.seconds < 10) {
+                for (let ship of game.ships) {
+                  timer_change(ship, '0'+game.custom.minuts_1 + ':'+ '0' + game.custom.seconds);
+                }
+                game.custom.seconds--;
+              }
+              else {
+                for (let ship of game.ships) {
+                  timer_change(ship, '0'+game.custom.minuts_1 + ':'+ game.custom.seconds);
+                }
+                game.custom.seconds--;
+              }
+
+              if (game.custom.seconds == -1 && game.custom.minuts_1 !== 0) {
+                game.custom.minuts_1--;
+                game.custom.seconds += 60;
+              }
+          }
+        if (game.custom.seconds === 0 && game.custom.minuts_1 === 0) {
+          game.custom.status = "Aliens";
+          for (let ship of game.ships) { 
+            team_assign(ship);
+            ship.setUIComponent({id: 'timer', visible: false});
+            ship.setUIComponent(info2);
+            ship.setUIComponent(scoreboard);
+            ship.setUIComponent(bar);
+            ship.setUIComponent(bosses);
+            ship.setUIComponent(reset);
+            ship.setUIComponent(player_number);
+            ship.setUIComponent(timer);
+            ship.custom.time_start_before_hiding = true;
+            ship.custom.timeZ = seconds_beifre_hiding;
+          }
+        }
+      }
+      for (let ship of game.ships) { 
       if (ship.custom.time_start_before_hiding === true) {
         ship.custom.timeZ--;
         if (ship.custom.timeZ === 0) {
@@ -745,8 +806,6 @@ var bruh = {
     { type: "box",position:[0,0,10,100],stroke:"#119304", fill: "#119304",width:5},
     ]
 };
-//119304
-//3440B8
 var lol = {
   id: "lol",
   position: [22.8,0,10,10],
@@ -776,26 +835,21 @@ var bosses = {
     ]
 };
 
+var timer = {
+  id: "timer",
+  position: [6,30,15,15],
+  visible: true,
+  components: [
+    { type: "text",position:[0,0,60,60],value: " ",color:"#CDE"},
+    ]
+};
+
+
+
 var actualize_boss_infos = function(ship, text) {
   bosses.components[0].value = text;
   ship.setUIComponent(bosses);
 }
-
-var healing = function(ship) {
-  if (ship.crystals >= 100) {
-      ship.set({
-        shield: ship.shield + 90,
-        crystals: ship.crystals - 100
-      })
-  } else {
-    ship.set({
-      shield: ship.shield + ship.crystals,
-      crystals: 0
-    })
-  }
-};
-
-
 
 
 this.event = function(event, game) {
@@ -874,9 +928,6 @@ this.event = function(event, game) {
     break;
     case "ui_component_clicked":
       switch (event.id) {
-        case "heal":
-          healing(ship);
-        break;
         case "reset":
           reset_ship(ship);
       }
@@ -902,8 +953,5 @@ game.setObject({
   rotation: {x:0,y:0,z:0},
   scale: {x:10,y:10,z:10}
 }) ;
-
-
-
 
 
