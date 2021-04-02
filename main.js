@@ -25,6 +25,9 @@ const points = 25000;
 const alien_shield = 20000;
 const point_per_kills = 450;
 const points_per_boss = 3500;
+game.custom.status =  "Mining";
+game.custom.seconds = 59; // 59
+game.custom.minuts_1 = 5; // 1
 
 
 
@@ -471,9 +474,6 @@ this.tick = function(game) {
   internals_init();
   this.tick(game);
 };
-game.custom.status =  "Mining";
-game.custom.seconds = 59; // 59
-game.custom.minuts_1 = 5; // 1
 
 
 var tick = function(game) {
