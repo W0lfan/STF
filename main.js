@@ -21,8 +21,8 @@ const alien_shield = 20000;
 const point_per_kills = 450;
 const points_per_boss = 3500;
 game.custom.status =  "Mining";
-game.custom.seconds = 59; // 59
-game.custom.minuts_1 = 6; // 1
+game.custom.seconds = 1; // 59
+game.custom.minuts_1 = 1; // 6
 
 
 
@@ -160,7 +160,7 @@ this.options = {
   survival_level: 8,
   crystal_value: crystal_value[~~(Math.random()*crystal_value.length)],
   ships: ships,
-  map_size: 120,
+  map_size: 105,
   reset_tree:true, 
   map_id: map_id[~~(Math.random()*map_id.length)],
   crystal_drop: 1.1,
@@ -268,19 +268,7 @@ var lol = [11,42];
 var kek = [0,1];
 
 
-var reset_ship = function(ship) {
-  if (ship.custom.reset !== 0) {
-    ship.set({
-      type: 101,
-      crystals: 20,
-      stats: 11111111
-    })
-    ship.custom.reset--;
-    ship.setUIComponent(reset);
-  } else {
-    ship.setUIComponent({id:"reset", visible: true})
-  }
-}
+
 
 
 
@@ -478,7 +466,7 @@ var internals_init = function() {
 };
 
 var shield_regen_buff = function(shipp) {
-  ship.set({shield:ship.shield + 15});
+  ship.set({shield:ship.shield + 1.5});
   echo('bruh')
 }
 
@@ -575,7 +563,6 @@ var tick = function(game) {
       game.custom.win = true;
     }
     for (let ship of game.ships) {
-            ship.setUIComponent(radar_background);
       if (ship.x < 20 && ship.x > -20 && ship.y > -270 && ship.y < -230 ) {
         if (ship.team === 1) {
           shield_regen_buff(ship);
@@ -603,9 +590,6 @@ var tick = function(game) {
           }
           else if (ship.custom.team === "Volgauf") {
             actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
-          }
-          if (ship.custom.score > 1000 && ship.custom.score < 10000) {
-            ship.custom.pointsPos = [70,10,20,20]
           }
           if (game.custom.aliens === 4) {
             change_bar(ship, [10,5,70,0.1], "#35BC0D");
@@ -636,7 +620,6 @@ var tick = function(game) {
         ship.custom.deaths = 0;
         ship.custom.boss_killed = 0;
         ship.custom.alien_killed = 0;
-        ship.custom.reset = 3;
         ship.custom.tped = true;
         ship.custom.AE = false;
         ship.custom.init = true;
@@ -650,30 +633,12 @@ var tick = function(game) {
           ship.setUIComponent(scoreboard);
           ship.setUIComponent(bar);
           ship.setUIComponent(bosses);
-          ship.setUIComponent(reset);
           ship.setUIComponent(player_number);
           ship.custom.time_start_before_hiding = true;
           ship.custom.timeZ = seconds_beifre_hiding;
-          ship.custom.invulnerable_seconds = 15;
+          ship.setUIComponent(radar_background);
         }
         echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
-        }
-        if (game.custom.status === "Aliens") {
-          if (ship.custom.reset !== 0) {
-              var reset = {
-                id: "reset",
-                position: [5,50,10,20],
-                clickable: true,
-                shortcut: "R",
-                visible: true,
-                components: [
-                  { type: "box",position:[0,2,100,35],stroke:"#4D4D4D", fill:"#7F7F7F",width:5},
-                  { type: "text",position:[11,5,75,30],value:"Reset [R]",color:"#CDE"},
-                  { type: "text",position:[15,35,65,35],value:ship.custom.reset + " left",color:"#CDE"},
-                  ]
-              };
-              ship.setUIComponent(reset);
-          }
         }
       }
     if (game.custom.status === "Aliens") {
@@ -741,10 +706,10 @@ var tick = function(game) {
             ship.setUIComponent(scoreboard);
             ship.setUIComponent(bar);
             ship.setUIComponent(bosses);
-            ship.setUIComponent(reset);
             ship.setUIComponent(player_number);
             ship.custom.time_start_before_hiding = true;
             ship.custom.timeZ = seconds_beifre_hiding;
+            ship.setUIComponent(radar_background);
           }
         }
       }
@@ -950,13 +915,6 @@ this.event = function(event, game) {
       }
       echo(ship.name + " left")
     break;
-    case "ui_component_clicked":
-      switch (event.id) {
-        case "reset":
-          reset_ship(ship);
-      }
-          break;
-          
   }
 };
 
