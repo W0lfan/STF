@@ -22,7 +22,7 @@ const point_per_kills = 450;
 const points_per_boss = 3500;
 game.custom.status =  "Mining";
 game.custom.seconds = 59; // 59
-game.custom.minuts_1 = 4; // 1
+game.custom.minuts_1 = 6; // 1
 
 
 
@@ -395,7 +395,9 @@ var scoreboard = {
 
 
 
-
+var invulnerable = function(ship) {
+  ship.set({invulnerable: 100});
+}
 var actualize_player_number = function(ship, orgonoPlayer, volgaufPlayer) {
   player_number.components[1].value = orgonoPlayer;
   player_number.components[2].value = volgaufPlayer;
@@ -410,6 +412,22 @@ var player_number = {
     { type: "text",position:[10,0,75,30],value:"Players:",color:"#CDE"},
     { type: "text",position:[10,25,75,30],value:" ",color:"#119304"},
     { type: "text",position:[10,50,75,30],value:" ",color:"#3440B8"},
+  ]
+};
+
+var radar_background = {
+  id: "radar_background",
+  visible: true,
+  components: [
+    {type: "round",position:[
+      45,24.5,10,10],
+      stroke:"#119304",
+      fill:"#119304",width:5},
+    {type: "round",position:[
+      45,49 + 16.5,10,10],
+      stroke:"#3440B8",
+      fill:"#3440B8",
+      width:5},
   ]
 };
 
@@ -459,6 +477,10 @@ var internals_init = function() {
   game.custom.internals_init = true;
 };
 
+var shield_regen_buff = function(shipp) {
+  ship.set({shield:ship.shield + 15});
+  echo('bruh')
+}
 
 var spawn = function(ship) {
   ship.set({hue: 60, team: 1});
@@ -553,6 +575,12 @@ var tick = function(game) {
       game.custom.win = true;
     }
     for (let ship of game.ships) {
+            ship.setUIComponent(radar_background);
+      if (ship.x < 20 && ship.x > -20 && ship.y > -270 && ship.y < -230 ) {
+        if (ship.team === 1) {
+          shield_regen_buff(ship);
+        }
+      }
       if (game.custom.status === "Aliens") {
         ship.setUIComponent(player_number);
         score_set_points(ship);
@@ -624,11 +652,11 @@ var tick = function(game) {
           ship.setUIComponent(bosses);
           ship.setUIComponent(reset);
           ship.setUIComponent(player_number);
-          ship.setUIComponent(timer);
           ship.custom.time_start_before_hiding = true;
           ship.custom.timeZ = seconds_beifre_hiding;
+          ship.custom.invulnerable_seconds = 15;
         }
-        echo(`${ship.ame} joined: ${ship.custom.team}, ${ship.team}`)
+        echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
         }
         if (game.custom.status === "Aliens") {
           if (ship.custom.reset !== 0) {
@@ -715,7 +743,6 @@ var tick = function(game) {
             ship.setUIComponent(bosses);
             ship.setUIComponent(reset);
             ship.setUIComponent(player_number);
-            ship.setUIComponent(timer);
             ship.custom.time_start_before_hiding = true;
             ship.custom.timeZ = seconds_beifre_hiding;
           }
@@ -727,6 +754,8 @@ var tick = function(game) {
         if (ship.custom.timeZ === 0) {
           ship.custom.time_start_before_hiding = false;
           ship.setUIComponent({id:"info2", visible: false});
+        } else if (ship.custom.timeZ > 0) {
+          invulnerable(ship);
         }
       }
       if (ship.custom.time_start_before_hiding === false && ship.custom.timeZ === 0) {
@@ -870,6 +899,16 @@ this.event = function(event, game) {
         }
       }
       break ;
+    case "ship_spawned":
+      if (ship !== null) {
+        if (game.custom.status === "Aliens") {
+          if (ship.team === 0) {
+            ship.set({x:0,y:250});
+          } else {
+            ship.set({x:0,y:-250});
+          }
+        }
+      }
     case "ship_destroyed":
       if (ship !== null) {
         echo(ship.name + " died.")
@@ -922,21 +961,39 @@ this.event = function(event, game) {
 };
 
 
-var spawner = {
-  id: "spawner",
+var orgono_spawn = {
+  id: "orgono_spawn",
   obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/spawner.obj",
   diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
   emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0xff8c00,
+  emissiveColor: 0x228B22,
   transparent: false
 } ;
 
 game.setObject({
-  id: "spawner",
-  type: spawner,
-  position: {x:0,y:0,z:-40},
+  id: "orgono_spawn",
+  type: orgono_spawn,
+  position: {x:0,y:250,z:-40},
   rotation: {x:0,y:0,z:0},
   scale: {x:10,y:10,z:10}
 }) ;
+
+var volgauf_spawn = {
+  id: "volgauf_spawn",
+  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/spawner.obj",
+  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
+  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
+  emissiveColor: 0x3264C8,
+  transparent: false
+} ;
+
+game.setObject({
+  id: "volgauf_spawn",
+  type: volgauf_spawn,
+  position: {x:0,y:-250,z:-40},
+  rotation: {x:0,y:0,z:0},
+  scale: {x:10,y:10,z:10}
+}) ;
+
 
 
