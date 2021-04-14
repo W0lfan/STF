@@ -493,11 +493,11 @@ var shield_regen_gain = function(ship) {
   ship.set({shield:ship.shield + 1.5});
 };
 var shield_regen_lose = function(ship) {
-  if (ship.shield > 50) {
-    ship.set({shield: ship.shield - 50});
+  if (ship.shield > 10) {
+    ship.set({shield: ship.shield - 10});
   }
-  else if (ship.shield < 50) {
-    ship.set({shield: 0, crystals: 50 - ship.shield});
+  else if (ship.shield < 10) {
+    ship.set({shield: 0, crystals: 10 - ship.shield});
   }
 };
 
@@ -788,6 +788,11 @@ var tick = function(game) {
           less_crystals(ship);
           ship.custom.mined_gems += Math.trunc(ship.type/100);
           ship.custom.total_gems += Math.trunc(ship.type/100);
+          if (ship.custom.team === "Orgono") {
+            game.custom.team_score_1 += Math.trunc(ship.type/100);
+          } else if (ship.custom.team === "Volgauf") {
+            game.custom.team_score_2 += Math.trunc(ship.type/100);
+          }
           change_mining_button_infos(ship, ship.custom.total_gems);
           if (ship.custom.minged_gems >== 200) {
             game.addCollectible({x:ship.x,y:ship.y, 
@@ -906,13 +911,13 @@ this.event = function(event, game) {
       }
       break ;
     case "ship_spawned":
-      if (ship !== null) {
         if (game.custom.status === "Aliens") {
-          if (ship.team === 0) {
-            ship.set({x:0,y:250});
-          } else {
-            ship.set({x:0,y:-250});
-          }
+          if (ship !== null) {
+            if (ship.team === 0) {
+              ship.set({x:0,y:250});
+            } else {
+              ship.set({x:0,y:-250});
+            }
         }
       }
       break ;
@@ -921,15 +926,15 @@ this.event = function(event, game) {
         echo(ship.name + " died.")
         change_score(ship);
           if (ship.custom.team === "Orgono") {
-            if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) >= 0) {
-              game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100)));
+            if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 >= 0) {
+              game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 ;
               echo('Orgono lost some points: ' + game.custom.team_score_1);
             } else {
               game.custom.team_score_1 = 0;
             }
           } else if (ship.custom.team === "Volgauf") {
-            if (game.custom.team_score_2 - Math.trunc(((Math.trunc(ship.type / 100) * 100) )) >= 0) {
-              game.custom.team_score_2 -= Math.trunc(((Math.trunc(ship.type / 100) * 100) ));
+            if (game.custom.team_score_2 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5  >= 0) {
+              game.custom.team_score_2 -= Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 ;
               echo('Volgauf lost some points: ' + game.custom.team_score_2);
             } else {
               game.custom.team_score_2 = 0;
