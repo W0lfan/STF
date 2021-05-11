@@ -16,14 +16,14 @@
 
 
 const seconds_beifre_hiding = 20;
-const points = 10000; //25K
-const alien_shield = 20000;
-const point_per_kills = 450;
+const points = 15000; //25K
+const alien_shield = 17000;
+const point_per_kills = 500;
 const points_per_boss = 3500;
 game.custom.status =  "Mining";
 game.custom.seconds = 60; // 60
 game.custom.minuts_1 = 7; // 6
-
+const secondsBeforeUsingAPower = 90;
 
 
 game.modding.commands.ect = function(req) {
@@ -113,7 +113,7 @@ for (let ship in s) ships.push(s[ship]);
 
 var map_name = [
   "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
-  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5"
+  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5", "Pan-Da 3", "Sub 2 Wol-F-an"
 ];
 
 
@@ -498,6 +498,223 @@ var shield_regen_lose = function(ship) {
   }
 };
 
+
+
+var petrificationPowerPath = {
+  id: "petrificationPowerPath",
+  position: [30,30,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#35064E", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"💀",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Petrification",color:"#CDE"}
+    ]
+};
+var learrnMorePetrificationPath = {
+  id: "learrnMorePetrificationPath",
+  position: [30,51,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+
+var eletricPowerPath = {
+  id: "eletricPowerPath",
+  position: [45,30,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#E6D31B", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"⚡",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Eletricity",color:"#CDE"}
+    ]
+};
+var learnMoreElectricityPath = {
+  id: "learnMoreElectricityPath",
+  position: [45,51,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+var teleportationPowerPath = {
+  id: "teleportationPowerPath",
+  position: [60,30,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#1B5FE6", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"🌀",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Teleportation",color:"#CDE"}
+    ]
+};
+var leanMoreTeleportationPath = {
+  id: "leanMoreTeleportationPath",
+  position: [60,51,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+
+var choose = {
+  id: "choose",
+  position: [27.5,0,45,50],
+  visible: true,
+  components: [
+    { type: "text",position:[5,10,90,60],value:"Choose your power:",color:"#CDE"}
+    ]
+};
+
+
+var idleStatus = function(ship) {
+  ship.set({
+    idle:true
+  });
+};
+
+var powerPerShip = {
+  id: "powerPerShip",
+  position: [5,30,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#373737", fill:"#949494",width:20},
+    { type: "text",position:[10,20,80,30],value:"Powers ",color:"#FFFFFF"},
+    { type: "text",position:[5,50,90,40],value:" ",color:" "}
+    ]
+};
+
+var actualize_seconds = function(ship, seconds,color) {
+  powerPerShip.components[2].value = seconds;
+  powerPerShip.components[2].color = color;
+  ship.setUIComponent(powerPerShip);
+};
+
+var stopIdle = function(ship) {
+  ship.custom.petrificationCount = 2;
+  ship.set({idle:false});
+};
+var hideInstructorForShip = function(ship) {
+  ship.hideInstructor();
+};
+
+
+
+var BatteryPicked = function(ship) {
+  ship.emptyWeapons();
+  if (ship.custom.batteries <=3) {
+    ship.custom.batteries++;
+    if (ship.custom.batteries === 1) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#838383", "#BABABA");
+    }
+    else if (ship.custom.batteries === 2) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#BABABA");
+    }
+    else if (ship.custom.batteries === 3) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#FBEE0E");
+    }
+  }
+};
+
+
+var actualizationOfBatteryBox = function(ship,OneBattery,TwoBatteries, ThreeBatteries) {
+  batteryBox.components[1].fill = OneBattery;
+  batteryBox.components[2].fill = TwoBatteries;
+  batteryBox.components[3].fill = ThreeBatteries;
+  ship.setUIComponent(batteryBox);
+};
+
+
+var batteryBox = {
+  id: "batteryBox",
+  position: [17,32,10,20],
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,30,80], fill:" ",width:10},
+    { type: "box",position:[5,3,20,27],fill:" ",width:0},
+    { type: "box",position:[5,27,20,27],fill:" ",width:0},
+    { type: "box",position:[5,52,20,25],fill:" ",width:0},
+    ]
+};
+
+
+
+var healerPath = {
+  id: "healerPath",
+  position: [30,60,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#e672da", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"🌿",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Healer",color:"#CDE"}
+    ]
+};
+var learnMorehealerPath = {
+  id: "learnMorehealerPath",
+  position: [30,81,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+
+var bodyguardPath = {
+  id: "bodyguardPath",
+  position: [45,60,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#212082", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"🛡️",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Bodyguards",color:"#CDE"}
+    ]
+};
+var learnMorebodyguardPath = {
+  id: "learnMorebodyguardPath",
+  position: [45,81,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+var bloodStealerPath = {
+  id: "bloodStealerPath",
+  position: [60,60,10,20],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#891a1a", fill:"#3B3B3B",width:5},
+    { type: "text",position:[10,20,80,30],value:"🩸",color:"#CDE"},
+    { type: "text",position:[5,50,90,40],value:"Vampire",color:"#CDE"}
+    ]
+};
+var learnMorebloodStealerPath = {
+  id: "learnMorebloodStealerPath",
+  position: [60,81,10,5],
+  clickable: true,
+  visible: true,
+  components: [
+    { type: "box",position:[0,0,100,100],stroke:"#000000", fill:"#909090",width:5},
+    { type: "text",align:"center",position:[5,35,90,40],value:"Learn more",color:"#CDE"}
+    ]
+};
+
+
+
 var tick = function(game) {
   if (game.step == 0) {
       game.custom.trigger = 0;
@@ -525,7 +742,7 @@ var tick = function(game) {
       var xy = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9];
       var crystals = [30,31,32,33,34,35,36,37,38,39,40];
       for (let alien of game.aliens) {
-        if (game.aliens.length <= 60) {
+        if (game.aliens.length <= 50) {
           game.addAlien({
             x: (Math.random() - 0.5) * game.options.map_size * 10,
             y: (Math.random() - 0.5) * game.options.map_size * 10,
@@ -569,45 +786,6 @@ var tick = function(game) {
           ship, "Orgono    (" +
           game.custom.team_score_1 + ")", "Volgauf    (" +
           game.custom.team_score_2 + ")");
-          if (ship.x < 40 && ship.x > -40 && ship.y < 290 && ship.y > 210 ) { 
-              if (ship.team === 0) {
-                shield_regen_gain(ship);
-              } else if (ship.team === 1) {
-                shield_regen_lose(ship);
-              }
-          }
-          if (ship.x < 40 && ship.x > -40 && ship.y > -290 && ship.y < -210){ 
-              if (ship.team === 1) {
-                shield_regen_gain(ship);
-              } else if (ship.team === 0) {
-                shield_regen_lose(ship);
-              }
-          }
-          if (ship.x < 40 && ship.x > -40 && ship.y < 290 && ship.y > 210 && ship.team === 0) { 
-            if (ship.custom.mining_button_status == true) {
-                ship.setUIComponent(mining_button);
-                ship.custom.mining_button_status = false;
-              }
-          } else if (ship.x > 40 && ship.x < -40 && ship.y > 290 && 
-          ship.y < 210 && ship.team === 0){
-            if (ship.custom.mining_button_status === false) {
-              ship.setUIComponent({id:"mining_button", visible:false})
-              ship.custom.mining_button_status = true;
-            }
-          }
-          if (ship.x < 40 && ship.x > -40 && ship.y > -290 && 
-          ship.y < -210 && ship.team === 1) { 
-            if (ship.custom.mining_button_status == true) {
-              ship.setUIComponent(mining_button);
-              ship.custom.mining_button_status = false;
-            }
-          } else if (ship.x > 40 && ship.x < -40 && ship.y < -290 
-          && ship.y > -210 && ship.team === 1){
-            if (ship.custom.mining_button_status === false) {
-              ship.setUIComponent({id:"mining_button", visible:false})
-              ship.custom.mining_button_status = true;
-            }
-          }
           if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
             actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
           }
@@ -642,76 +820,6 @@ var tick = function(game) {
             actualize_boss_infos(ship, "No bosses left");
           }
         if (game.custom.boss_creation === true) {
-            game.setObject({
-              id: "volgauf_spawn",
-              type: volgauf_spawn,
-              position: {x:0,y:-250,z:-40},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:10,y:10,z:10}
-            }) ;
-            game.setObject({
-              id: "orgono_spawn",
-              type: orgono_spawn,
-              position: {x:0,y:250,z:-40},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:10,y:10,z:10}
-            }) ;
-            game.setObject({
-              id: "barrer1",
-              type: barrer1,
-              position: {x:40,y:260,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer2",
-              type: barrer2,
-              position: {x:-40,y:260,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer3",
-              type: barrer3,
-              position: {x:0,y:290,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer4",
-              type: barrer4,
-              position: {x:0,y:230,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer_1",
-              type: barrer_1,
-              position: {x:40,y:-260,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer_2",
-              type: barrer_2,
-              position: {x:-40,y:-260,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer_3",
-              type: barrer_3,
-              position: {x:0,y:-290,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
-            game.setObject({
-              id: "barrer_4",
-              type: barrer_4,
-              position: {x:0,y:-230,z:0},
-              rotation: {x:0,y:0,z:0},
-              scale: {x:15,y:15,z:15}
-            }) ;
             for (let i=0;i<4;i++) {
               game.custom.boss_aliens.push(game.addAlien({
                 x: (Math.random() - 0.5) * game.options.map_size * 10,
@@ -756,6 +864,7 @@ var tick = function(game) {
         ship.custom.total_gems = 0;
         ship.custom.mining=false;
         ship.custom.j = false;
+        ship.custom.mining_button_status = true;
         ship.instructorSays(
         "Welcome to Starblast Arena. After the phase of mining you will be assigned to a team and will have to fight"+
         " in order to get points. Aliens bosses and players gives more points. Be careful about not dying." +
@@ -764,6 +873,16 @@ var tick = function(game) {
         )
         ship.custom.time_start_before_hiding = true;
         ship.custom.timeZ = seconds_beifre_hiding;
+        ship.custom.lmfao = true;
+        ship.custom.secondsToHavePower = 60;
+        ship.custom.usedPower = true;
+        ship.custom.petrificationCount = 0;
+        ship.custom.petrified = false;
+        ship.custom.bruh = false;
+        ship.custom.healingEnabled = false;
+        ship.custom.heal=0;
+        ship.custom.batteries = 0;
+        ship.custom.power = "none";
         if (game.custom.status === "Mining") {spawn(ship);}
         if (game.custom.status === "Aliens") {
           team_assign(ship);
@@ -779,6 +898,10 @@ var tick = function(game) {
           )
           ship.custom.time_start_before_hiding = true;
           ship.custom.timeZ = seconds_beifre_hiding;
+          actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
+          echo(ship.name + " joined");
+          ship.setUIComponent(powerPerShip);
+          actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
         }
         echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
         }
@@ -820,51 +943,70 @@ var tick = function(game) {
             ship.setUIComponent(radar_background);
             ship.set({id: 'timer', visible: false});
             game.custom.boss_creation = true;
+            actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
+            echo(ship.name + " joined");
+            ship.setUIComponent(powerPerShip);
+            actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
           }
         }
       }
       for (let ship of game.ships) { 
-      if (ship.custom.time_start_before_hiding === true) {
-        ship.custom.timeZ--;
-        if (ship.custom.timeZ === 0) {
-          ship.custom.time_start_before_hiding = false;
-          ship.hideInstructor();
-        } else if (ship.custom.timeZ > 0) {
-          invulnerable(ship);
-        }
-      }
-      if (game.custom.status === "Aliens") {
-        var pointsship = {
-          id: "pointsship",
-          position: [27,15,65,20],
-          visible: true,
-          components: [
-            { type: "text",position:[15,30,40,40],value:"Your points: " + ship.custom.points,color:"#CDE"},
-            ]
-        };
-      ship.setUIComponent(pointsship);
-      }
-    }
-  }
-  if (game.step % 30 === 0) {
-    for (let ship of game.ships) {
-      if (game.custom.status === "Aliens") {
-        if (ship.custom.mining === true) {
-          less_crystals(ship);
-          ship.custom.mined_gems += Math.trunc(ship.type/100);
-          ship.custom.total_gems += Math.trunc(ship.type/100);
-          if (ship.custom.team === "Orgono") {
-            game.custom.team_score_1 += Math.trunc(ship.type/100);
-          } else if (ship.custom.team === "Volgauf") {
-            game.custom.team_score_2 += Math.trunc(ship.type/100);
-          }
-          change_mining_button_infos(ship, ship.custom.total_gems);
-          if (ship.custom.minged_gems >= 200) {
-            game.addCollectible({x:ship.x,y:ship.y, 
-            code: collectibles_codes[~~(Math.random()*collectibles_codes.length)]})
+        if (ship.custom.time_start_before_hiding === true) {
+          ship.custom.timeZ--;
+          if (ship.custom.timeZ === 0) {
+            ship.custom.time_start_before_hiding = false;
+            ship.hideInstructor();
+          } else if (ship.custom.timeZ > 0) {
+            invulnerable(ship);
           }
         }
-      }
+        if (game.custom.status === "Aliens") {
+          var pointsship = {
+            id: "pointsship",
+            position: [27,15,65,20],
+            visible: true,
+            components: [
+              { type: "text",position:[15,30,40,40],value:"Your points: " + ship.custom.points,color:"#CDE"},
+              ]
+          };
+        ship.setUIComponent(pointsship);
+          if (count === true) {
+            if (countSeconds > 0) {
+              countSeconds--;
+            } else {
+              count = false;
+              countSeconds =5;
+              ship.custom.bruh = true;
+            }
+          }
+            if (ship.custom.petrified === true) {
+              if (ship.custom.petrificationCount !== 0) {
+                ship.custom.petrificationCount--;
+              }
+              else if (ship.custom.petrificationCount === 0) {
+                stopIdle(ship);
+                ship.custom.petrified = false;
+              }
+            }
+            if (ship.custom.healingEnabled === true) {
+              if (ship.custom.heal !== 0) {
+                ship.custom.heal--;
+              } else if (ship.custom.heal === 0) {
+                stopHealing(ship);
+                ship.custom.healingEnabled = false;
+              }
+            }
+          if (ship.custom.usedPower === true) {
+            if (ship.custom.secondsToHavePower >= 1) {
+              ship.custom.secondsToHavePower--;
+              actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
+            } else if (ship.custom.secondsToHavePower === 0) {
+              ship.custom.secondsToHavePower = 0;
+              ship.custom.usedPower = false;
+              actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#339005");
+            }
+          }
+        }
     }
   }
   if (game.step % 12000 === 0) {
@@ -878,8 +1020,7 @@ var tick = function(game) {
       }
     }
   }
-
-};
+  };
 var hide_timer = false;
 var collectibles_codes = [10,11,41,42]
 var change_mining_button_infos = function(ship, value ) {
@@ -920,6 +1061,206 @@ var timer = {
 };
 
 
+var stopHealing = function(ship) {
+  ship.set({healing:false});
+};
+
+var count = false;
+var countSeconds = 5;
+var petrificationCount = 0;
+var space = "\n"
+var powerAction = function(ship) {
+  var teleportationInfos = {
+    teleportedPlayer: `You teleported yourself randomly on the map!`,
+    teleportedOthers: ``,
+    actionDelay: 0
+  };
+  var petrificationInfos = {
+    petrificator: `You froze ${game.ships.length - 1} ships for ${ship.custom.batteries} seconds!`,
+    petrificatedOthers: `${ship.name} froze you and ${game.ships.length - 2 } others for ${ship.custom.batteries} seconds!`,
+    actionDelay: 2
+  };
+  var eletricityInfos = {
+    electricityPlayer: `${game.ships.length - 1} players will lose ${
+      ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} of shield every second for 2 seconds!`,
+    electricitedPlayers: `You and ${game.ships.length - 2} players will lose ${
+       ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} shield!`,
+    actionDelay: 2
+  };
+  var healerInfos = {
+    healer: `You're healer for ${ship.custom.batteries} seconds!`
+  }; 
+  var bodyguardInfos = {
+    boyguarded: `${ship.custom.batteries} appear to protect you!`
+  };
+  var bloodStealerInfos = {
+    bloodstealer: `${game.ships.length - 1} lost ${
+      Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
+      
+    } and you gained ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} but lost ${
+      (Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals!`,
+    bloodstealed: `You and ${game.ships.length - 2} lost ${
+    Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
+    } of shield`
+  };
+  if (ship.custom.power === "petrification") {
+    for (let i = 0; i < game.ships.length; i++) {
+      if (game.ships[i].team !== ship.team) {
+        game.ships[i].instructorSays(space + petrificationInfos.petrificatedOthers);
+        game.ships[i].set({idle:true});
+        game.ships[i].custom.petrificationCount=ship.custom.batteries;
+        game.ships[i].custom.petrified=true;
+        game.ships[i].setUIComponent(explanationOK);
+      } else if (game.ships[i].team === ship.team) {
+        game.ships[i].instructorSays(space + petrificationInfos.petrificator );
+        game.ships[i].setUIComponent(explanationOK);
+      }
+    }
+    var count = true;
+  }
+  if (ship.custom.power === "teleportation") {
+    ship.set({
+      x:(Math.random() - 0.5) * game.options.map_size * 10,
+      y: (Math.random() - 0.5) * game.options.map_size * 10, 
+      invulnerable: 60*ship.custom.batteries
+    })
+    ship.instructorSays(space+teleportationInfos.teleportedPlayer);
+    var count = true;
+  }
+  if (ship.custom.power === "electricity") {
+    for (let c = 0; c < game.ships.length; c++) {
+      if (game.ships[c].team !== ship.team) {
+        game.ships[c].instructorSays(space + eletricityInfos.electricitedPlayers);
+        game.ships[c].set({shield:game.ships[c].shield - ((Math.trunc(ship.type / 100) * 10)/2)*2});
+        game.ships[c].setUIComponent(explanationOK);
+      } else if (game.ships[c].team === ship.team) {
+        game.ships[c].instructorSays(space + eletricityInfos.electricityPlayer );
+        game.ships[c].setUIComponent(explanationOK);
+      }
+    }
+    var count = true;
+  }
+  if (ship.custom.power === "healer") {
+    ship.instructorSays(space + healerInfos.healer);
+    ship.setUIComponent(explanationOK);
+    ship.set({healing:true});
+    ship.custom.heal = ship.custom.batteries;
+    ship.custom.healingEnabled=true;
+  };
+  if (ship.custom.power === "bodyguard") {
+    ship.instructorSays(space + bodyguardInfos.boyguarded);
+    ship.setUIComponent(explanationOK);
+    for (let z=0;z<ship.custom.batteries;z++) {
+      game.addAlien({
+        x: ship.x + z,
+        y: ship.y - z,
+        crystal_drop: 0,
+        code: 16,
+        level:0,
+        points: 0
+      });
+    };
+  };
+  if (ship.custom.power === "bloodStealer") {
+    for (let g = 0; g < game.ships.length; g++) {
+      if (game.ships[g].team !== ship.team) {
+        game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealed);
+        game.ships[g].set({
+          shield:
+            game.ships[g].shield - Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )});
+        game.ships[g].setUIComponent(explanationOK);
+      } else if (game.ships[g].team === ship.team) {
+        game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealer );
+        game.ships[g].setUIComponent(explanationOK);
+        game.ships[g].set({crystals:
+           game.ships[g].crystals - (Math.trunc(ship.tier/100)*5) * ship.custom.batteries
+        })
+      }
+    }
+  };
+  actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
+  ship.custom.batteries = 0;
+};
+
+
+
+
+var explanationOK = {
+  id: "explanationOK",
+  position: [75,15,45,50],
+  visible: true,
+  clickable:true,
+  components: [
+    { type: "box",position:[0,0,10,10],stroke:"#B2B2B2B2", fill:"#6C6C6C",width:5},
+    { type: "text",position:[0,0,10,10],value:"OK",color:"#CDE"}
+    ]
+};
+
+var showExplanation = function(ship, text, text2) {
+  explanationText.components[0].value = text;
+  explanationText.components[1].value = text2;
+  ship.setUIComponent(explanationText);
+  ship.setUIComponent(explanationOK);
+};
+var hideComponentsInfos = function(ship) {
+  ship.setUIComponent({id:"explanationText", visible:false});
+  ship.setUIComponent({id:"explanationOK",visible: false});
+};
+
+var showComponents = function(ship) {
+  ship.setUIComponent(petrificationPowerPath);
+  ship.setUIComponent(eletricPowerPath);
+  ship.setUIComponent(teleportationPowerPath);
+  ship.setUIComponent(leanMoreTeleportationPath);
+  ship.setUIComponent(learrnMorePetrificationPath);
+  ship.setUIComponent(learnMoreElectricityPath);
+      ship.setUIComponent(learnMorehealerPath);
+      ship.setUIComponent(healerPath);
+      ship.setUIComponent(bodyguardPath);
+      ship.setUIComponent(learnMorebodyguardPath);
+      ship.setUIComponent(bloodStealerPath);
+      ship.setUIComponent(learnMorebloodStealerPath);
+};
+
+var hideComponents = function(ship) {
+  ship.setUIComponent({id:"petrificationPowerPath",visible:false});
+  ship.setUIComponent({id:"eletricPowerPath",visible:false});
+  ship.setUIComponent({id:"teleportationPowerPath",visible:false});
+  ship.setUIComponent({id:"leanMoreTeleportationPath",visible:false});
+  ship.setUIComponent({id:"learrnMorePetrificationPath",visible:false});
+  ship.setUIComponent({id:"learnMoreElectricityPath",visible:false});
+      ship.setUIComponent({id:"learnMorehealerPath",visible:false});
+      ship.setUIComponent({id:"healerPath",visible:false});
+      ship.setUIComponent({id:"bodyguardPath",visible:false});
+      ship.setUIComponent({id:"learnMorebodyguardPath",visible:false});
+      ship.setUIComponent({id:"bloodStealerPath",visible:false});
+      ship.setUIComponent({id:"learnMorebloodStealerPath",visible:false});
+};
+
+
+var BatteryPicked = function(ship) {
+  if (ship.custom.batteries <= 2) {
+    ship.custom.batteries++;
+    if (ship.custom.batteries === 1) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#838383", "#BABABA");
+    }
+    else if (ship.custom.batteries === 2) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#BABABA");
+    }
+    else if (ship.custom.batteries === 3) {
+      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#FBEE0E");
+    }
+  }
+};
+
+
+var actualizationOfBatteryBox = function(ship,OneBattery,TwoBatteries, ThreeBatteries) {
+  batteryBox.components[3].fill = OneBattery;
+  batteryBox.components[2].fill = TwoBatteries;
+  batteryBox.components[1].fill = ThreeBatteries;
+  ship.setUIComponent(batteryBox);
+};
+
 
 var actualize_boss_infos = function(ship, text) {
   bosses.components[0].value = text;
@@ -947,9 +1288,119 @@ this.event = function(event, game) {
   var component = event.id ;
   switch (event.name) {
     case "ui_component_clicked":
-      if (component === "mining_button") {
-        mining(ship);
+      if (component == "learrnMorePetrificationPath") {
+        ship.instructorSays(space+`
+        Petrification: freeze your ennemies for ${ship.custom.batteries} seconds
+        `);
+        ship.setUIComponent(explanationOK);
       }
+      if (component == "learnMoreElectricityPath") {
+        ship.instructorSays(space+`
+          Electricity: damage every players of ${
+          ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries
+          } shields
+        `);
+        ship.setUIComponent(explanationOK);
+      }
+      if (component == "leanMoreTeleportationPath") {
+        ship.instructorSays(space+`
+          Teleportation: teleport yourself randomly the map and gain ${ship.custom.batteries} seconds of
+          invulnerability
+        `);
+        ship.setUIComponent(explanationOK);
+      }
+      if (component == "learnMorehealerPath") {
+        ship.instructorSays(space+`
+        Healer: gain the ability to heal for ${ship.custom.batteries} seconds
+        `);
+        ship.setUIComponent(explanationOK);
+      }
+      if (component == "learnMorebodyguardPath") {
+        ship.instructorSays(space+`
+          Bodyguarded: summon ${ship.custom.batteries} piranhas
+        `);
+        ship.setUIComponent(explanationOK);
+      }
+      if (component == "learnMorebloodStealerPath") {
+        ship.instructorSays(space+`
+          Blood stealer: damage every ships of ${
+              Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
+            } shields, gain ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} of shield but lose
+            ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals.
+        `);
+        ship.setUIComponent(explanationOK);
+      }
+    if (component == "explanationOK") {
+        ship.hideInstructor();
+        ship.setUIComponent({id:'explanationOK', visible:false})
+      }
+      
+      if (component == "petrificationPowerPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "petrification";
+          powerAction(ship);
+        }
+      }
+      if (component == "eletricPowerPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "electricity";
+          powerAction(ship);
+        }
+      }
+      if (component == "teleportationPowerPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "teleportation";
+          powerAction(ship);
+        }
+      }
+      if (component == "healerPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "healer";
+          powerAction(ship);
+        }
+      }
+      if (component == "bodyguardPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "bodyguard";
+          powerAction(ship);
+        }
+      }
+      if (component == "bloodStealerPath" ) {
+        if (ship.custom.secondsToHavePower <= 0 && ship.custom.batteries >= 0 && ship.custom.batteries <= 3) {
+          hideComponents(ship);
+          ship.custom.secondsToHavePower = secondsBeforeUsingAPower;
+          ship.custom.usedPower = true;
+          ship.custom.power = "bloodStealer";
+          powerAction(ship);
+        }
+      }
+      if (component === "powerPerShip") {
+        if (ship.custom.secondsToHavePower <= 0) {
+          if (ship.custom.lmfao === false) {
+            showComponents(ship);
+            ship.custom.lmfao = true;
+          } else if (ship.custom.lmfao === true) {
+            hideComponents(ship);
+            ship.custom.lmfao = false;
+          }
+        }
+      }
+      
       break ;
     case "alien_destroyed":
       if (alien !== null)
@@ -1010,11 +1461,11 @@ this.event = function(event, game) {
         if (killer !== null) {
           killer.custom.frags++;
           if (killer.custom.team === "Orgono") {
-            game.custom.team_score_1 += point_per_kills;
+            game.custom.team_score_1 += 450;
           } else if (killer.custom.team === "Volgauf") {
-            game.custom.team_score_2 += point_per_kills;
+            game.custom.team_score_2 += 450;
           }
-          killer.custom.points += point_per_kills;
+          killer.custom.points += 450;
         }
         ship.custom.deaths++;
       }
@@ -1029,91 +1480,10 @@ this.event = function(event, game) {
       }
       echo(ship.name + " left")
     break;
+    case "collectible_picked":
+      if (ship != null) {
+        ship.emptyWeapons();
+        BatteryPicked(ship);
+      }
   }
 };
-
-
-var orgono_spawn = {
-  id: "orgono_spawn",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/spawner.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x228B22,
-  transparent: false
-} ;
-
-
-var volgauf_spawn = {
-  id: "volgauf_spawn",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/spawner.obj",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x3264C8,
-  transparent: false
-} ;
-
-
-var barrer1 = {
-  id: "barrer1",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x228B22,
-  transparent: false,
-} ;
-var barrer2 = {
-  id: "barrer2",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x228B22,
-  transparent: false,
-} ;
-var barrer3 = {
-  id: "barrer3",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x228B22,
-  transparent: false,
-} ;
-var barrer4 = {
-  id: "barrer4",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x228B22,
-  transparent: false,
-} ;
-var barrer_1 = {
-  id: "barrer_1",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x3264C8,
-  transparent: false,
-} ;
-var barrer_2 = {
-  id: "barrer_2",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x3264C8,
-  transparent: false,
-} ;
-var barrer_3 = {
-  id: "barrer_3",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x3264C8,
-  transparent: false,
-} ;
-var barrer_4 = {
-  id: "barrer_4",
-  obj: "https://raw.githubusercontent.com/W0lfan/Fitz-Arena/main/team_bareer_defense",
-  diffuse: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20lambert%20orange.png",
-  emissive: "https://raw.githubusercontent.com/45rfew/Starblast-mods-n-objs/master/Img/Ship%20emissive%20(5).jpg",
-  emissiveColor: 0x3264C8,
-  transparent: false,
-} ;
