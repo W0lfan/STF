@@ -22,6 +22,5 @@ Basically, defense pods will appear randomly on the map. These defense pods will
  <li>Mod made by Wolfan, idea by Wolfan, most of the ships by Wolfan.</li>
  <li>Thanks to Glitch for his help and suggestions.</li>
  <li>Thanks to Lotus and Bhpsngum, who are always here to help me.</li>
- <br/><br/><br/><br/>
-
-Hoping to see this mod one day in modding space! Feel free to play it and host it, I hope you'll appreciate it!!
+ <br/><br/>
+<b>Hoping to see this mod one day in modding space! Feel free to play it and host it, I hope you'll appreciate it!!</b>
