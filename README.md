@@ -18,11 +18,11 @@ Basically, defense pods will appear randomly on the map. These defense pods will
 <br/><br/><br/><br/>
 
 <b>Credits goes to:</b>
-<ol>
- <ul>All the credits first goes to Neuronality for offering this coding environement. All the ships of this mod are Neuronality's property.</ul>
- <ul>Megalodon, Serendibite, Endersult, Nova for their ships.</ul>
- <ul>Mod made by Wolfan, idea by Wolfan, most of the ships by Wolfan.</ul>
- <ul>Thanks to Glitch for his help and suggestions.</ul>
- <ul>Thanks to Lotus and Bhpsngum, who are always here to help me.</ul>
+<ul>
+ <li>All the credits first goes to Neuronality for offering this coding environement. All the ships of this mod are Neuronality's property.</li>
+ <li>Megalodon, Serendibite, Endersult, Nova for their ships.</li>
+ <li>Mod made by Wolfan, idea by Wolfan, most of the ships by Wolfan.</li>
+ <li>Thanks to Glitch for his help and suggestionsi</li>
+ <li>Thanks to Lotus and Bhpsngum, who are always here to help me.</li></ul>
 <br/><br/>
 <b>Hoping to see this mod one day in modding space! Feel free to play it and host it, I hope you'll appreciate it!!</b>
