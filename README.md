@@ -13,6 +13,8 @@ Players will have access to "capacities" after the mining phase, such as:
 <br/><br/><br/>
  <b>What is "x"?</b><br/>
 Basically, defense pods will appear randomly on the map. These defense pods will constitute the charges of the battery you have. Max battery charge is 3. x depend on the number of charges you battery have: 1, 2 or 3. However, you have 1 chance on 5 to get a corrupted battery which will reduce the total charge of battery you have (-1). If you already have 0 charges then you won't lose any charge.
+<br/><br/><br/>
+<b>All the power can be used as one power per 90 seconds.</b>
 <br/><br/><br/><br/>
 
 <b>Credits goes to:</b>
