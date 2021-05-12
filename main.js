@@ -829,11 +829,7 @@ var tick = function(game) {
         ship.custom.j = false;
         ship.custom.mining_button_status = true;
         ship.instructorSays(
-        "Welcome to Starblast Arena. After the phase of mining you will be assigned to a team and will have to fight"+
-        " in order to get points. Aliens bosses and players gives more points. Be careful about not dying." +
-        " First team to 25K wins.",
-        "Maria"
-        )
+        "Welcome to SA. After the mining phase you will be teleported on the map and will have to fight players and aliens. Fight and don’t die. Win points with kills, make your team winning 25 000 points."        )
         ship.custom.time_start_before_hiding = true;
         ship.custom.timeZ = seconds_beifre_hiding;
         ship.custom.lmfao = true;
@@ -853,10 +849,7 @@ var tick = function(game) {
           ship.setUIComponent(batteryBox);
           ship.setUIComponent(player_number);
           ship.instructorSays(
-          "Welcome to Starblast Arena. After the phase of mining you will be assigned to a team and will have to fight"+
-          "in order to get points. Aliens bosses and players gives more points. Be careful about not dying." +
-          "Search your team, it's useful.",
-          "Maria"
+        "Welcome to SA. After the mining phase you will be teleported on the map and will have to fight players and aliens. Fight and don’t die. Win points with kills, make your team winning 25 000 points."        )
           )
           ship.custom.time_start_before_hiding = true;
           ship.custom.timeZ = seconds_beifre_hiding;
@@ -1003,37 +996,33 @@ var petrificationCount = 0;
 var space = "\n"
 var powerAction = function(ship) {
   var teleportationInfos = {
-    teleportedPlayer: `You teleported yourself randomly on the map!`,
+    teleportedPlayer: `You teleported yourself randomly on the map and gained ${ship.custom.batteries} seconds of invulnerability`,
     teleportedOthers: ``,
     actionDelay: 0
   };
   var petrificationInfos = {
-    petrificator: `You froze ${game.ships.length - 1} ships for ${ship.custom.batteries} seconds!`,
-    petrificatedOthers: `${ship.name} froze you and ${game.ships.length - 2 } others for ${ship.custom.batteries} seconds!`,
+    petrificator: `You have petrified ${game.ships.length - 1} players for ${ship.custom.batteries} seconds.`,
+    petrificatedOthers: `You and  ${game.ships.length - 2 } players were petrified for ${ship.custom.batteries} seconds.`,
     actionDelay: 2
   };
   var eletricityInfos = {
-    electricityPlayer: `${game.ships.length - 1} players will lose ${
-      ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} of shield every second for 2 seconds!`,
-    electricitedPlayers: `You and ${game.ships.length - 2} players will lose ${
-       ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} shield!`,
+    electricityPlayer: `${game.ships.length - 1} players received ${((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} damages.`,
+    electricitedPlayers: `You and ${game.ships.length - 2} players received ${((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} damages.`,
     actionDelay: 2
   };
   var healerInfos = {
-    healer: `You're healer for ${ship.custom.batteries} seconds!`
+    healer: `You gained the ability to heal for ${ship.custom.batteries} seconds.`
   }; 
   var bodyguardInfos = {
-    boyguarded: `${ship.custom.batteries*2} appear to protect you!`
+    boyguarded: `You summoned ${ship.custom.batteries*2} aliens to protect you.`
   };
   var bloodStealerInfos = {
-    bloodstealer: `${game.ships.length - 1} lost ${
-      Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
-      
-    } and you gained ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} but lost ${
-      (Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals!`,
-    bloodstealed: `You and ${game.ships.length - 2} lost ${
+    bloodstealer: `You drained a total of  ${
+      (Math.trunc(ship.tier/100)*5) * ship.custom.batteries} shields and lost  ${
+      (Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals.`,
+    bloodstealed: `You were drained of ${
     Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
-    } of shield`
+    } shields.`
   };
   if (ship.custom.power === "petrification") {
     for (let i = 0; i < game.ships.length; i++) {
@@ -1191,7 +1180,7 @@ var BatteryPicked = function(ship) {
     var randomNummbbers = [1,2,3,4,5]
     if (randomNumbers[~~(Math.random()*randomNumbers.length)] === 1) {
       ship.custom.batteries--;
-      ship.instructorSays(`${space}You collected a corrupted battery! You now have ${ship.custom.batteries} charges instead of ${ship.custom.batteries + 1 } charges!`)
+      ship.instructorSays(`${space}You got a corrupted battery and lost 1 charge in your power battery.`)
       ship.setUIComponent(explanationOK);
       ship.setUIComponent({id:"pointsship", visible:false})
       if (ship.custom.batteries === 0) {
@@ -1254,23 +1243,22 @@ this.event = function(event, game) {
     case "ui_component_clicked":
       if (component == "learrnMorePetrificationPath") {
         ship.instructorSays(space+`
-        Petrification: freeze your ennemies for ${ship.custom.batteries} seconds
+        Petrify players for ${ship.custom.batteries} seconds.
         `);
         ship.setUIComponent(explanationOK);
         ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMoreElectricityPath") {
         ship.instructorSays(space+`
-          Electricity: damage every players of ${
-          ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries
-          } shields
+          Damage players of ${
+          ((Math.trunc(ship.type / 100) * 10)/2)*ship.custom.batteries} damages.
         `);
         ship.setUIComponent(explanationOK);
         ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "leanMoreTeleportationPath") {
         ship.instructorSays(space+`
-          Teleportation: teleport yourself randomly the map and gain ${ship.custom.batteries} seconds of
+          Teleport yourself randomly the map and gain ${ship.custom.batteries} seconds of
           invulnerability
         `);
         ship.setUIComponent(explanationOK);
@@ -1278,24 +1266,24 @@ this.event = function(event, game) {
       }
       if (component == "learnMorehealerPath") {
         ship.instructorSays(space+`
-        Healer: gain the ability to heal for ${ship.custom.batteries} seconds
+        Gain the ability to heal for ${ship.custom.batteries} seconds.
         `);
         ship.setUIComponent(explanationOK);
         ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMorebodyguardPath") {
         ship.instructorSays(space+`
-          Bodyguarded: summon ${ship.custom.batteries} piranhas
+          Summon ${ship.custom.batteries*2} aliens to protect you.
         `);
         ship.setUIComponent(explanationOK);
         ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMorebloodStealerPath") {
         ship.instructorSays(space+`
-          Blood stealer: damage every ships of ${
-              Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
-            } shields, gain ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} of shield but lose
-            ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals.
+            Drain enemies’s shield (${game.ships.length - 1}) and lose ${
+            Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )
+            
+          } crystals.
         `);
         ship.setUIComponent(explanationOK);
         ship.setUIComponent({id:"pointsship", visible:false})
