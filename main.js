@@ -22,7 +22,7 @@ const point_per_kills = 500;
 const points_per_boss = 3500;
 game.custom.status =  "Mining";
 game.custom.seconds = 60; // 60
-game.custom.minuts_1 = 7; // 6
+game.custom.minuts_1 = 0; // 6
 const secondsBeforeUsingAPower = 90;
 
 
@@ -331,9 +331,11 @@ var boss_set = function(alien) {
 var change_score = function(ship) {
   if (ship.custom.points - Math.trunc((ship.type / 100) * 100) >= 0) {
     ship.custom.points = ship.custom.points - Math.trunc((ship.type / 100) * 100);
+    actualizePLayerPoints(ship, ship.custom.points);
   }
   else if (ship.custom.points - Math.trunc((ship.type / 100)*100) < 0){
     ship.custom.points = 0;
+    actualizePLayerPoints(ship, ship.custom.points);
   }
 };
 
@@ -378,18 +380,7 @@ var scoreboard = {
   ]
 };
 
-var mining_button = {
-  id: "mining_button",
-  position: [5,50,8,14],
-  clickable: true,
-  shortcut: "M",
-  visible: true,
-  components: [
-    { type: "box",position:[0,0,100,100],stroke:"#CDE",width:2},
-    { type: "text",position:[10,35,80,30],value:"MINE [M]",color:"#CDE"},
-    { type: "text",position:[20,70,60,20],value:" ",color:"#CDE"}
-    ]
-};
+
 var actualize_ship_gems = function(ship, value) {
   mining_button.components[2].value = value;
   ship.setUIComponent(mining_button);
@@ -414,21 +405,6 @@ var player_number = {
   ]
 };
 
-var radar_background = {
-  id: "radar_background",
-  visible: true,
-  components: [
-    {type: "box",position:[
-     47,24.5,6,6],
-      stroke:"#119304",
-      fill:"#119304",width:5},
-    {type: "box",position:[
-      47,69.5,6,6],
-      stroke:"#3440B8",
-      fill:"#3440B8",
-      width:5},
-  ]
-};
 
 var check_hue_team = function(ship) {
   if (ship.team === 0 && ship.hue === 240) {
@@ -713,8 +689,10 @@ var learnMorebloodStealerPath = {
     ]
 };
 
-
-
+        var actualizePLayerPoints = function(ship, points) {
+          pointsship.components[0].value = `Your points: ${points}`;
+          ship.setUIComponent(pointsship);
+        };
 var tick = function(game) {
   if (game.step == 0) {
       game.custom.trigger = 0;
@@ -804,21 +782,6 @@ var tick = function(game) {
           else if (ship.custom.team === "Volgauf") {
             actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
           }
-          if (game.custom.aliens === 4) {
-            actualize_boss_infos(ship, "4 bosses left");
-          }
-          else if (game.custom.aliens === 3) {
-            actualize_boss_infos(ship, "3 bosses left" );
-          }
-          else if (game.custom.aliens === 2) {
-            actualize_boss_infos(ship, "2 bosses left");
-          }
-          else if (game.custom.aliens === 1) {
-            actualize_boss_infos(ship, "1 bosses left");
-          }
-          else if (game.custom.aliens === 0) {
-            actualize_boss_infos(ship, "No bosses left");
-          }
         if (game.custom.boss_creation === true) {
             for (let i=0;i<4;i++) {
               game.custom.boss_aliens.push(game.addAlien({
@@ -887,9 +850,8 @@ var tick = function(game) {
         if (game.custom.status === "Aliens") {
           team_assign(ship);
           ship.setUIComponent(scoreboard);
-          ship.setUIComponent(bosses);
+          ship.setUIComponent(batteryBox);
           ship.setUIComponent(player_number);
-          ship.setUIComponent(radar_background);
           ship.instructorSays(
           "Welcome to Starblast Arena. After the phase of mining you will be assigned to a team and will have to fight"+
           "in order to get points. Aliens bosses and players gives more points. Be careful about not dying." +
@@ -902,6 +864,7 @@ var tick = function(game) {
           echo(ship.name + " joined");
           ship.setUIComponent(powerPerShip);
           actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
+          ship.setUIComponent(pointsship);
         }
         echo(`${ship.name} joined: ${ship.custom.team}, ${ship.team}`)
         }
@@ -934,19 +897,18 @@ var tick = function(game) {
           game.custom.status = "Aliens";
           for (let ship of game.ships) { 
             team_assign(ship);
-            ship.setUIComponent(info2);
             ship.setUIComponent(scoreboard);
-            ship.setUIComponent(bosses);
             ship.setUIComponent(player_number);
             ship.custom.time_start_before_hiding = true;
             ship.custom.timeZ = seconds_beifre_hiding;
-            ship.setUIComponent(radar_background);
-            ship.set({id: 'timer', visible: false});
             game.custom.boss_creation = true;
             actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
             echo(ship.name + " joined");
             ship.setUIComponent(powerPerShip);
+            ship.setUIComponent(batteryBox);
             actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
+            ship.setUIComponent({id:"timer", visible:false});
+            ship.setUIComponent(pointsship);
           }
         }
       }
@@ -961,15 +923,6 @@ var tick = function(game) {
           }
         }
         if (game.custom.status === "Aliens") {
-          var pointsship = {
-            id: "pointsship",
-            position: [27,15,65,20],
-            visible: true,
-            components: [
-              { type: "text",position:[15,30,40,40],value:"Your points: " + ship.custom.points,color:"#CDE"},
-              ]
-          };
-        ship.setUIComponent(pointsship);
           if (count === true) {
             if (countSeconds > 0) {
               countSeconds--;
@@ -1000,7 +953,7 @@ var tick = function(game) {
             if (ship.custom.secondsToHavePower >= 1) {
               ship.custom.secondsToHavePower--;
               actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
-            } else if (ship.custom.secondsToHavePower === 0) {
+            } else if (ship.custom.secondsToHavePower === 1) {
               ship.custom.secondsToHavePower = 0;
               ship.custom.usedPower = false;
               actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#339005");
@@ -1009,15 +962,13 @@ var tick = function(game) {
         }
     }
   }
-  if (game.step % 12000 === 0) {
-    for (let ship of game.ships) {
-      if (hide_timer === false) {
-        for (let ship of game.ships) {
-          for (let t=0;t<game.ships.length;t++) {
-            game.ships[t].setUIComponent({id:'timer', visible:false});
-          }
-        }
-      }
+  if (game.step % 1800 === 0) {
+    for (let o=0;o<Math.trunc(game.ships.length*1.5);o++) {
+      game.addCollectible({
+        code: 42,
+        x:(Math.random() - 0.5) * game.options.map_size * 10,
+        y: (Math.random() - 0.5) * game.options.map_size * 10
+      })
     }
   }
   };
@@ -1030,26 +981,7 @@ var change_mining_button_infos = function(ship, value ) {
 
 
 
-var info2 = {
-  id: "info2",
-  position: [27,-2,70,70],
-  visible: true,
-  components: [
-    { type: "text",position:[6,15,55,55],value:"First team to reach  " + points + " points wins.",color:"#CDE"},
-    { type: "text",position:[4,20,60,60],value:"Kill players and aliens to gain points. Don't die.",color:"#CDE"},
-    ]
-};
 
-
-
-var bosses = {
-  id: "bosses",
-  position: [27,10,50,20],
-  visible: true,
-  components: [
-    { type: "text",position:[25,12,40,40],value:" ",color:"#CDE"},
-    ]
-};
 
 var timer = {
   id: "timer",
@@ -1091,7 +1023,7 @@ var powerAction = function(ship) {
     healer: `You're healer for ${ship.custom.batteries} seconds!`
   }; 
   var bodyguardInfos = {
-    boyguarded: `${ship.custom.batteries} appear to protect you!`
+    boyguarded: `${ship.custom.batteries*2} appear to protect you!`
   };
   var bloodStealerInfos = {
     bloodstealer: `${game.ships.length - 1} lost ${
@@ -1111,8 +1043,10 @@ var powerAction = function(ship) {
         game.ships[i].custom.petrificationCount=ship.custom.batteries;
         game.ships[i].custom.petrified=true;
         game.ships[i].setUIComponent(explanationOK);
+        game.ships[i].setUIComponent({id:"pointsship", visible:false})
       } else if (game.ships[i].team === ship.team) {
         game.ships[i].instructorSays(space + petrificationInfos.petrificator );
+        game.ships[i].setUIComponent({id:"pointsship", visible:false})
         game.ships[i].setUIComponent(explanationOK);
       }
     }
@@ -1125,16 +1059,19 @@ var powerAction = function(ship) {
       invulnerable: 60*ship.custom.batteries
     })
     ship.instructorSays(space+teleportationInfos.teleportedPlayer);
+    ship.setUIComponent({id:"pointsship", visible:false})
     var count = true;
   }
   if (ship.custom.power === "electricity") {
     for (let c = 0; c < game.ships.length; c++) {
       if (game.ships[c].team !== ship.team) {
         game.ships[c].instructorSays(space + eletricityInfos.electricitedPlayers);
+        game.ships[c].setUIComponent({id:"pointsship", visible:false})
         game.ships[c].set({shield:game.ships[c].shield - ((Math.trunc(ship.type / 100) * 10)/2)*2});
         game.ships[c].setUIComponent(explanationOK);
       } else if (game.ships[c].team === ship.team) {
         game.ships[c].instructorSays(space + eletricityInfos.electricityPlayer );
+        game.ships[c].setUIComponent({id:"pointsship", visible:false})
         game.ships[c].setUIComponent(explanationOK);
       }
     }
@@ -1142,6 +1079,7 @@ var powerAction = function(ship) {
   }
   if (ship.custom.power === "healer") {
     ship.instructorSays(space + healerInfos.healer);
+    ship.setUIComponent({id:"pointsship", visible:false});
     ship.setUIComponent(explanationOK);
     ship.set({healing:true});
     ship.custom.heal = ship.custom.batteries;
@@ -1149,13 +1087,14 @@ var powerAction = function(ship) {
   };
   if (ship.custom.power === "bodyguard") {
     ship.instructorSays(space + bodyguardInfos.boyguarded);
+    ship.setUIComponent({id:"pointsship", visible:false});
     ship.setUIComponent(explanationOK);
-    for (let z=0;z<ship.custom.batteries;z++) {
+    for (let z=0;z<ship.custom.batteries*2;z++) {
       game.addAlien({
         x: ship.x + z,
         y: ship.y - z,
         crystal_drop: 0,
-        code: 16,
+        code: 13,
         level:0,
         points: 0
       });
@@ -1165,12 +1104,14 @@ var powerAction = function(ship) {
     for (let g = 0; g < game.ships.length; g++) {
       if (game.ships[g].team !== ship.team) {
         game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealed);
+        game.ships[g].setUIComponent({id:"pointsship", visible:false})
         game.ships[g].set({
           shield:
             game.ships[g].shield - Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )});
         game.ships[g].setUIComponent(explanationOK);
       } else if (game.ships[g].team === ship.team) {
         game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealer );
+        game.ships[g].setUIComponent({id:"pointsship", visible:false})
         game.ships[g].setUIComponent(explanationOK);
         game.ships[g].set({crystals:
            game.ships[g].crystals - (Math.trunc(ship.tier/100)*5) * ship.custom.batteries
@@ -1182,7 +1123,14 @@ var powerAction = function(ship) {
   ship.custom.batteries = 0;
 };
 
-
+        var pointsship = {
+            id: "pointsship",
+            position: [27,15,65,20],
+            visible: true,
+            components: [
+              { type: "text",position:[15,30,40,40],value:" ",color:"#CDE"},
+              ]
+          };
 
 
 var explanationOK = {
@@ -1214,12 +1162,12 @@ var showComponents = function(ship) {
   ship.setUIComponent(leanMoreTeleportationPath);
   ship.setUIComponent(learrnMorePetrificationPath);
   ship.setUIComponent(learnMoreElectricityPath);
-      ship.setUIComponent(learnMorehealerPath);
-      ship.setUIComponent(healerPath);
-      ship.setUIComponent(bodyguardPath);
-      ship.setUIComponent(learnMorebodyguardPath);
-      ship.setUIComponent(bloodStealerPath);
-      ship.setUIComponent(learnMorebloodStealerPath);
+  ship.setUIComponent(learnMorehealerPath);
+  ship.setUIComponent(healerPath);
+  ship.setUIComponent(bodyguardPath);
+  ship.setUIComponent(learnMorebodyguardPath);
+  ship.setUIComponent(bloodStealerPath);
+  ship.setUIComponent(learnMorebloodStealerPath);
 };
 
 var hideComponents = function(ship) {
@@ -1229,26 +1177,46 @@ var hideComponents = function(ship) {
   ship.setUIComponent({id:"leanMoreTeleportationPath",visible:false});
   ship.setUIComponent({id:"learrnMorePetrificationPath",visible:false});
   ship.setUIComponent({id:"learnMoreElectricityPath",visible:false});
-      ship.setUIComponent({id:"learnMorehealerPath",visible:false});
-      ship.setUIComponent({id:"healerPath",visible:false});
-      ship.setUIComponent({id:"bodyguardPath",visible:false});
-      ship.setUIComponent({id:"learnMorebodyguardPath",visible:false});
-      ship.setUIComponent({id:"bloodStealerPath",visible:false});
-      ship.setUIComponent({id:"learnMorebloodStealerPath",visible:false});
+  ship.setUIComponent({id:"learnMorehealerPath",visible:false});
+  ship.setUIComponent({id:"healerPath",visible:false});
+  ship.setUIComponent({id:"bodyguardPath",visible:false});
+  ship.setUIComponent({id:"learnMorebodyguardPath",visible:false});
+  ship.setUIComponent({id:"bloodStealerPath",visible:false});
+  ship.setUIComponent({id:"learnMorebloodStealerPath",visible:false});
 };
 
 
 var BatteryPicked = function(ship) {
   if (ship.custom.batteries <= 2) {
-    ship.custom.batteries++;
-    if (ship.custom.batteries === 1) {
-      actualizationOfBatteryBox(ship, "#B2A91B", "#838383", "#BABABA");
-    }
-    else if (ship.custom.batteries === 2) {
-      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#BABABA");
-    }
-    else if (ship.custom.batteries === 3) {
-      actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#FBEE0E");
+    var randomNummbbers = [1,2,3,4,5]
+    if (randomNumbers[~~(Math.random()*randomNumbers.length)] === 1) {
+      ship.custom.batteries--;
+      ship.instructorSays(`${space}You collected a corrupted battery! You now have ${ship.custom.batteries} charges instead of ${ship.custom.batteries + 1 } charges!`)
+      ship.setUIComponent(explanationOK);
+      ship.setUIComponent({id:"pointsship", visible:false})
+      if (ship.custom.batteries === 0) {
+        actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
+      }
+      if (ship.custom.batteries === 1) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#838383", "#BABABA");
+      }
+      else if (ship.custom.batteries === 2) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#BABABA");
+      }
+      else if (ship.custom.batteries === 3) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#FBEE0E");
+      }
+    } else {
+      ship.custom.batteries++;
+      if (ship.custom.batteries === 1) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#838383", "#BABABA");
+      }
+      else if (ship.custom.batteries === 2) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#BABABA");
+      }
+      else if (ship.custom.batteries === 3) {
+        actualizationOfBatteryBox(ship, "#B2A91B", "#DFD41A", "#FBEE0E");
+      }
     }
   }
 };
@@ -1262,10 +1230,6 @@ var actualizationOfBatteryBox = function(ship,OneBattery,TwoBatteries, ThreeBatt
 };
 
 
-var actualize_boss_infos = function(ship, text) {
-  bosses.components[0].value = text;
-  ship.setUIComponent(bosses);
-};
 var less_crystals = function(ship) {
   ship.set({
     crystals: ship.crystals - Math.trunc(ship.type/100)
@@ -1293,6 +1257,7 @@ this.event = function(event, game) {
         Petrification: freeze your ennemies for ${ship.custom.batteries} seconds
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMoreElectricityPath") {
         ship.instructorSays(space+`
@@ -1301,6 +1266,7 @@ this.event = function(event, game) {
           } shields
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "leanMoreTeleportationPath") {
         ship.instructorSays(space+`
@@ -1308,18 +1274,21 @@ this.event = function(event, game) {
           invulnerability
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMorehealerPath") {
         ship.instructorSays(space+`
         Healer: gain the ability to heal for ${ship.custom.batteries} seconds
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMorebodyguardPath") {
         ship.instructorSays(space+`
           Bodyguarded: summon ${ship.custom.batteries} piranhas
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
       if (component == "learnMorebloodStealerPath") {
         ship.instructorSays(space+`
@@ -1329,10 +1298,12 @@ this.event = function(event, game) {
             ${(Math.trunc(ship.tier/100)*5) * ship.custom.batteries} crystals.
         `);
         ship.setUIComponent(explanationOK);
+        ship.setUIComponent({id:"pointsship", visible:false})
       }
     if (component == "explanationOK") {
         ship.hideInstructor();
         ship.setUIComponent({id:'explanationOK', visible:false})
+        ship.setUIComponent(pointsship);
       }
       
       if (component == "petrificationPowerPath" ) {
@@ -1391,12 +1362,13 @@ this.event = function(event, game) {
       }
       if (component === "powerPerShip") {
         if (ship.custom.secondsToHavePower <= 0) {
-          if (ship.custom.lmfao === false) {
+          if (ship.custom.lmfao === true) {
             showComponents(ship);
-            ship.custom.lmfao = true;
-          } else if (ship.custom.lmfao === true) {
-            hideComponents(ship);
             ship.custom.lmfao = false;
+          } else if (ship.custom.lmfao === false) {
+            hideComponents(ship);
+            ship.setUIComponent({id:""})
+            ship.custom.lmfao = true;
           }
         }
       }
@@ -1417,6 +1389,7 @@ this.event = function(event, game) {
                 }
                 killer.custom.points += points_per_boss;
                 killer.custom.boss_killed++;
+                actualizePLayerPoints(killer, killer.custom.points);
           }
             else {
               if (killer.custom.team === "Orgono") {
@@ -1425,6 +1398,7 @@ this.event = function(event, game) {
                 game.custom.team_score_2 += ((Number(alien.code) + Number(alien.level))*10);
               }
               killer.custom.points += ((Number(alien.code) + Number(alien.level))*10);
+              actualizePLayerPoints(killer, killer.custom.points);
             }
         }
       }
@@ -1466,6 +1440,7 @@ this.event = function(event, game) {
             game.custom.team_score_2 += 450;
           }
           killer.custom.points += 450;
+          actualizePLayerPoints(killer, killer.custom.points);
         }
         ship.custom.deaths++;
       }
