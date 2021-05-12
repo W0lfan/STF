@@ -8,7 +8,7 @@ Players will have access to "capacities" after the mining phase, such as:
 :zap: Electricity: damage all your enemies of x damages.<br/>
 :cyclone: Teleportation: gain the ability to be teleported randomly on the map with x seconds of invulnerability.<br/>
 :herb: Healer: gain the ability to be healer for x seconds.<br/>
-:shield: Bodyguard: summon 3 piranhas (it will be removed).<br/>
+:shield: Bodyguard: summon x piranhas (it will be removed).<br/>
 :drop_of_blood: Vampire: All the player will be damaged to heal you. You will lose the number of shield points you gained.<br/>
 <br/><br/><br/>
  <b>What is "x"?</b><br/>
