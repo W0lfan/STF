@@ -1027,12 +1027,19 @@ var powerAction = function(ship) {
   if (ship.custom.power === "petrification") {
     for (let i = 0; i < game.ships.length; i++) {
       if (game.ships[i].team !== ship.team) {
-        game.ships[i].instructorSays(space + petrificationInfos.petrificatedOthers);
-        game.ships[i].set({idle:true});
-        game.ships[i].custom.petrificationCount=ship.custom.batteries;
-        game.ships[i].custom.petrified=true;
-        game.ships[i].setUIComponent(explanationOK);
-        game.ships[i].setUIComponent({id:"pointsship", visible:false})
+          if (
+            game.ships[i].x < ship.x + 30 && 
+            game.ships[i].x > ship.x - 30 && 
+            game.ships[i].y < ship.y + 30 && 
+            game.ships[i].y > ship.y - 30
+            ) {
+              game.ships[i].instructorSays(space + petrificationInfos.petrificatedOthers);
+              game.ships[i].set({idle:true});
+              game.ships[i].custom.petrificationCount=ship.custom.batteries;
+              game.ships[i].custom.petrified=true;
+              game.ships[i].setUIComponent(explanationOK);
+              game.ships[i].setUIComponent({id:"pointsship", visible:false})
+            }
       } else if (game.ships[i].team === ship.team) {
         game.ships[i].instructorSays(space + petrificationInfos.petrificator );
         game.ships[i].setUIComponent({id:"pointsship", visible:false})
@@ -1054,10 +1061,17 @@ var powerAction = function(ship) {
   if (ship.custom.power === "electricity") {
     for (let c = 0; c < game.ships.length; c++) {
       if (game.ships[c].team !== ship.team) {
-        game.ships[c].instructorSays(space + eletricityInfos.electricitedPlayers);
-        game.ships[c].setUIComponent({id:"pointsship", visible:false})
-        game.ships[c].set({shield:game.ships[c].shield - ((Math.trunc(ship.type / 100) * 10)/2)*2});
-        game.ships[c].setUIComponent(explanationOK);
+          if (
+            game.ships[c].x < ship.x + 30 && 
+            game.ships[c].x > ship.x - 30 && 
+            game.ships[c].y < ship.y + 30 && 
+            game.ships[c].y > ship.y - 30
+            ) {
+              game.ships[c].instructorSays(space + eletricityInfos.electricitedPlayers);
+              game.ships[c].setUIComponent({id:"pointsship", visible:false})
+              game.ships[c].set({shield:game.ships[c].shield - ((Math.trunc(ship.type / 100) * 10)/2)*2});
+              game.ships[c].setUIComponent(explanationOK);
+            }
       } else if (game.ships[c].team === ship.team) {
         game.ships[c].instructorSays(space + eletricityInfos.electricityPlayer );
         game.ships[c].setUIComponent({id:"pointsship", visible:false})
@@ -1092,12 +1106,19 @@ var powerAction = function(ship) {
   if (ship.custom.power === "bloodStealer") {
     for (let g = 0; g < game.ships.length; g++) {
       if (game.ships[g].team !== ship.team) {
-        game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealed);
-        game.ships[g].setUIComponent({id:"pointsship", visible:false})
-        game.ships[g].set({
-          shield:
-            game.ships[g].shield - Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )});
-        game.ships[g].setUIComponent(explanationOK);
+          if (
+            game.ships[c].x < ship.x + 30 && 
+            game.ships[c].x > ship.x - 30 && 
+            game.ships[c].y < ship.y + 30 && 
+            game.ships[c].y > ship.y - 30
+            ) {
+              game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealed);
+              game.ships[g].setUIComponent({id:"pointsship", visible:false})
+              game.ships[g].set({
+                shield:
+                  game.ships[g].shield - Math.trunc(((Math.trunc(ship.tier/100)*5) * ship.custom.batteries) / (game.ships.length - 1) )});
+              game.ships[g].setUIComponent(explanationOK);
+            }
       } else if (game.ships[g].team === ship.team) {
         game.ships[g].instructorSays(space + bloodStealerInfos.bloodstealer );
         game.ships[g].setUIComponent({id:"pointsship", visible:false})
@@ -1111,6 +1132,12 @@ var powerAction = function(ship) {
   actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
   ship.custom.batteries = 0;
 };
+
+
+if (ship.x + 30 >  )
+
+
+
 
         var pointsship = {
             id: "pointsship",
