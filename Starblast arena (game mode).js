@@ -853,8 +853,7 @@ var tick = function(game) {
           ship.setUIComponent(scoreboard);
           ship.setUIComponent(batteryBox);
           ship.setUIComponent(player_number);
-          ship.instructorSays(
-        "Welcome to SA. After the mining phase you will be teleported on the map and will have to fight players and aliens. Fight and don’t die. Win points with kills, make your team winning 25 000 points."        )
+          ship.instructorSays("Welcome to SA. After the mining phase you will be teleported on the map and will have to fight players and aliens. Fight and don’t die. Win points with kills, make your team winning 25 000 points."        )
           ship.custom.time_start_before_hiding = true;
           ship.custom.timeZ = seconds_beifre_hiding;
           actualize_seconds(ship, ship.custom.secondsToHavePower + "s", "#AD1414");
