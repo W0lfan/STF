@@ -107,8 +107,6 @@ var ships = [];
 for (let ship in s) ships.push(s[ship]); 
 
 
-//[x,y,width,height]
-
 
 
 
