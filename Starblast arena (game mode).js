@@ -109,7 +109,6 @@ for (let ship in s) ships.push(s[ship]);
 
 
 
-
 var map_name = [
   "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
   "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5", "Pan-Da 3", "SUB 2 Wol-F-an"
@@ -996,7 +995,32 @@ var countSeconds = 5;
 var petrificationCount = 0;
 var space = "\n"
 var powerAction = function(ship) {
-  calculateCoordinates(ship);
+  var min = 110 * 5;
+  var max = - 110 * 5;
+  if (ship.x + 30 > 150) {
+    ship.custom.Calcul = 150 - (game.ships[i].x + 30);
+    ship.custom.FirstX = min - ship.custom.Calcul;
+  } else {
+    ship.custom.FirstX = ship.x;
+  }
+  if (ship.x - 30 < -150) {
+    ship.custom.Calcul = -150 - (game.ships[i].x - 30);
+    ship.custom.SecondX = max - ship.custom.Calcul;
+  } else {
+    ship.custom.SecondX = ship.x;
+  }
+  if (ship.y + 30 > 150) {
+    ship.custom.Calcul = 150 - (game.ships[i].y + 30);
+    ship.custom.FirstY = min - ship.custom.Calcul;
+  } else {
+    ship.custom.FirstY = ship.y;
+  }
+  if (ship.y - 30 < -150) {
+    ship.custom.Calcul = -150 - (game.ships[i].x - 30);
+    ship.custom.SecondY = max - ship.custom.Calcul;
+  } else {
+    ship.custom.SecondY = ship.y;
+  }
   var teleportationInfos = {
     teleportedPlayer: `You teleported yourself randomly on the map and gained ${ship.custom.batteries} seconds of invulnerability`,
     teleportedOthers: ``,
@@ -1135,46 +1159,6 @@ var powerAction = function(ship) {
   actualizationOfBatteryBox(ship, "#5F5F5F", "#838383", "#BABABA");
   ship.custom.batteries = 0;
 };
-
-
-var calculateCoordinates = function(ship) {
-  var min = 30 * 5;
-  var max = - 30 * 5;
-  if (ship.x + 30 > 150) {
-    ship.custom.Calcul = 150 - (game.ships[i].x + 30);
-    ship.custom.FirstX = min - ship.custom.Calcul;
-  } else {
-    ship.custom.FirstX = ship.x;
-  }
-  if (ship.x - 30 < -150) {
-    ship.custom.Calcul = -150 - (game.ships[i].x - 30);
-    ship.custom.SecondX = max - ship.custom.Calcul;
-  } else {
-    ship.custom.SecondX = ship.x;
-  }
-  if (ship.y + 30 > 150) {
-    ship.custom.Calcul = 150 - (game.ships[i].y + 30);
-    ship.custom.FirstY = min - ship.custom.Calcul;
-  } else {
-    ship.custom.FirstY = ship.y;
-  }
-  if (ship.y - 30 < -150) {
-    ship.custom.Calcul = -150 - (game.ships[i].x - 30);
-    ship.custom.SecondY = max - ship.custom.Calcul;
-  } else {
-    ship.custom.SecondY = ship.y;
-  }
-};
-
-if (
-  game.ships[i].x < ship.custom.FirstX &&
-  game.ships[i].x > ship.custom.SecondX &&
-  game.ships[i].y < ship.custom.FirstY &&
-  game.ships[i].y > ship.custom.SecondY
-  ) {
-  //stuff
-};
-
 
 
 
@@ -1497,6 +1481,7 @@ this.event = function(event, game) {
           actualizePLayerPoints(killer, killer.custom.points);
         }
         ship.custom.deaths++;
+        ship.custom.batteries = 0;
       }
       break;
     case "ship_disconnected":
