@@ -108,7 +108,6 @@ for (let ship in s) ships.push(s[ship]);
 
 
 
-
 var map_name = [
   "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
   "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5", "Pan-Da 3", "SUB 2 Wol-F-an"
