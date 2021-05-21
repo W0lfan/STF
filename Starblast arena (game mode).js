@@ -16,7 +16,7 @@
 
 
 const seconds_beifre_hiding = 20;
-const points = 40000; //25K
+const points = 20000; //25K
 const alien_shield = 20000;
 const point_per_kills = 500;
 const points_per_boss = 3500;
@@ -30,7 +30,7 @@ const points_per_boss = 3500;
 
 var s={};
 //Tier 1
-s.Vewlar_101 = (function(){var r=Function('return(function(){var model;return model={name:\'Vewlar\',level:1,model:1,size:1,specs:{shield:{capacity:[110,130],reload:[5,7]},generator:{capacity:[40,60],reload:[22,35]},ship:{mass:175,speed:[100,110],rotation:[50,60],acceleration:[100,115]}},bodies:{hands:{section_segments:12,offset:{x:30,y:0,z:-20},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0],y:[-120,-85,-80,-50,-30,0,40,45,50,70,70],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,15,15,20,20,20,20,20,20,15,0,0],height:[0,15,15,15,15,15,15,15,15,15,0,0],texture:[63,1,1,2,2,3,3,4,63],propeller:true},uphands:{section_segments:8,offset:{x:30,y:0,z:0},position:{x:[-8,-5,0,0,0,0,0,0,0,0,0,0],y:[-75,-55,-40,-10,-5,0,25,40,60,95,95],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,10,10,10,10,10,10,10,9,7,0,0],height:[0,10,10,10,10,10,10,10,9,7,0,0],texture:[10,1,2,3,3,3,3,63,4],propeller:true},sides:{section_segments:12,offset:{x:50,y:-20,z:-20},position:{x:[-8,-8,-6,-2,0,0,0,0,0,-3,-3],y:[0,-90,-80,-50,-30,0,40,50,65,90,90],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,0,7,7,7,7,7,7,7,7,7,0],height:[0,0,15,20,20,20,20,20,20,15,0,0],texture:[4,4,3,2,63,63,2,3,4],propeller:false},main1:{section_segments:8,offset:{x:0,y:30,z:5},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0,0],y:[-180,-150,-150,-70,-40,0,10,30,50,45],z:[0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,20,20,30,30,30,30,25,20,0,0],height:[0,20,20,20,20,20,20,20,20,0,0],texture:[63,13,3,2,2,3,3,13,17],propeller:true},cockpit:{section_segments:8,offset:{x:0,y:0,z:20},position:{x:[0,0,0,0,0,0,0],y:[-60,-30,20,40,50],z:[0,0,0,0,0,0,0]},width:[0,15,17,15,5],height:[0,10,10,10,5],texture:[4,9,63,63,0]},cannons:{section_segments:8,offset:{x:30,y:-100,z:-20},position:{x:[0,0,0,0],y:[-20,-15,20,30],z:[0,0,0,0]},width:[3,5,5,3],height:[3,5,5,3],texture:[6,10,5],laser:{damage:[10,12],rate:3,type:2,speed:[200,250],number:1,error:0,recoil:7}}},wings:{main:{length:[80,30,0],width:[100,70,40],angle:[10,0,0],position:[0,50,90,0],texture:[11,4],bump:{position:30,size:1},offset:{x:0,y:-40,z:-25}}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[3,2.742,2.489,2.355,2.273,1.98,1.735,1.555,1.493,1.58,1.672,1.74,1.846,1.999,2.214,2.338,2.481,2.583,1.537,1.708,1.768,1.775,2.039,1.998,1.629,1.603,1.629,1.998,2.039,1.775,1.768,1.708,1.537,2.583,2.481,2.338,2.214,1.999,1.846,1.74,1.672,1.58,1.493,1.555,1.735,1.98,2.273,2.355,2.489,2.742],"lasers":[{"x":0.6,"y":-2.4,"z":-0.4,"angle":0,"damage":[10,12],"rate":3,"type":2,"speed":[200,250],"number":1,"spread":0,"error":0,"recoil":7},{"x":-0.6,"y":-2.4,"z":-0.4,"angle":0,"damage":[10,12],"rate":3,"type":2,"speed":[200,250],"number":1,"spread":0,"error":0,"recoil":7}],"radius":3}')),JSON.stringify(r)})();
+s.Vewlar_101 = (function(){var r=Function('return(function(){var model;return model={name:\'Vewlar\',level:1,model:1,size:1,specs:{shield:{capacity:[110,130],reload:[5,7]},generator:{capacity:[40,60],reload:[22,35]},ship:{mass:175,speed:[100,110],rotation:[50,60],acceleration:[100,115]}},bodies:{hands:{section_segments:12,offset:{x:30,y:0,z:-20},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0],y:[-120,-85,-80,-50,-30,0,40,45,50,70,70],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,15,15,20,20,20,20,20,20,15,0,0],height:[0,15,15,15,15,15,15,15,15,15,0,0],texture:[63,1,1,2,2,3,3,4,63],propeller:true},uphands:{section_segments:8,offset:{x:30,y:0,z:0},position:{x:[-8,-5,0,0,0,0,0,0,0,0,0,0],y:[-75,-55,-40,-10,-5,0,25,40,60,95,95],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,10,10,10,10,10,10,10,9,7,0,0],height:[0,10,10,10,10,10,10,10,9,7,0,0],texture:[10,1,2,3,3,3,3,63,4],propeller:true},sides:{section_segments:12,offset:{x:50,y:-20,z:-20},position:{x:[-8,-8,-6,-2,0,0,0,0,0,-3,-3],y:[0,-90,-80,-50,-30,0,40,50,65,90,90],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,0,7,7,7,7,7,7,7,7,7,0],height:[0,0,15,20,20,20,20,20,20,15,0,0],texture:[4,4,3,2,63,63,2,3,4],propeller:false},main1:{section_segments:8,offset:{x:0,y:30,z:5},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0,0],y:[-180,-150,-150,-70,-40,0,10,30,50,45],z:[0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,20,20,30,30,30,30,25,20,0,0],height:[0,20,20,20,20,20,20,20,20,0,0],texture:[63,13,3,2,2,3,3,13,17],propeller:true},cockpit:{section_segments:8,offset:{x:0,y:0,z:20},position:{x:[0,0,0,0,0,0,0],y:[-60,-30,20,40,50],z:[0,0,0,0,0,0,0]},width:[0,15,17,15,5],height:[0,10,10,10,5],texture:[4,9,63,63,0]},cannons:{section_segments:8,offset:{x:30,y:-100,z:-20},position:{x:[0,0,0,0],y:[-20,-15,20,30],z:[0,0,0,0]},width:[3,5,5,3],height:[3,5,5,3],texture:[6,10,5],laser:{damage:[10,12],rate:3,type:2,speed:[200,250],number:1,error:0,recoil:7}}},wings:{main:{length:[80,10,0],width:[100,70,40],angle:[10,0,0],position:[0,50,75,0],texture:[11,4],bump:{position:30,size:1},offset:{x:-15,y:-20,z:-25}}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[3,2.742,2.489,2.355,2.273,1.98,1.735,1.555,1.408,1.299,1.225,1.208,1.3,1.352,1.435,1.548,1.681,1.822,2.02,2.101,1.768,1.775,2.039,1.998,1.629,1.603,1.629,1.998,2.039,1.775,1.768,2.101,2.02,1.822,1.681,1.548,1.435,1.352,1.3,1.208,1.225,1.299,1.408,1.555,1.735,1.98,2.273,2.355,2.489,2.742],"lasers":[{"x":0.6,"y":-2.4,"z":-0.4,"angle":0,"damage":[10,12],"rate":3,"type":2,"speed":[200,250],"number":1,"spread":0,"error":0,"recoil":7},{"x":-0.6,"y":-2.4,"z":-0.4,"angle":0,"damage":[10,12],"rate":3,"type":2,"speed":[200,250],"number":1,"spread":0,"error":0,"recoil":7}],"radius":3}')),JSON.stringify(r)})();
 
 s.Inferno_601 = (function(){var r=Function('return(function(){var i,j,key,model,ref,value;Array.prototype.mult=function(m){return this.map(function(v){return v*m})};Array.prototype.add=function(m){return this.map(function(v){return v+m})};ref=[];for(key in ref){key=key;key=key;value=ref[key];delete Array.prototype[key];Object.defineProperty(Array.prototype,key,{value:value,configurable:true,enumerable:false})}model={name:\'Inferno\',level:6,model:1,size:2.7,specs:{shield:{capacity:[300,375],reload:[4,7]},generator:{capacity:[175,250],reload:[30,40]},ship:{mass:350,speed:[70,90],rotation:[65,90],acceleration:[100,130]}},bodies:{reactors:{section_segments:40,vertical:true,offset:{x:30,y:10,z:-43},position:{x:[0,0,0,0],y:[-10,1,3,3],z:[0,0,0,0]},width:[7,7,6,0],height:[10,10,9,0],texture:[4,3,17]},big_reactor:{section_segments:40,vertical:true,offset:{x:0,y:14,z:-20},position:{x:[0,0,0,0],y:[-10,1,3,3],z:[0,0,0,0]},width:[7,7,6,0].mult(1.2),height:[10,10,9,0].mult(1.2),texture:[4,3,17]},cockpit:{section_segments:8,offset:{x:0,y:-33,z:7},position:{x:[0,0,0,0,0,0,0],y:[-30,-19,-10,5,10,15,20].mult(0.5),z:[0,0,0,0,0,0,0]},width:[0,6,8,9,9,8,0].mult(0.4),height:[0,9,10,11,11,10,0].mult(0.3),texture:[4,9,9,4]},side_guards1:{section_segments:12,offset:{x:30,y:-5,z:7},position:{x:[28,30,30,27,20,2,-5],y:[-50,-45,-15,15,40,60,65],z:[-7,-5,0,0,0,-4,-7]},width:[0,3,5,6,7,8,0],height:[0,6,10,12,11,9,0].mult(0.7),texture:[63,3,18,4,10,3]},side_guards2:{section_segments:12,offset:{x:30,y:-5,z:-7},position:{x:[28,30,30,27,20,2,-5],y:[-50,-45,-15,15,40,60,65],z:[7,5,0,0,0,4,7]},width:[0,3,5,6,7,8,0],height:[0,6,10,12,11,9,0].mult(0.7),texture:[63,3,18,4,10,3]},side_guards3:{section_segments:12,offset:{x:34,y:-4,z:0},position:{x:[27,29,31,28,20,0,-5],y:[-45,-45,-15,15,42,62,65],z:[0,0,0,0,0,0,0]},width:[0,3,5,6,7,8,0].mult(0.7),height:[0,6,10,12,11,9,0].mult(0.3),texture:[4,63,4,63,4]},guns:{section_segments:12,offset:{x:40,y:-20,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0],y:[-100,-110,-104,-96,-90,-84,20,22,30,50,60,63],z:[0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,10,11,11,11,10,10,13,15,15,13,0],height:[0,10,11,11,11,10,10,13,15,15,13,0],texture:[17,4,63,4,2,3,4,13,8,63,4],laser:{number:1,damage:[70,100],rate:8,speed:[180,260],angle:0,error:0,recoil:250}},turbines:{section_segments:8,offset:{x:18,y:35,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0],y:[-50,-46,-51,-48,-40,-20,10,20,25,15],z:[0,0,0,0,0,0,0,0,0,0]},width:[0,6,9,12,13,14,13,11,10,0],height:[0,6,9,12,13,14,13,11,10,0],texture:[3,17,4,3,18,10,63,13,17],propeller:true},center:{section_segments:8,offset:{x:0,y:-10,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0,0],y:[-45,-35,-20,-5,5,15,45,60,70,75,70],z:[0,0,0,6,6,8,8,3,0,0,0]},width:[0,6,8,10,11,11,10,8,6,4,0],height:[0,8,8,8,8,8,8,10,8,6,6,0],texture:[3,8,10,18,63,4,11,3,13,17],propeller:true},center_borders:{section_segments:8,offset:{x:10,y:-10,z:11},position:{x:[-10,-10,-7,-5,0,0,-4,-4],y:[-45,-45,-35,-20,5,45,70,70],z:[-12,-12,-9,-9,-1,-1,-7,-7]},width:[0,1,3,3,3,3,2,0],height:[0,1,3,3,3,3,3,0],texture:[63,63,63,4,17]},gun_topping_1:{section_segments:8,offset:{x:40,y:-20,z:7.8},position:{x:[0,0,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,0,0],y:[-85,-85,-82.5,-80,-77.5,-75,-72.5,-70,-67.5,-65,-62.5,-60,-57.5,-55,-52.5,-50,-47.5,-45,-42.5,-40,-37.5,-35,-32.5,-30,-27.5,-25,-22.5,-20,-17.5,-15,-12.5,-10,-7.5,-5,-2.5,0,2.5,5,7.5,10,12.5,15,17.5,20,20],z:[0,0,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,0,0]},width:[0,3,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,3,0],height:[0,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],texture:[4,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4]},gun_topping_2:{section_segments:8,offset:{x:40,y:-20,z:7.8},position:{x:[0,0,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,-3,-5,-5,-3,0,3,5,5,3,0,0,0],y:[-80,-85,-82.5,-80,-77.5,-75,-72.5,-70,-67.5,-65,-62.5,-60,-57.5,-55,-52.5,-50,-47.5,-45,-42.5,-40,-37.5,-35,-32.5,-30,-27.5,-25,-22.5,-20,-17.5,-15,-12.5,-10,-7.5,-5,-2.5,0,2.5,5,7.5,10,12.5,15,17.5,20,20],z:[0,0,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,-1,-1.7,-1.7,-1,0,0,0]},width:[0,3,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,2.5,2,2,2.5,3,3,0],height:[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0],texture:[4,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4,4,17,4,17,4]}},wings:{armor_gun_connection:{offset:{x:50,y:-5,z:0},length:[8],position:[0,-22],width:[20,30],angle:[0],texture:[2],bump:{position:5,size:10}},gun_fin:{offset:{x:39,y:25,z:15},doubleside:true,length:[20],position:[0,20],width:[29,15],angle:[20],texture:[63],bump:{position:5,size:0}},gun_fin2:{offset:{x:39,y:12.5,z:14},doubleside:true,length:[20],position:[0,22],width:[10,7],angle:[20],texture:[3],bump:{position:5,size:0}},front_fin1:{offset:{x:50,y:-120,z:0},doubleside:true,length:[10],position:[0,-10],width:[20,10],angle:[0],texture:[63],bump:{position:5,size:10}},front_fin2:{offset:{x:-30,y:-120,z:0},doubleside:true,length:[10],position:[0,-10],width:[20,10],angle:[0],texture:[63],bump:{position:5,size:10}}}};i=j=0;while(j<8){model.bodies[\'emitter\'+i]={section_segments:20,vertical:true,offset:{x:40,y:5,z:i*12.5+8.5},position:{x:[0,0,0,0,0,0],y:[-1,5.4,5.5,5.3,5.7,6],z:[0,0,0,0,0,0]},width:[3,2.9,2.4,2.3,1.2,0],height:[3,2.9,2.4,2.3,1.2,0],texture:[4,3,2,17,13]};i=++j}return model}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[2.97,7.37,7.381,7.978,7.609,5.003,4.317,4.4,4.351,4.095,3.923,3.812,3.684,3.62,3.624,3.628,3.708,3.853,4.216,3.74,3.792,3.751,3.575,3.407,3.506,3.517,3.506,3.407,3.575,3.751,3.792,3.74,4.216,3.853,3.708,3.628,3.624,3.62,3.684,3.812,3.923,4.095,4.351,4.4,4.317,5.003,7.609,7.978,7.381,7.37],"lasers":[{"x":2.16,"y":-7.02,"z":0,"angle":0,"damage":[70,100],"rate":8,"speed":[180,260],"number":1,"spread":0,"error":0,"recoil":250},{"x":-2.16,"y":-7.02,"z":0,"angle":0,"damage":[70,100],"rate":8,"speed":[180,260],"number":1,"spread":0,"error":0,"recoil":250}],"radius":7.978}')),JSON.stringify(r)})();
 s.Wylde_602 = '{"name":"Wylde","level":6,"model":2,"size":1.2,"specs":{"shield":{"capacity":[200,275],"reload":[7,10]},"generator":{"capacity":[150,200],"reload":[70,90]},"ship":{"mass":240,"speed":[100,130],"rotation":[40,50],"acceleration":[100,115]}},"bodies":{"main":{"section_segments":12,"offset":{"x":0,"y":10,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[-240,-215,-150,-130,-100,-60,5,60,90,120,100],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,20,30,40,40,40,40,40,40,30,0],"height":[0,20,30,30,30,30,30,30,30,20,0],"texture":[63,3,13,63,1,10,2,3,4,17],"propeller":true},"cannon":{"section_segments":8,"offset":{"x":60,"y":40,"z":-10},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[-140,-120,-100,-80,-60,-30,30,50,70,90,80],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,10,20,20,25,25,25,20,20,15,0],"height":[0,10,20,20,20,20,20,20,20,15,0],"texture":[3,4,63,2,3,10,3,4,13,17],"propeller":true,"laser":{"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"error":5}},"cannon1":{"section_segments":8,"offset":{"x":40,"y":20,"z":20},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0,0],"y":[-160,-160,-140,-100,-60,-30,10,40,60,80,80],"z":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,10,15,25,25,25,25,25,20,15,0],"height":[0,10,20,20,20,20,20,20,20,15,0],"texture":[17,13,63,10,1,2,3,4,63,17],"propeller":true,"laser":{"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"error":5}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-150,"z":30},"position":{"x":[0,0,0,0,0,0,0,0],"y":[-50,-40,0,30,90,140,180,200],"z":[-10,-10,-4,-2,0,0,0,0]},"width":[0,10,15,20,20,20,20,0],"height":[0,15,15,15,15,15,15,0],"texture":[4,9,63,10,2,3,4]}},"wings":{"main":{"doubleside":true,"offset":{"x":20,"y":-10,"z":0},"length":[85,40,20,0,0],"width":[120,90,70,50],"angle":[-10,0,0,0],"position":[0,40,70,90],"texture":[3,4,63],"bump":{"position":20,"size":1}},"main1":{"doubleside":true,"offset":{"x":25,"y":20,"z":30},"length":[50,20,0,0,0],"width":[70,50,30,0],"angle":[20,10,0,0],"position":[0,50,80,0],"texture":[3,63],"bump":{"position":20,"size":1}}},"typespec":{"name":"Wylde","level":6,"model":2,"code":602,"specs":{"shield":{"capacity":[200,275],"reload":[7,10]},"generator":{"capacity":[150,200],"reload":[70,90]},"ship":{"mass":240,"speed":[100,130],"rotation":[40,50],"acceleration":[100,115]}},"shape":[5.52,5.122,3.644,3.568,3.122,2.754,2.581,2.464,2.372,2.189,2.242,2.548,2.844,3.282,3.793,4.223,4.478,4.668,3.052,3.451,3.53,3.602,3.448,3.202,3.176,3.126,3.176,3.202,3.448,3.602,3.53,3.451,3.052,4.668,4.478,4.223,3.793,3.282,2.844,2.548,2.242,2.189,2.372,2.464,2.581,2.754,3.122,3.568,3.644,5.122],"lasers":[{"x":1.44,"y":-2.4,"z":-0.24,"angle":0,"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"spread":0,"error":5,"recoil":0},{"x":-1.44,"y":-2.4,"z":-0.24,"angle":0,"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"spread":0,"error":5,"recoil":0},{"x":0.96,"y":-3.36,"z":0.48,"angle":0,"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"spread":0,"error":5,"recoil":0},{"x":-0.96,"y":-3.36,"z":0.48,"angle":0,"damage":[10,20],"rate":6,"type":1,"speed":[150,180],"number":1,"spread":0,"error":5,"recoil":0}],"radius":5.52}}';
@@ -224,6 +224,7 @@ var team_assign = function(ship) {
         y: (Math.random() - 0.5) * game.options.map_size * 10,
       })
   }
+  ship.set({invulnerable:60*10})
 }
 
 
@@ -410,18 +411,6 @@ var actualizationOfBatteryBox = function(ship,OneBattery,TwoBatteries, ThreeBatt
 };
 
 
-var batteryBox = {
-  id: "batteryBox",
-  position: [17,32,10,20],
-  visible: true,
-  components: [
-    { type: "box",position:[0,0,30,80], fill:" ",width:10},
-    { type: "box",position:[5,3,20,27],fill:" ",width:0},
-    { type: "box",position:[5,27,20,27],fill:" ",width:0},
-    { type: "box",position:[5,52,20,25],fill:" ",width:0},
-    ]
-};
-
 
 
 
@@ -544,6 +533,7 @@ var tick = function(game) {
           }
           game.custom.boss_creation = true;
         }
+        score_set_points(ship);
       if (ship.custom.init !== true) {
         random_set(ship);
         ship.custom.init = true;
@@ -636,7 +626,7 @@ var space = "\n"
 
         var pointsship = {
             id: "pointsship",
-            position: [27,15,65,20],
+            position: [27,5,65,20],
             visible: true,
             components: [
               { type: "text",position:[15,30,40,40],value:" ",color:"#CDE"},
@@ -711,9 +701,7 @@ var nextShip = {
 var nextShipWillBeHiddenIn = {
   id: "nextShipWillBeHiddenIn",
   position: [50,84,15,10],
-  clickable: true,
   visible: true,
-  shortcut: 'L',
   components: [
     { type: "text",align:"center",position:[5,30,90,55],value:"",color:"#CDE"}
     ]
@@ -741,9 +729,9 @@ this.event = function(event, game) {
     case "ui_component_clicked":
       if (component === "nextShip") {
         if (ship.type < Math.max(...FightingTierSix) ) {{
-          ship.set({type: ship.type + 1,generator:0, stats:6666666, shield: 1000});
+          ship.set({type: ship.type + 1,generator:0, stats:66666666, shield: 1000, crystals: 500});
         }} else if (ship.type == Math.max(...FightingTierSix) ) {
-          ship.set({type:Math.min(...FightingTierSix), stats:6666666, shield: 1000 });
+          ship.set({type:Math.min(...FightingTierSix), stats:66666666, shield: 1000 , crystals: 500});
         }
       }
     if (component == "explanationOK") {
@@ -786,7 +774,7 @@ this.event = function(event, game) {
         if (ship != null) {
           if (ship.custom.init == true) {
             shipSpawn(ship);
-            ship.set({idle:true, invulnerable:600});
+            ship.set({idle:true, invulnerable:60*HiddenIN});
           }
         }
       break ;
