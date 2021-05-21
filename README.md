@@ -21,4 +21,3 @@ Please <b>always</b> keep modding tab active when hosting this mod owerthise you
 <b>Hoping to see this mod one day in modding space! Feel free to play it and host it, I hope you'll appreciate it!!</b>
 <br>
 <br>
-<img src="https://cdn.discordapp.com/attachments/821015314586140753/845322538904715284/starblastarena.png">
