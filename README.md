@@ -4,8 +4,10 @@ Starblast Arena is a starblast mod with custom tree.
 After the phase of mining, players will have to survive in a chaotic environment. They have to collect points by killing aliens & players, and the first to reach 25 000 points wins. Dying makes your team losing points.<br><br>
 <br/>
 Please <b>always</b> keep modding tab active when hosting this mod owerthise you will get issues in the game. That is really important to follow.
-<br>
+<br>Example (you can have only one tab in the entire screen but modding editor must be in a separate tab!):
 <img src="https://cdn.discordapp.com/attachments/833384193262223392/845336448483328020/Capture.PNG">
+<br>
+<br>
 <br>
 <br>
 <b>Credits goes to:</b>
@@ -17,3 +19,6 @@ Please <b>always</b> keep modding tab active when hosting this mod owerthise you
  <li>Thanks to Lotus and Bhpsngum, who are always here to help me.</li></ul>
 <br/><br/>
 <b>Hoping to see this mod one day in modding space! Feel free to play it and host it, I hope you'll appreciate it!!</b>
+<br>
+<br>
+<img src="https://cdn.discordapp.com/attachments/821015314586140753/845322538904715284/starblastarena.png">
