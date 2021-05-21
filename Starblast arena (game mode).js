@@ -6,17 +6,12 @@
 * Mod made by Wolfan, idea by Wolfan.
 * Thanks to Glitch for his help and suggestions.
 * Thanks to Lotus and Bhpsngum, who are always here to help me.
-* Modding commands available:
-    `t1 [NUMBER]` => gives number points to orgono team
-    `t1 [NUMBER]` => gives number points to volgauf team
-    `ap [NUMBER]` => gives a certain number of points to the first player (id:0)
-    `list` => shows player name + ship faction
 */
 
 
 
 const seconds_beifre_hiding = 20;
-const points = 20000; //25K
+const points = 50000; //25K
 const alien_shield = 20000;
 const point_per_kills = 500;
 const points_per_boss = 3500;
@@ -59,7 +54,7 @@ var FightingTierSix = [
 
 var map_name = [
   "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
-  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5", "Pan-Da 3", "SUB 2 Wol-F-an"
+  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5"
 ];
 
 
@@ -232,7 +227,7 @@ var boss_set = function(alien) {
     alien.set({
       shield: alien_shield,
       regen: 1,
-      damage: 50,
+      damage: 30,
       laser_speed: 90,
       rate: 1
     })
@@ -315,13 +310,13 @@ var check_hue_team = function(ship) {
   if (ship.team === 0 && ship.hue === 240) {
     ship.set({hue: 120});
   }
-  else if (ship.team === 1 && ship.hue === 120) {
+  if (ship.team === 1 && ship.hue === 120) {
     ship.set({hue: 240});
   }
-  else if (ship.custom.team === "Volgauf" && ship.team === 0 ) {
+  if (ship.custom.team === "Volgauf" && ship.team === 0 ) {
     ship.set({team:1, hue: 240})
   }
-  else if (ship.custom.team === "Orgono" && ship.team === 1 ) {
+  if (ship.custom.team === "Orgono" && ship.team === 1 ) {
     ship.set({team:0,hue: 120})
   }
 }
@@ -479,30 +474,23 @@ var tick = function(game) {
       game.custom.win = true;
     }
     for (let ship of game.ships) {
-        ship.setUIComponent(player_number);
-        score_set_points(ship);
-        check_hue_team(ship);
+      check_hue_team(ship);
         actualize_scores(
           ship, "Orgono    (" +
           game.custom.team_score_1 + ")", "Volgauf    (" +
           game.custom.team_score_2 + ")");
+          score_set_points(ship);
           if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
             actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
           }
-          else if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 >= 10) {
+          if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 >= 10) {
             actualize_player_number(ship, "Orgono: 0" + game.custom.number_player_t1, "Volgauf: " + game.custom.number_player_t2);
           } 
-          else if (game.custom.number_player_t2 < 10 && game.custom.number_player_t1 >= 10) {
+          if (game.custom.number_player_t2 < 10 && game.custom.number_player_t1 >= 10) {
             actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1, "Volgauf: 0"+ game.custom.number_player_t2);
           }
-          else if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
+          if (game.custom.number_player_t1 >= 10 && game.custom.number_player_t2 >= 10) {
             actualize_player_number(ship, "Orgono: " + game.custom.number_player_t1,"Volgauf: " +  game.custom.number_player_t2);
-          }
-          if (ship.custom.team === "Orgono") {
-            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
-          }
-          else if (ship.custom.team === "Volgauf") {
-            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
           }
         if (game.custom.boss_creation !== true) {
             for (let i=0;i<4;i++) {
@@ -775,6 +763,12 @@ this.event = function(event, game) {
           if (ship.custom.init == true) {
             shipSpawn(ship);
             ship.set({idle:true, invulnerable:60*HiddenIN});
+          }
+          if (ship.custom.team === "Orgono") {
+            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
+          }
+          if (ship.custom.team === "Volgauf") {
+            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
           }
         }
       break ;
