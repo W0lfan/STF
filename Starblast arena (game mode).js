@@ -6,6 +6,11 @@
 * Mod made by Wolfan, idea by Wolfan.
 * Thanks to Glitch for his help and suggestions.
 * Thanks to Lotus and Bhpsngum, who are always here to help me.
+* Modding commands available:
+    `t1 [NUMBER]` => gives number points to orgono team
+    `t1 [NUMBER]` => gives number points to volgauf team
+    `ap [NUMBER]` => gives a certain number of points to the first player (id:0)
+    `list` => shows player name + ship faction
 */
 
 
