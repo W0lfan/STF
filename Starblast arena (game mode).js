@@ -1,21 +1,15 @@
 /*
 * Special thanks to: Megalodon, Serendibite, Endersult, Nova for their ships!
-    Endersult, Nova, Megalodon made one ship for this mod.
-    Serendibite made 6 ships for this mod.
-    Wolfan made 21 ships for this made.
+    Endersult, Nova, Megalodon, Serendibite made one ship for this mod.
+    Wolfan made 9 ships for this made.
 * Mod made by Wolfan, idea by Wolfan.
 * Thanks to Glitch for his help and suggestions.
 * Thanks to Lotus and Bhpsngum, who are always here to help me.
-* Modding commands available:
-    `t1 [NUMBER]` => gives number points to orgono team
-    `t1 [NUMBER]` => gives number points to volgauf team
-    `ap [NUMBER]` => gives a certain number of points to the first player (id:0)
-    `list` => shows player name + ship faction
 */
 
 
 
-const seconds_beifre_hiding = 20;
+const seconds_beifre_hiding = 15;
 const points = 50000; //25K
 const alien_shield = 20000;
 const point_per_kills = 500;
@@ -43,7 +37,7 @@ s.Negator_608 = (function(){var r=Function('return(function(){var model;return m
 s.Gedihan_609 = (function(){var r=Function('return(function(){var model;return model={name:\'Gedihan\',level:6,model:9,size:1.6,specs:{shield:{capacity:[280,280],reload:[5,5]},generator:{capacity:[250,250],reload:[55,55]},ship:{mass:200,speed:[120,120],rotation:[65,65],acceleration:[110,110]}},bodies:{main:{section_segments:12,offset:{x:0,y:-20,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0,0],y:[-160,-140,-125,-130,-100,-55,5,60,90,120,118],z:[0,0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,15,15,15,20,30,30,30,30,20,0],height:[0,15,15,15,20,25,25,25,25,20,0],texture:[2,63,3,3,10,2,2,1,13,17],propeller:true},cockpit:{section_segments:8,offset:{x:0,y:0,z:20},position:{x:[0,0,0,0,0,0,0,0,0],y:[-90,-70,-20,30,50,70,80],z:[0,0,0,0,0,0,0,0,0]},width:[0,17,20,20,20,15,0],height:[0,12,15,15,15,10,0],propeller:false,texture:[2,9,4,63,2]},cannon:{section_segments:12,offset:{x:0,y:30,z:30},position:{x:[0,0,0,0,0,0],y:[-50,-49,-35,-10,20,30],z:[0,0,0,0,0,0]},width:[0,5,10,10,10,0],height:[0,5,10,10,10,0],angle:0,laser:{damage:[63,65],rate:4,type:1,speed:[180,180],number:1,error:2.5},propeller:false,texture:[17,10,2,3,4]},cannon1:{section_segments:8,offset:{x:70,y:0,z:0},position:{x:[0,0,0,0,0,0],y:[-125,-125,-110,-50,20,50,50],z:[0,0,0,0,0,0]},width:[0,7,10,15,15,10,0],height:[0,7,10,15,15,10,0],angle:0,laser:{damage:[10,10],rate:5,type:1,speed:[150,150],number:1,error:0},propeller:true,texture:[16.9,13,4,3,13,17]},propulsors:{section_segments:12,offset:{x:40,y:30,z:0},position:{x:[0,0,0,0,0,0],y:[-70,-50,-10,30,60,55],z:[0,0,0,0,0,0]},width:[0,10,15,15,10,0],height:[0,10,15,15,10,0],texture:[4,3,13,63,17],propeller:true},cockpitShield:{section_segments:12,offset:{x:16,y:0,z:13},position:{x:[-6,-6,-3,-2,-2,-10],y:[-70,-70,-50,-20,50,70],z:[5,5,5,0,0,0]},width:[0,7,10,15,15,10],height:[0,7,10,15,15,10],angle:0,texture:[16.9,63,11,2,63,17]}},wings:{main:{doubleside:true,offset:{x:0,y:40,z:15},length:[90,20,20],width:[120,70,30],angle:[0,0,0],position:[0,-70,-110],texture:[4,63],bump:{position:0,size:5}},winglets:{doubleside:true,offset:{x:70,y:30,z:0},length:[25,10,10],width:[40,40,30],angle:[0,0,0],position:[-10,0,10],texture:[63,4],bump:{position:0,size:7}},winglets1:{doubleside:true,offset:{x:20,y:30,z:20},length:[25,10,10],width:[40,40,30],angle:[20,22,0],position:[-10,0,10],texture:[2,63],bump:{position:0,size:7}}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[5.76,5.323,3.675,2.859,4.698,4.63,4.055,4.448,4.351,4.016,3.634,3.309,3.082,3.109,3.468,3.613,3.793,3.019,2.722,2.71,3.072,3.295,3.183,3.263,3.258,3.206,3.258,3.263,3.183,3.295,3.072,2.71,2.722,3.019,3.793,3.613,3.468,3.109,3.082,3.309,3.634,4.016,4.351,4.448,4.055,4.63,4.698,2.859,3.675,5.323],"lasers":[{"x":0,"y":-0.64,"z":0.96,"angle":0,"damage":[63,65],"rate":4,"type":1,"speed":[180,180],"number":1,"spread":0,"error":2.5,"recoil":0},{"x":2.24,"y":-4,"z":0,"angle":0,"damage":[10,10],"rate":5,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0},{"x":-2.24,"y":-4,"z":0,"angle":0,"damage":[10,10],"rate":5,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0}],"radius":5.76}')),JSON.stringify(r)})();
 s.Vampire_610 = (function(){var r=Function('return(function(){var model;return model={name:\'Vampire\',level:6,model:10,size:1.7,specs:{shield:{capacity:[300,300],reload:[8,8]},generator:{capacity:[250,250],reload:[55,75]},ship:{mass:320,speed:[115,115],rotation:[70,70],acceleration:[120,120]}},bodies:{main:{section_segments:12,offset:{x:0,y:0,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0,0],y:[-225,-200,-180,-150,-70,-50,20,80,90,100,95],z:[0,0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,0,25,30,40,40,40,25,25,25,0],height:[0,0,20,25,30,30,30,30,28,25,0],texture:[17,63,10,2,2,3,4,13,13,17],propeller:true},sides:{section_segments:8,offset:{x:35,y:-20,z:0},position:{x:[0,-7,-5,0,0,-2,-3,-5,-7,-10,-10,-10,-20],y:[-90,-80,-50,-20,-10,45,50,70,90,100,95],z:[0,0,0,0,0,0,0,0,0,0,0,0,0]},width:[0,15,20,20,20,20,20,20,20,20,0],height:[0,15,20,25,25,25,25,25,25,20,0],texture:[63,13,63,2,2,1,10,3,4,17],propeller:false},cockpit:{section_segments:12,offset:{x:0,y:-90,z:22},position:{x:[0,0,0,0,0,0,0],y:[-30,-10,10,50,80,110,130],z:[0,0,0,0,0,0,0]},width:[0,10,15,17,17,17,0],height:[0,15,15,15,15,15,0],propeller:false,texture:[4,63,9,3,2,1]},cannons:{section_segments:8,offset:{x:55,y:0,z:0},position:{x:[0,0,0,0,0,0,0,0,0],y:[-115,-110,-80,-30,10,30,55,65,60],z:[0,0,0,0,0,0,0,0,0]},width:[0,5,10,10,10,10,10,7,0,0],height:[0,5,10,10,10,10,10,7,0,0],angle:0,propeller:true,texture:[17,63,3,10,3,4,13,6],laser:{damage:[7,7],rate:5,type:1,speed:[170,170],number:1,error:0,recoil:0}},cannons1:{section_segments:10,offset:{x:25,y:50,z:25},position:{x:[0,0,0,0,0,0,0],y:[-30,-35,-25,10,30,70,85],z:[0,0,0,0,0,0,0]},width:[0,5,9,10,10,10,0],height:[0,5,9,10,10,10,0],angle:180,propeller:true,texture:[17,63,3,2,4,2],laser:{damage:[30,30],rate:1.1,type:1,speed:[130,130],number:2,error:10,recoil:150}},reactor:{section_segments:10,offset:{x:10,y:30,z:30},position:{x:[0,0,0,0,0,0,0],y:[-50,-50,-30,-20,30,50,45],z:[0,0,0,0,0,0,0]},width:[0,5,13,13,13,10,0],height:[0,10,15,15,15,10,0],angle:0,propeller:true,texture:[17,63,10,2,13,17]}},wings:{main1:{doubleside:true,offset:{x:60,y:5,z:0},length:[0,0,0,20],width:[0,0,0,250,40],angle:[0,0,0,30],position:[20,30,0,-30,10],texture:[0,8,13,4],bump:{position:35,size:20}}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[7.65,6.486,5.317,5.493,4.936,4.13,3.622,3.248,3.002,2.832,2.71,2.648,2.647,2.707,2.809,2.98,3.223,3.557,3.632,3.739,3.914,3.965,3.062,3.505,3.461,3.407,3.461,3.505,3.062,3.965,3.914,3.739,3.632,3.557,3.223,2.98,2.809,2.707,2.647,2.648,2.71,2.832,3.002,3.248,3.622,4.13,4.936,5.493,5.317,6.486],"lasers":[{"x":1.87,"y":-3.91,"z":0,"angle":0,"damage":[7,7],"rate":5,"type":1,"speed":[170,170],"number":1,"spread":0,"error":0,"recoil":0},{"x":-1.87,"y":-3.91,"z":0,"angle":0,"damage":[7,7],"rate":5,"type":1,"speed":[170,170],"number":1,"spread":0,"error":0,"recoil":0},{"x":0.85,"y":2.89,"z":0.85,"angle":180,"damage":[30,30],"rate":1.1,"type":1,"speed":[130,130],"number":2,"spread":0,"error":10,"recoil":150},{"x":-0.85,"y":2.89,"z":0.85,"angle":-180,"damage":[30,30],"rate":1.1,"type":1,"speed":[130,130],"number":2,"spread":0,"error":10,"recoil":150}],"radius":7.65}')),JSON.stringify(r)})();
 s.Preculsor_611 = '{"name":"Preculsor","designer":"Megalodon","level":6,"model":11,"size":1.9,"specs":{"shield":{"capacity":[350,350],"reload":[6,6]},"generator":{"capacity":[300,300],"reload":[50,50]},"ship":{"mass":300,"speed":[100,110],"rotation":[90,90],"acceleration":[130,130]}},"bodies":{"main":{"section_segments":9,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[-150,-140,-100,-50,50,120,90],"z":[0,0,0,0,0,-2,-2]},"width":[0,6,17,24,24,20,0],"height":[0,5,14,18,20,14,0],"texture":[4,4,3,18,18,17],"propeller":true},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-70,"z":14},"position":{"x":[0,0,0,0,0,0,0],"y":[-10,0,20,35,100],"z":[0,0,0,0,0]},"width":[0,7,10,10,0],"height":[0,5,10,12,0],"texture":[9]},"cannons":{"section_segments":8,"offset":{"x":35,"y":-120,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,-20,-20,-20],"y":[35,30,54,57,92,94,120,122,163,185,185],"z":[0,0,0,0,0,0,0,0,0,0,0,0]},"width":[0,3,3,4,4,3,3,5,5,5,0],"height":[0,3,3,4,4,3,3,5,5,5,0],"texture":[17,13,17,18,17,13,17,8,31,17],"laser":{"damage":[5,10],"rate":5,"type":1,"speed":[150,180],"number":7,"recoil":10,"error":5},"propeller":false},"propulsors":{"section_segments":8,"offset":{"x":25,"y":55,"z":-5},"position":{"x":[-8,-2,-2,0,0,0,0,0,0,0,0,0,0],"y":[-20,-10,0,30,50,30],"z":[5,5,5,0,0,0,0,0,0,0,0,0,0]},"width":[0,5,9,10,8,0],"height":[0,4,6,10,8,0],"texture":[4,31,18,13,17],"propeller":true},"propulsors2":{"section_segments":8,"offset":{"x":15,"y":65,"z":-20},"position":{"x":[-8,-2,-2,0,0,0,0,0,0,0,0,0,0],"y":[-20,-10,0,30,50,30],"z":[5,5,5,0,0,0,0,0,0,0,0,0,0]},"width":[0,5,9,10,8,0],"height":[0,4,6,10,8,0],"texture":[4,31,18,13,17],"propeller":true},"Propeller":{"section_segments":9,"offset":{"x":60,"y":10,"z":0},"position":{"x":[0,0,0,0,0,0,0],"y":[-53,-46,-23,2,28,55,30],"z":[0,0,0,0,0,0,0]},"width":[0,5,11,8,11,8,0],"height":[0,5,10,8,10,5,0],"texture":[6,2,3,4,31,17],"propeller":true},"topdetail":{"section_segments":8,"offset":{"x":0,"y":0,"z":15},"position":{"x":[0,0,0,0,0,0],"y":[-40,-30,0,10,60,70],"z":[0,0,0,0,0,0]},"width":[10,10,10,10,10,0],"height":[5,5,5,5,5,0],"texture":[4,10,1,10,4]}},"wings":{"main":{"offset":{"x":60,"y":10,"z":2},"length":[30,0],"width":[90,40,20],"angle":[-10,10],"position":[0,20,20],"doubleside":true,"texture":[18],"bump":{"position":30,"size":5}},"winglets":{"length":[25],"width":[30,15,20],"angle":[0,0],"position":[-50,-70,-65],"bump":{"position":0,"size":15},"texture":63,"doubleside":true,"offset":{"x":0,"y":-40,"z":2}},"side":{"doubleside":true,"offset":{"x":85,"y":47,"z":-14},"length":[10,5,10],"width":[25,50,50,25],"angle":[60,90,120,90],"position":[0,-20,-20,0],"texture":[63],"bump":{"position":0,"size":5}},"top":{"doubleside":true,"offset":{"x":10,"y":75,"z":8},"length":[30],"width":[50,20],"angle":[50],"position":[0,20],"texture":[63],"bump":{"position":10,"size":10}},"soutient":{"doubleside":true,"offset":{"x":0,"y":-25,"z":-10},"length":[40,20],"width":[15,15,10],"angle":[0,30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient1":{"doubleside":true,"offset":{"x":0,"y":0,"z":-10},"length":[40,20],"width":[15,15,10],"angle":[0,30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient2":{"doubleside":true,"offset":{"x":0,"y":25,"z":-10},"length":[40,20],"width":[15,15,10],"angle":[0,30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient3":{"doubleside":true,"offset":{"x":0,"y":50,"z":-10},"length":[40,20],"width":[15,15,10],"angle":[0,30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutienttop":{"doubleside":true,"offset":{"x":0,"y":-25,"z":10},"length":[40,20],"width":[15,15,10],"angle":[0,-30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient1top":{"doubleside":true,"offset":{"x":0,"y":0,"z":10},"length":[40,20],"width":[15,15,10],"angle":[0,-30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient2top":{"doubleside":true,"offset":{"x":0,"y":25,"z":10},"length":[40,20],"width":[15,15,10],"angle":[0,-30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}},"soutient3top":{"doubleside":true,"offset":{"x":0,"y":50,"z":10},"length":[40,20],"width":[15,15,10],"angle":[0,-30],"position":[0,0,0],"texture":[8,63],"bump":{"position":50,"size":2}}},"typespec":{"name":"Preculsor","level":6,"model":11,"code":611,"specs":{"shield":{"capacity":[350,350],"reload":[6,6]},"generator":{"capacity":[300,300],"reload":[50,50]},"ship":{"mass":300,"speed":[100,110],"rotation":[90,90],"acceleration":[130,130]}},"shape":[5.7,4.996,4.565,3.712,3.388,2.759,2.318,2.06,2.821,2.817,2.784,2.932,3.144,3.481,3.614,3.743,3.911,3.95,3.54,3.571,3.205,3.003,4.084,4.457,4.621,4.569,4.621,4.457,4.084,3.003,3.205,3.571,3.54,3.95,3.911,3.743,3.614,3.481,3.144,2.932,2.784,2.817,2.821,2.06,2.318,2.759,3.388,3.712,4.565,4.996],"lasers":[{"x":1.33,"y":-3.42,"z":0,"angle":0,"damage":[5,10],"rate":5,"type":1,"speed":[150,180],"number":7,"spread":0,"error":5,"recoil":10},{"x":-1.33,"y":-3.42,"z":0,"angle":0,"damage":[5,10],"rate":5,"type":1,"speed":[150,180],"number":7,"spread":0,"error":5,"recoil":10}],"radius":5.7}}';
-s.Mewin_612 = (function(){var r=Function('return(function(){var model;return model={name:\'Mewin\',level:6,model:12,size:0.8,specs:{shield:{capacity:[200,200],reload:[5,7]},generator:{capacity:[200,200],reload:[65,65]},ship:{mass:180,speed:[150,150],rotation:[80,80],acceleration:[120,120]}},bodies:{main:{section_segments:12,offset:{x:85,y:60,z:-10},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0],y:[-120,-130,-90,-70,-60,-40,-25,40,50,100,90],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,20,25,25,25,30,30,30,30,20,0],height:[0,20,25,25,25,30,30,30,30,20,0],texture:[17,10,2,2,3,3,4,4,63,17],propeller:true},main1:{section_segments:20,offset:{x:0,y:50,z:0},position:{x:[0,0,0,0,0,0,0,0,0,0,0,0],y:[-250,-250,-160,-90,-60,10,30,40,60,100,90],z:[0,0,0,0,0,0,0,0,0,0,0]},width:[0,20,45,50,50,50,50,50,50,40,0],height:[0,20,50,50,50,50,50,50,50,40,0],texture:[1,2,10,2,3,3,4,4,13,17],propeller:true,laser:{damage:[130,130],rate:1,type:1,speed:[180,180],number:1,error:0,recoil:150}},cockpit:{section_segments:8,offset:{x:0,y:10,z:50},position:{x:[0,0,0,0,0,0,0,0,0],y:[-90,-80,0,20,40,80,90],z:[0,0,0,0,0,0,0,0,0]},width:[0,20,25,25,25,20,0],height:[0,15,15,15,15,15,0],texture:[4,9,4,3,2,2]},cannon2:{section_segments:12,offset:{x:85,y:-55,z:-10},position:{x:[0,0,0,0],y:[-50,-50,-20,0],z:[0,0,0,0]},width:[0,10,15,15],height:[0,10,15,15],texture:[17,4,63,10],laser:{damage:[10,10],rate:4,type:1,speed:[150,150],number:1,error:0}},barr1:{section_segments:10,offset:{x:50,y:30,z:5},position:{x:[-10,-5,0,0,0,-5,-15,-15],y:[-160,-120,-80,-20,40,90,120],z:[0,0,0,0,0,0,0,0]},width:[0,20,20,20,20,20,0],height:[0,20,20,20,20,20,0],texture:[4,3,2,63,10,4,0]}},wings:{main:{doubleside:true,offset:{x:15,y:10,z:-10},length:[20,20,70,30],width:[150,150,150,120,90],angle:[0,-10,-10,-10],position:[0,10,0,60,100],texture:[0,11,11,63],bump:{position:35,size:5}},main1:{doubleside:true,offset:{x:20,y:-150,z:0},length:[40,0],width:[50,40],angle:[-15,-15],position:[0,-30,80],texture:63,bump:{position:20,size:5}}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[3.206,3.216,3.335,3.035,1.947,2.18,2.266,2.134,2.019,1.943,1.865,1.817,1.824,2.041,2.26,2.578,2.794,3.026,3.356,3.487,3.062,3.032,2.829,2.484,2.443,2.405,2.443,2.484,2.829,3.032,3.062,3.487,3.356,3.026,2.794,2.578,2.26,2.041,1.824,1.817,1.865,1.943,2.019,2.134,2.266,2.18,1.947,3.035,3.335,3.216],"lasers":[{"x":0,"y":-3.2,"z":0,"angle":0,"damage":[130,130],"rate":1,"type":1,"speed":[180,180],"number":1,"spread":0,"error":0,"recoil":150},{"x":1.36,"y":-1.68,"z":-0.16,"angle":0,"damage":[10,10],"rate":4,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0},{"x":-1.36,"y":-1.68,"z":-0.16,"angle":0,"damage":[10,10],"rate":4,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0}],"radius":3.487}')),JSON.stringify(r)})();
+s.Mewin_612 = '{"name":"Mewin","level":6,"model":12,"size":0.8,"specs":{"shield":{"capacity":[200,200],"reload":[5,7]},"generator":{"capacity":[200,200],"reload":[65,65]},"ship":{"mass":180,"speed":[150,150],"rotation":[80,80],"acceleration":[120,120]}},"bodies":{"main":{"section_segments":12,"offset":{"x":85,"y":80,"z":-10},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[-120,-130,-90,-70,-60,-40,-25,40,50,100,90],"z":[0,0,0,0,0,0,0,0,0,0,0]},"width":[0,20,25,25,25,30,30,30,30,20,0],"height":[0,20,25,25,25,30,30,30,30,20,0],"texture":[17,10,2,2,3,3,4,4,63,17],"propeller":true},"main1":{"section_segments":20,"offset":{"x":0,"y":70,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0,0,0],"y":[-250,-250,-160,-90,-60,10,30,40,60,100,90],"z":[0,0,0,0,0,0,0,0,0,0,0]},"width":[0,20,45,50,50,50,50,50,50,40,0],"height":[0,20,50,50,50,50,50,50,50,40,0],"texture":[1,2,10,2,3,3,4,4,13,17],"propeller":true,"laser":{"damage":[130,130],"rate":1,"type":1,"speed":[180,180],"number":1,"error":0,"recoil":150}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":30,"z":50},"position":{"x":[0,0,0,0,0,0,0,0,0],"y":[-90,-80,0,20,40,80,90],"z":[0,0,0,0,0,0,0,0,0]},"width":[0,20,25,25,25,20,0],"height":[0,15,15,15,15,15,0],"texture":[4,9,4,3,2,2]},"cannon2":{"section_segments":12,"offset":{"x":85,"y":-35,"z":-10},"position":{"x":[0,0,0,0],"y":[-50,-50,-20,0],"z":[0,0,0,0]},"width":[0,10,15,15],"height":[0,10,15,15],"texture":[17,4,63,10],"laser":{"damage":[10,10],"rate":4,"type":1,"speed":[150,150],"number":1,"error":0}},"barr1":{"section_segments":10,"offset":{"x":50,"y":50,"z":5},"position":{"x":[-10,-5,0,0,0,-5,-15,-15],"y":[-160,-120,-80,-20,40,90,120],"z":[0,0,0,0,0,0,0,0]},"width":[0,20,20,20,20,20,0],"height":[0,20,20,20,20,20,0],"texture":[4,3,2,63,10,4,0]}},"wings":{"main":{"doubleside":true,"offset":{"x":15,"y":30,"z":-10},"length":[20,20,70,30],"width":[150,150,150,120,90],"angle":[0,-10,-10,-10],"position":[0,10,0,60,100],"texture":[0,11,11,63],"bump":{"position":35,"size":5}},"main1":{"doubleside":true,"offset":{"x":20,"y":-120,"z":0},"length":[40,0],"width":[50,40],"angle":[-15,-15],"position":[0,-30,80],"texture":63,"bump":{"position":20,"size":5}}},"typespec":{"name":"Mewin","level":6,"model":12,"code":612,"specs":{"shield":{"capacity":[200,200],"reload":[5,7]},"generator":{"capacity":[200,200],"reload":[65,65]},"ship":{"mass":180,"speed":[150,150],"rotation":[80,80],"acceleration":[120,120]}},"shape":[2.886,2.898,2.808,2.877,1.749,1.625,1.987,2.04,1.925,1.861,1.823,1.78,1.767,1.774,2.056,2.344,2.778,3.028,3.358,3.721,3.196,3.334,3.183,2.794,2.769,2.725,2.769,2.794,3.183,3.334,3.196,3.721,3.358,3.028,2.778,2.344,2.056,1.774,1.767,1.78,1.823,1.861,1.925,2.04,1.987,1.625,1.749,2.877,2.808,2.898],"lasers":[{"x":0,"y":-2.88,"z":0,"angle":0,"damage":[130,130],"rate":1,"type":1,"speed":[180,180],"number":1,"spread":0,"error":0,"recoil":150},{"x":1.36,"y":-1.36,"z":-0.16,"angle":0,"damage":[10,10],"rate":4,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0},{"x":-1.36,"y":-1.36,"z":-0.16,"angle":0,"damage":[10,10],"rate":4,"type":1,"speed":[150,150],"number":1,"spread":0,"error":0,"recoil":0}],"radius":3.721}}';
 
 
 s.Fly_791 = (function(){var r=Function('return(function(){var model;return model={name:\'Fly\',level:7.9,model:1,size:1.05,specs:{shield:{capacity:[700,700],reload:[1000,1000]},generator:{capacity:[9999,999],reload:[10000,10000]},ship:{mass:999,speed:[150,150],rotation:[150,150],acceleration:[150,150]}},bodies:{main:{section_segments:12,offset:{x:0,y:0,z:10},position:{x:[0,0,0,0,0,0,0,0,0,0],y:[-65,-60,-50,-20,10,30,55,75,60],z:[0,0,0,0,0,0,0,0,0]},width:[0,8,10,30,25,30,18,15,0],height:[0,6,8,12,20,20,18,15,0],propeller:true,texture:[4,63,10,1,1,1,12,17]},cockpit:{section_segments:12,offset:{x:0,y:0,z:20},position:{x:[0,0,0,0,0,0,0],y:[-15,0,20,30,60],z:[0,0,0,0,0]},width:[0,13,17,10,5],height:[0,18,25,18,5],propeller:false,texture:[7,9,9,4,4]},cannon:{section_segments:6,offset:{x:0,y:-15,z:-10},position:{x:[0,0,0,0,0,0],y:[-40,-50,-20,0,20,30],z:[0,0,0,0,0,20]},width:[0,5,8,11,7,0],height:[0,5,8,11,10,0],angle:0,laser:{damage:[1000,1000],rate:10,type:1,speed:[180,180],number:1,error:0},propeller:false,texture:[3,3,10,3]}},wings:{main:{length:[60,20],width:[100,50,40],angle:[-10,10],position:[0,20,10],doubleside:true,offset:{x:0,y:10,z:5},bump:{position:30,size:20},texture:[11,63]}}}}).call(this);')();return r.typespec=Object.assign({name:r.name,level:r.level,model:r.model,code:r.level*100+r.model,specs:r.specs,next:null!=r.next?r.next:void 0},JSON.parse('{"shape":[1.368,1.368,1.093,0.965,0.883,0.827,0.791,0.767,0.758,0.777,0.847,0.951,1.092,1.667,1.707,1.776,1.856,1.827,1.744,1.687,1.525,1.415,1.335,1.606,1.603,1.578,1.603,1.606,1.335,1.415,1.525,1.687,1.744,1.827,1.856,1.776,1.707,1.667,1.654,0.951,0.847,0.777,0.758,0.767,0.791,0.827,0.883,0.965,1.093,1.368],"lasers":[{"x":0,"y":-1.365,"z":-0.21,"angle":0,"damage":[1000,1000],"rate":10,"type":1,"speed":[180,180],"number":1,"spread":0,"error":0,"recoil":0}],"radius":1.856}')),JSON.stringify(r)})();
@@ -88,7 +82,7 @@ var mod_vocabulary = [
 
 
 var crystal_value = [1.7,1.8, 1.9,2];
-var crystal_drop = [1,1.1,1.2];
+var crystal_drop = [2,2.1,2.2];
 var map_id = [2739,2742,2817,2865,2900,2961];
 var soundtrack = [
   "argon.mp3",
@@ -106,13 +100,13 @@ var random_set = function(ship) {
     shield: 1000,
     stats: 66666666,
     crystals: 500
-  })
-}
+  });
+};
 this.options = {
   // see documentation for options reference
   root_mode: " ",
   survival_level: 8,
-  crystal_value: /*crystal_value[~~(Math.random()*crystal_value.length)]*/50,
+  crystal_value: crystal_value[~~(Math.random()*crystal_value.length)],
   ships: ships,
   map_size: 110,
   reset_tree:true, 
@@ -130,15 +124,6 @@ this.options = {
   hues:[120,240],
   soundtrack: soundtrack[~~(Math.random()*soundtrack.length)],
 };
-
-
-
-
-
-
-
-
-
 var actualize_scoreboard = function(ship, name, score, color) {
   scoreboard.components[2].value   = name;
   scoreboard.components[3].value = score;
@@ -150,7 +135,6 @@ var actualize_ur_team_or_not = function(ship, name, score, color) {
   scoreboard.components[5].color = color;
   ship.setUIComponent(scoreboard);
 };
-
 var gameover = function(ship) {
   if (ship.team === game.custom.winner) {
     ship.gameover({
@@ -174,11 +158,8 @@ var gameover = function(ship) {
     });
   }
 };
-
 var lol = [11,42];
 var kek = [0,1];
-
-
 var team_assign = function(ship) {
   if (game.custom.number_player_t1 === game.custom.number_player_t2) {
     ship.set({team: kek[~~(Math.random()*kek.length)]});
@@ -224,8 +205,6 @@ var team_assign = function(ship) {
   }
   ship.set({invulnerable:600})
 }
-
-
 var boss_set = function(alien) {
     alien.set({
       shield: alien_shield,
@@ -235,7 +214,6 @@ var boss_set = function(alien) {
       rate: 1
     })
 }
-
 var change_score = function(ship) {
   if (ship.custom.points - Math.trunc((ship.type / 100) * 100) >= 0) {
     ship.custom.points = ship.custom.points - Math.trunc((ship.type / 100) * 100);
@@ -246,33 +224,25 @@ var change_score = function(ship) {
     actualizePLayerPoints(ship, ship.custom.points);
   }
 };
-
 var score_set_points = function(ship) {
   ship.set({
     score: Number(ship.custom.points)
   })
 }
-
-
 game.custom.team_score_1 = 0;
 game.custom.team_score_2 = 0;
 game.custom.number_player_t1 = 0;
 game.custom.number_player_t2 = 0;
-  
-  
-
 var actualize_ennemies_and_friends = function(ship, a, b) {
   scoreboard.components[4].value = a;  
   scoreboard.components[5].value = b;
   ship.setUIComponent(scoreboard);
 };
-
 var actualize_scores = function(ship, orgono, volgauf) {
   scoreboard.components[2].value = orgono;
   scoreboard.components[3].value = volgauf;
   ship.setUIComponent(scoreboard);
 };
-
 var scoreboard = {
   id: "scoreboard",
   visible: true,
@@ -285,9 +255,6 @@ var scoreboard = {
     { type: "text",position: [0,55,100,50], value: " ",color:"#3440B8"},
   ]
 };
-
-
-
 var invulnerable = function(ship) {
   ship.set({invulnerable: 100});
 };
@@ -296,7 +263,6 @@ var actualize_player_number = function(ship, orgonoPlayer, volgaufPlayer) {
   player_number.components[2].value = volgaufPlayer;
   ship.setUIComponent(player_number);
 };
-
 var player_number = {
   id: "player_number",
   position: [82,40,15,15],
@@ -307,8 +273,6 @@ var player_number = {
     { type: "text",position:[10,50,75,30],value:" ",color:"#3440B8"},
   ]
 };
-
-
 var check_hue_team = function(ship) {
   if (ship.team === 0 && ship.hue === 240) {
     ship.set({hue: 120});
@@ -323,12 +287,9 @@ var check_hue_team = function(ship) {
     ship.set({team:0,hue: 120})
   }
 }
-
 var crystals_set = function(ship) {
   ship.set({crystals: 700})
-}
-
-
+};
 var internals_init = function() {
   if (game.custom.internals_init) {
     return;
@@ -354,12 +315,9 @@ var internals_init = function() {
   }
   game.custom.internals_init = true;
 };
-
-
 var spawn = function(ship) {
   ship.set({hue: 60, team: 1});
 };
-
 this.tick = function(game) {
   this.tick = tick;
   internals_init();
@@ -376,20 +334,11 @@ var shield_regen_lose = function(ship) {
     ship.set({shield: 0, crystals: 10 - ship.shield});
   }
 };
-
-
-
-
-
-
 var idleStatus = function(ship) {
   ship.set({
     idle:true
   });
 };
-
-
-
 var stopIdle = function(ship) {
   ship.custom.petrificationCount = 2;
   ship.set({idle:false});
@@ -397,28 +346,16 @@ var stopIdle = function(ship) {
 var hideInstructorForShip = function(ship) {
   ship.hideInstructor();
 };
-
-
-
-
 var actualizationOfBatteryBox = function(ship,OneBattery,TwoBatteries, ThreeBatteries) {
   batteryBox.components[1].fill = OneBattery;
   batteryBox.components[2].fill = TwoBatteries;
   batteryBox.components[3].fill = ThreeBatteries;
   ship.setUIComponent(batteryBox);
 };
-
-
-
-
-
-        var actualizePLayerPoints = function(ship, points) {
+var actualizePLayerPoints = function(ship, points) {
           pointsship.components[0].value = `Total points: ${points}`;
           ship.setUIComponent(pointsship);
         };
-        
-        
-
 var tick = function(game) {
   if (game.step == 0) {
       game.custom.trigger = 0;
@@ -593,10 +530,6 @@ var tick = function(game) {
 };
 var hide_timer = false;
 var collectibles_codes = [10,11,41,42]
-
-
-
-
 var timer = {
   id: "timer",
   position: [6,30,15,15],
@@ -605,19 +538,13 @@ var timer = {
     { type: "text",position:[0,0,60,60],value: " ",color:"#CDE"},
     ]
 };
-
-
 var stopHealing = function(ship) {
   ship.set({healing:false});
 };
-
 var count = false;
 var countSeconds = 5;
 var petrificationCount = 0;
 var space = "\n"
-
-
-
         var pointsship = {
             id: "pointsship",
             position: [27,5,65,20],
@@ -626,8 +553,6 @@ var space = "\n"
               { type: "text",position:[15,30,40,40],value:" ",color:"#CDE"},
               ]
           };
-
-
 var explanationOK = {
   id: "explanationOK",
   position: [75,15,45,50],
@@ -638,7 +563,6 @@ var explanationOK = {
     { type: "text",position:[0,0,10,10],value:"OK",color:"#CDE"}
     ]
 };
-
 var showExplanation = function(ship, text, text2) {
   explanationText.components[0].value = text;
   explanationText.components[1].value = text2;
@@ -649,11 +573,6 @@ var hideComponentsInfos = function(ship) {
   ship.setUIComponent({id:"explanationText", visible:false});
   ship.setUIComponent({id:"explanationOK",visible: false});
 };
-
-
-
-
-
 var less_crystals = function(ship) {
   ship.set({
     crystals: ship.crystals - Math.trunc(ship.type/100)
@@ -668,19 +587,12 @@ var mining = function(ship) {
     ship.set({idle:false});
   }
 };
-
-
-//game.ships[0].set({type:601,crystals:720})
-
-//game.ships[0].set({kill:true})
 var iidleFalse = function(ship) {
   ship.set({idle:false,
       x: (Math.random() - 0.5) * game.options.map_size * 10,
       y: (Math.random() - 0.5) * game.options.map_size * 10,
   });
 };
-
-
 var nextShip = {
   id: "nextShip",
   position: [40,85,15,10],
@@ -700,20 +612,14 @@ var nextShipWillBeHiddenIn = {
     { type: "text",align:"center",position:[5,30,90,55],value:"",color:"#CDE"}
     ]
 };
-
-
 var actualiaznexShipHiddenIn = function(ship,value) {
   nextShipWillBeHiddenIn.components[0].value = value;
   ship.setUIComponent(nextShipWillBeHiddenIn);
 };
-
 var shipSpawn = function(ship) {
       ship.custom.HiddenIN = 15;
       ship.custom.HiddenInStart = true;
 }
-
-
-
 this.event = function(event, game) {
   let ship = event.ship;
   let alien = event.alien;
@@ -774,16 +680,23 @@ this.event = function(event, game) {
       break ;
     case "ship_destroyed":
       if (ship !== null) {
-        change_score(ship);
+        if (ship.custom.points - Math.trunc(((ship.type / 100) * 100 )/ 1.5) >= 0) {
+          ship.custom.points = Math.trunc(((ship.type / 100) * 100 )/ 1.5);
+          actualizePLayerPoints(ship, ship.custom.points);
+        }
+        else if (ship.custom.points -Math.trunc(((ship.type / 100) * 100 )/ 1.5) < 0){
+          ship.custom.points = 0;
+          actualizePLayerPoints(ship, ship.custom.points);
+        }
           if (ship.custom.team === "Orgono") {
-            if (game.custom.team_score_1 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 >= 0) {
-              game.custom.team_score_1 -= Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 ;
+            if (game.custom.team_score_1 - Math.trunc(((ship.type / 100) * 100 )/ 1.5) >= 0) {
+              game.custom.team_score_1 -= Math.trunc(((ship.type / 100) * 100 )/ 1.5) ;
             } else {
               game.custom.team_score_1 = 0;
             }
           } else if (ship.custom.team === "Volgauf") {
-            if (game.custom.team_score_2 - Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5  >= 0) {
-              game.custom.team_score_2 -= Math.trunc(((Math.trunc(ship.type / 100) * 100))) * 1.5 ;
+            if (game.custom.team_score_2 - Math.trunc(((ship.type / 100) * 100 )/ 1.5)  >= 0) {
+              game.custom.team_score_2 -= Math.trunc(((ship.type / 100) * 100 )/ 1.5) ;
             } else {
               game.custom.team_score_2 = 0;
             }
