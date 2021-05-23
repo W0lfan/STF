@@ -222,7 +222,7 @@ var team_assign = function(ship) {
         y: (Math.random() - 0.5) * game.options.map_size * 10,
       })
   }
-  ship.set({invulnerable:60*10})
+  ship.set({invulnerable:600})
 }
 
 
@@ -481,6 +481,12 @@ var tick = function(game) {
           game.custom.team_score_1 + ")", "Volgauf    (" +
           game.custom.team_score_2 + ")");
           score_set_points(ship);
+          if (ship.custom.team === "Orgono") {
+            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
+          }
+          if (ship.custom.team === "Volgauf") {
+            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
+          }
           if (game.custom.number_player_t1 < 10 && game.custom.number_player_t2 < 10) {
             actualize_player_number(ship, "Orgono: 0"+game.custom.number_player_t1, "Volgauf: 0"+game.custom.number_player_t2);
           }
@@ -761,13 +767,7 @@ this.event = function(event, game) {
         if (ship != null) {
           if (ship.custom.init == true) {
             shipSpawn(ship);
-            ship.set({idle:true, invulnerable:60*HiddenIN});
-          }
-          if (ship.custom.team === "Orgono") {
-            actualize_ennemies_and_friends(ship, "↑ Allies ↑", "↑ Enemies ↑");
-          }
-          if (ship.custom.team === "Volgauf") {
-            actualize_ennemies_and_friends(ship, "↑ Enemies ↑", "↑ Allies ↑");
+            ship.set({idle:true, invulnerable:900});
           }
           ship.set({crystals: 500})
         }
