@@ -260,7 +260,7 @@ var bossCreation = function(game) {
 
 var team_assign = function(ship) {
   if (team1_numbersP === team2_numbersP) {
-    ship.set({team: Math.round(randomNumber(0,1))});
+    ship.set({team: randomNumber(0,1)});
     if (ship.team === 0) {
       ship.set({hue: 120});
       ship.custom.team = "Orgono";
