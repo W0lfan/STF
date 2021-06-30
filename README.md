@@ -6,7 +6,7 @@ In this mod, players will have to kill a certain amount of aliens and players to
 Players will be able to choose a ship when spawning or respawning in game. They'll have 30 seconds to choose their ship after being randomly teleported.
 Some features and easter-eggs are hidden in the mode.
 <br>
-You can find the current version code (here)[https://raw.githubusercontent.com/W0lfan/Starblast-Arena/main/Version%201/Main/Starbast%20Arena%20Version%201-09.j].
+You can find the current version code [here](https://raw.githubusercontent.com/W0lfan/Starblast-Arena/main/Version%201/Main/Starbast%20Arena%20Version%201-09.j).
 <br>
 <br>
 <h2><u>Copyright, claims & credits</u></h2>
