@@ -60,7 +60,7 @@ var mod_vocabulary = [
   { text: "Hmm", icon:"\u004b", key:"Q" },
   ];
 
-var crystal_value = [0.8, 0.9,1];
+var crystal_value = [1,1.1,1.2];
 var crystal_drop = [2,2.1,2.2];
 var map_id = [2739,2742,2817,2865,2900,2961];
 var soundtrack = [
@@ -108,7 +108,7 @@ this.options = {
 
 var maxAliensLimit = 70, maxAsteroidsLimit = 50;
 var aliensCodes = [10,11,17,18] , aliensTypes = [0,1,2,3];
-var aliensKills = 300, shipsKills = 50;
+var aliensKills = 100, shipsKills = 10;
 var Team1_AliensKills = 0, Team1_ShipsKills = 0;
 var Team2_AliensKills = 0, Team2_ShipsKills = 0;
 var winner = 0;
@@ -153,7 +153,7 @@ var internals_init = function() {
 };
 
 
-var randomNumber = function(min,max) {return Math.random() * (max - min) + min;};
+var randomNumber = function(min,max) {return Math.trunc(Math.random() * (max - min) + min);};
 
 var add_AsteroidsAndAliens = function(game) {if (game.aliens.length <= maxAliensLimit) {game.addAlien({x : (Math.random() - 0.5) * game.options.map_size * 10,y : (Math.random() - 0.5) * game.options.map_size * 10,code: alien_code[~~(Math.random()*alien_code.length)],level : aliensTypes[~~(Math.random()*aliensTypes.length)],crystal_drop : randomNumber(50,60)})}if (game.asteroids.length <= maxAsteroidsLimit ) {game.addAsteroid({y: (Math.random() - 0.5) * game.options.map_size * 10,x: (Math.random() - 0.5) * game.options.map_size * 10,size: randomNumber(50,70),vx: randomNumber(0.1,0.9),vy: randomNumber(0.1,0.9)})}}
 
@@ -346,16 +346,6 @@ function updateScoreboard(game) {
 }
 
 var scoreboardACT = function(game) {
-  if (team2_numbersP < 10) {
-    scoreboard.components[17].value = `0${team2_numbersP}`;
-  } else {
-    scoreboard.components[17].value = `${team2_numbersP}`;
-  }
-  if (team1_numbersP < 10) {
-    scoreboard.components[16].value = `0${team1_numbersP}`;
-  } else {
-    scoreboard.components[16].value = `${team1_numbersP}`;
-  }
   if (team2_score < 10) {
     scoreboard.components[18].value = `00${team2_score}`;
   } else if (team2_score < 100) {
@@ -368,29 +358,29 @@ var scoreboardACT = function(game) {
   } else if (team2_score < 100) {
     scoreboard.components[19].value = `0${team1_score}`;
   } else {
-    scoreboard.components[25].value = `${team1_score}`;
+    scoreboard.components[19].value = `${team1_score}`;
   }
 }
 
 var scoreboard = {
   id: "scoreboard",
   components: [
-    { type: "player",position:[2.5,15,70,10],id:"",color:"#CDE"},
+    { type: "player",position:[2.5,15,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,14,25,12],value: "",color:"#CDE",align:"right"},
 
-    { type: "player",position:[2.5,25,70,10],id:"",color:"#CDE"},
+    { type: "player",position:[2.5,25,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,24,25,12],value: "",color:"#CDE",align:"right"},
 
-    { type: "player",position:[2.5,35,70,10],id:"",color:"#CDE"},
+    { type: "player",position:[2.5,35,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,34,25,12],value: "",color:"#CDE",align:"right"},
 
-    { type: "player",position:[2.5,65,70,10],id:"",color:"#CDE"},
+    { type: "player",position:[2.5,65,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,64,25,12],value: "",color:"#CDE",align:"right"},
 
-    { type: "player",position:[2.5,75,70,10],id:"",color:"#CDE"},
-    { type: "text",position:[27,74,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,75,65,10],id:"",color:"#CDE"},
+    { type: "text",position:[72,74,25,12],value: "",color:"#CDE",align:"right"},
 
-    { type: "player",position:[2.5,85,70,10],id:"",color:"#CDE"},
+    { type: "player",position:[2.5,85,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,84,25,12],value: "",color:"#CDE",align:"right"},
 
     { type: "box",position:[0,1,100,10],stroke:"#6DD56E",fill:"#6DD56E",width:15},
@@ -588,29 +578,31 @@ var ship6 = {
 };
 
 
+
 var nextShip = {
   id: "nextShip",
-  position: [30,85,40,25],
+  position: [30,85,8,7],
   visible: true,
   clickable:true,
   shortcut:"N",
   components: [
-    { type : "box",position:[0,0,20,30], width:5, stroke:"#5D5D5D",fill:"#818181"},
-    { type: "text",position:[2.5,9,15,15],value: "NEXT [N]",color:"#CDE"},
+    { type : "box",position:[0,0,100,100], width:5, stroke:"#5D5D5D",fill:"#818181"},
+    { type: "text",position:[15,15,70,70],value: "NEXT [N]",color:"#CDE"},
   ]
 };
 
 var close = {
   id: "close",
-  position: [50,85,40,25],
+  position: [50,85,8,7],
   visible: true,
   clickable:true,
   shortcut:"C",
   components: [
-    { type : "box",position:[0,0,20,30], width:5, stroke:"#5D5D5D",fill:"#818181"},
-    { type: "text",position:[2.5,9,15,15],value: "CLOSE [C]",color:"#CDE"},
+    { type : "box",position:[0,0,100,100], width:5, stroke:"#5D5D5D",fill:"#818181"},
+    { type: "text",position:[12.5,15,75,75],value: "CLOSE [C]",color:"#CDE"},
   ]
 };
+
 
 
 var setPannels = function(ship) {
@@ -748,85 +740,10 @@ var summonWeapon = function(game) {
     }
   }
 };
-var activateWeapon = false;
-var timeBeforeActivate = 0;
-var k = true;
-var hideBombInfos = 10;
-var hasWeapon = false;
-var bruh = 0;
-var name_ = " ";
-var hideBombInfosStart = 0;
-var addWeapon = function(game) {
-  for (let ship of game.ships) {
-    if (bruh === 0) {
-      if (ship.x < 30 && ship.x > -30 && ship.y > -30 && ship.y < 30 && ship.custom.hasWeapon === true) {
-        activateWeapon = true;
-        name_ = ship.name;
-      } else {
-        activateWeapon = false;
-        timeBeforeActivate = 0;
-        for (let i = 0; i < game.ships.length; i++) {
-          game.ships[i].setUIComponent({id:"timerToActivateWeapon",visible:false});
-        }
-      }
-    }
-  }
-};
 
-var weaponActivation = function(game) {
-  if (game.step % 50 === 0) {
-    if (activateWeapon === true) {
-      timeBeforeActivate++;
-      for (let ship of game.ships) {
-        timerToActivateWeapon.components[0].value = "⚠️ Weapon activated - ";
-        if (timeBeforeActivate < 10) {
-          timerToActivateWeapon.components[1].value = `00${timeBeforeActivate}%` ;
-        }
-        else if (timeBeforeActivate < 100) {
-          timerToActivateWeapon.components[1].value = `0${timeBeforeActivate}%` ;
-        }
-        ship.setUIComponent(timerToActivateWeapon);
-      }
-      if (timeBeforeActivate === 100 && k === true) {
-        k = false;
-        var percentNumber = Math.trunc((game.aliens.length * 60 ) / 100);
-        var Thepoints = (percentNumber/2) - 5;
-        for (let ship of game.aliens) {
-          for (let i = 0 ; i < percentNumber ; i++) {
-            game.ships[i].set({kill:true});
-          }
-        }
-        for (let ship of game.ships) {
-          ship.instructorSays(`${percentNumber} aliens were destroyed by ${name_}, its team got ${Thepoints}+ alien kills!`);
-        }
-        hideBombInfosStart = true;
-      }
-    }
-  }
-};
-
-var hideBombInfosFun = function(game) {
-  if (game.step % 60 === 0) {
-    if (hideBombInfosStart === true) {
-      if (hideBombInfos > 0) {
-        hideBombInfos--;
-      } else {
-        for (let i=0;i<game.ships.length;i++) {
-          game.ships[i].hideInstructor();
-        }
-      }
-    }
-  }
-};
 this.tick = function(game) {
   internals_init();
-  summonWeapon(game);
-  weaponActivation(game);
-  hideBombInfosFun(game);
   if (game.step % 15 === 0) {
-    if (hasWeapon === true) {
-      addWeapon(game);
-    }
     if (game.custom.bossesCreate !== true) {
       bossCreation(game);
       game.custom.bossesCreate = true;
@@ -996,7 +913,7 @@ this.event = function(event, game) {
           Team1_ShipsKills++;
         } else if (killer.custom.team === "Volgauf") {
           team1_score++;
-          Team2_ShipsKills;
+          Team2_ShipsKills++;;
         }
         killer.set({points:killer.custom.aliensKills})
         }
@@ -1020,13 +937,6 @@ this.event = function(event, game) {
         team2_numbersP--;
       }
       break;
-    case "collectible_picked":
-      if (collectible !== null) {
-        if (collectible.code == 41) {
-          ship.custom.hasWeapon = true;
-          hasWeapon = true;
-        }
-      }
   }
 };
 
