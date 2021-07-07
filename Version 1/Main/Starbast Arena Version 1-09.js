@@ -53,7 +53,7 @@ var mod_vocabulary = [
   { text: "Attack", icon:"\u0049", key:"W" },
   { text: "Asteroid", icon:"\u002f", key:"D" },
   { text: "Mine", icon:"\u0044", key:"M" },
-  { text: "Coop", icon:"\u0031", key:"T" },
+  { text: "My team", icon:"\u0031", key:"T" },
   
   { text: "Thanks", icon:"\u0041", key:"X" },
   { text: "Sorry", icon:"\u00a1", key:"S" },
@@ -638,10 +638,10 @@ var nextShip = {
   position: [30,85,8,7],
   visible: true,
   clickable:true,
-  shortcut:"N",
+  shortcut:"Y",
   components: [
     { type : "box",position:[0,0,100,100], width:5, stroke:"#5D5D5D",fill:"#818181"},
-    { type: "text",position:[15,15,70,70],value: "NEXT [N]",color:"#CDE"},
+    { type: "text",position:[15,15,70,70],value: "NEXT [Y]",color:"#CDE"},
   ]
 };
 
