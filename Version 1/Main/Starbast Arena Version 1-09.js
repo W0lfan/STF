@@ -111,7 +111,7 @@ this.options = {
 
 var maxAliensLimit = 70, maxAsteroidsLimit = 50;
 var aliensCodes = [10,11,17,18] , aliensTypes = [0,1,2,3];
-var aliensKills = 100, shipsKills = 10;
+var aliensKills = 50, shipsKills = 5;
 var Team1_AliensKills = 0, Team1_ShipsKills = 0;
 var Team2_AliensKills = 0, Team2_ShipsKills = 0;
 var winner = 0;
@@ -119,13 +119,13 @@ var winner = 0;
 var team1_name = factionOne, team2_name = factionTwo;
 var team1_id = 0, team2_id = 1;
 var team1_score = 0, team2_score = 0;
-var team1_numbersP = 0, team2_numbersP = 1;
+var team1_numbersP = 0, team2_numbersP = 0;
 var mvps = [[],[]];
 
 var factions_6 = ["Valgie","Lianiu","Nanbat", "Orgono","Queena","Frosts","Merlin","Palmer"];
 var factions_7 = ["Flaming","Dolfall","Volgauf","Lornar","Starmod","Assault","Stacker","Eobard"];
 var factions_hues_6 = ["#BF1ADA","#DD23BB","#316BE8","#2BE528","#BF1ADA","#DD23BB","#316BE8","#2BE528"];
-var factions_hues_7 = ["#22D5D8","#E59529","#F64323","#F7AA41","#22D5D8","#E59529","#F64323","#F7AA41"];
+var factions_hues_7 = ["#E59529","#E0EA13","#EA3D13","#E0EA13","#E59529","#E0EA13","#EA3D13","#E0EA13"];
 var factions_hues_ships_6 = [280,300,180,120,280,300,180,120];
 var factions_hues_ships_7 = [30,60,0,60,30,60,0,60];
 /*
@@ -139,10 +139,10 @@ Nanbat : normal blue
 */
 var factionOne = " ";
 var factionOneHue = " ";
-var factionOneHueShip = 0;
+var factionOneHueShip;
 var factionTwo = " ";
 var factionTwoHue= " "; 
-var factionTwoHueShip = 0;
+var factionTwoHueShip;
 
 var factionInit = function(game) {
   if (game.step === 0) {
@@ -306,61 +306,41 @@ var bossCreation = function(game) {
 
 var team_assign = function(ship) {
   if (team1_numbersP === team2_numbersP) {
-    ship.set({team: randomNumber(0,2)});
-    if (ship.team === 0) {
-      ship.set({hue: factionOneHueShip});
-      ship.custom.team = factionOne;
-      ship.custom.ennemies = factionTwo;
-      ship.set({
-        x: (Math.random() - 0.5) * game.options.map_size * 10,
-        y: (Math.random() - 0.5) * game.options.map_size * 10,
-      })
-    } else if (ship.team === 1) {
-      ship.set({hue: factionTwoHueShip});
-      ship.custom.team = factionTwo;
-      ship.custom.ennemies = factionOne;
-      ship.set({
-        x: (Math.random() - 0.5) * game.options.map_size * 10,
-        y: (Math.random() - 0.5) * game.options.map_size * 10,
-      })
+    if (ship.custom.team === null) {
+      ship.set({team: randomNumber(0,2)});
     }
   }
   else if (team1_numbersP < team2_numbersP) {
-      ship.set({team: 0, hue: factionOneHueShip});
-      ship.custom.team = factionOne;
-      ship.custom.ennemies = factionTwo;
-       ship.set({
-        x: (Math.random() - 0.5) * game.options.map_size * 10,
-        y: (Math.random() - 0.5) * game.options.map_size * 10,
-      })
+    if (ship.custom.team === null) {
+      ship.set({team: 0});
+    }
   } 
   else if (team1_numbersP > team2_numbersP) {
-      ship.set({team: 1, hue: factionTwoHueShip})
+    if (ship.custom.team === null) {
+      ship.set({team: 1});
+    }
+  }
+  if (ship.team !== null) {
+    if (ship.team === 0) {
+      team1_numbersP++;
+      ship.set({hue: factionOneHueShip});
+      echo(team1_numbersP + " team1")
+      ship.custom.team = factionOne;
+      ship.custom.ennemies = factionTwo;
+    } else if (ship.team ===1) {
+      team2_numbersP++;
+      ship.set({hue: factionTwoHueShip});
+      echo(team2_numbersP + "team2")
       ship.custom.team = factionTwo;
       ship.custom.ennemies = factionOne;
-      ship.set({
-        x: (Math.random() - 0.5) * game.options.map_size * 10,
-        y: (Math.random() - 0.5) * game.options.map_size * 10,
-      })
+    }
+    ship.set({
+      x: (Math.random() - 0.5) * game.options.map_size * 10,
+      y: (Math.random() - 0.5) * game.options.map_size * 10,
+    })
   }
-  ship.set({invulnerable:600})
-  check_hue_team(ship);
 }
 
-var check_hue_team = function(ship) {
-  if (ship.team === 0 && ship.hue === 240) {
-    ship.set({hue: factionOneHueShip});
-  }
-  if (ship.team === 1 && ship.hue === 120) {
-    ship.set({hue: factionTwoHueShip});
-  }
-  if (ship.custom.team === factionTwo && ship.team === 0 ) {
-    ship.set({team:1, hue: factionTwoHueShip})
-  }
-  if (ship.custom.team === factionOne && ship.team === 1 ) {
-    ship.set({team:0,hue: factionOneHueShip})
-  }
-}
 
 function determineMVPS(ships) {
   if (ships.length === 0) {
@@ -483,13 +463,7 @@ var shipInit = function(game) {
       Object.assign(ship.custom,customVariablesToAssign);
       for (let component of components){ship.setUIComponent(component)}
       team_assign(ship);
-      check_hue_team(ship);
       setPannels(ship);
-      if (ship.custom.team === factionOne) {
-        team1_numbersP++;
-      } else if (ship.custom.team === factionTwo) {
-        team2_numbersP++;
-      }
     }
   }
 }
@@ -1000,8 +974,10 @@ this.event = function(event, game) {
     case "ship_disconnected":
       if (ship.team === 0) {
         team1_numbersP--;
+        echo(team1_numbersP + " team1")
       } else {
         team2_numbersP--;
+        echo(team2_numbersP + " team2")
       }
       break;
   }
