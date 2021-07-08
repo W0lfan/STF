@@ -36,7 +36,8 @@ var FightingTierSix = [
 
 var map_name = [
   "Emanakalor 15", "Derababilii", "Teros 5", "Abadelio 6", "Turha", "Ghurad", "Molurtas 2",
-  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5"
+  "Juni 5", "M-KDO 1", "Boop 9", "Blu T-5", "DSE-V","Hanaturo 25", "Sharkos","Starnova","Albie Tertiary",
+  "Ömep","Rex-5","Lo'tus","Fomalhaut B","Glowtch"
 ];
 
 var mod_vocabulary = [
@@ -63,7 +64,7 @@ var mod_vocabulary = [
 
 var crystal_value = [1,1.1,1.2];
 var crystal_drop = [2,2.1,2.2];
-var map_id = [2739,2742,2817,2865,2900,2961];
+var map_id = [2739,2742,2817,2865,2900,2961,4989,4955,4897,4797];
 var soundtrack = [
   "argon.mp3",
   "civilisation.mp3",
@@ -105,7 +106,7 @@ this.options = {
   hues:[120,240],
   soundtrack: soundtrack[~~(Math.random()*soundtrack.length)],
   asteroids_strength : 1.2,
-  weapon_drop : 4
+  weapon_drop : 4,
 };
 
 var maxAliensLimit = 70, maxAsteroidsLimit = 50;
@@ -121,12 +122,12 @@ var team1_score = 0, team2_score = 0;
 var team1_numbersP = 0, team2_numbersP = 1;
 var mvps = [[],[]];
 
-var factions_6 = ["Valgie","Lianiu","Nanbat", "Orgono"];
-var factions_7 = ["Flaming","Dolfall","Volgauf","Lornar"];
-var factions_hues_6 = ["#BF1ADA","#DD23BB","#316BE8","#2BE528"];
-var factions_hues_7 = ["#22D5D8","#E59529","#F64323","#F7AA41"];
-var factions_hues_ships_6 = [280,300,180,120];
-var factions_hues_ships_7 = [30,60,0,60];
+var factions_6 = ["Valgie","Lianiu","Nanbat", "Orgono","Queena","Frosts","Merlin","Palmer"];
+var factions_7 = ["Flaming","Dolfall","Volgauf","Lornar","Starmod","Assault","Stacker","Eobard"];
+var factions_hues_6 = ["#BF1ADA","#DD23BB","#316BE8","#2BE528","#BF1ADA","#DD23BB","#316BE8","#2BE528"];
+var factions_hues_7 = ["#22D5D8","#E59529","#F64323","#F7AA41","#22D5D8","#E59529","#F64323","#F7AA41"];
+var factions_hues_ships_6 = [280,300,180,120,280,300,180,120];
+var factions_hues_ships_7 = [30,60,0,60,30,60,0,60];
 /*
 Valgie : purple
 Nolkit : pink
@@ -993,16 +994,7 @@ this.event = function(event, game) {
         killer.set({points:killer.custom.aliensKills})
         }
         ship.custom.deaths++;
-        if (ship.custom.hasWeapon === true) {
-          for (let i = 0; i<game.ships.length;i++) {
-            game.ships[i].instructorSays(`${name} lost its weapon, it is now lost, no one can take it again!`);
-            game.ships[i].emptyWeapons();
-          }
-          ship.custom.hasWeapon = false;
-          hideBombInfosStart = true;
-          bruh = null;
-          hasWeapon = false;
-        }
+
       }
       break;
     case "ship_disconnected":
