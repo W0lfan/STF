@@ -99,7 +99,7 @@ this.options = {
   boucing_lasers: false,
   map_name: map_name[~~(Math.random()*map_name.length)],
   vocabulary: mod_vocabulary,
-  max_players: 30,
+  max_players: 60,
   release_crystal:true,
   weapons_store: false,
   friendly_colors:2,
