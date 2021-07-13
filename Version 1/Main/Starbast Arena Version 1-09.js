@@ -43,7 +43,7 @@ var map_name = [
 var mod_vocabulary = [
   { text: "Alien", icon:"\u0030", key:"A" },
   { text: "Defend", icon:"\u0025", key:"D" },
-  { text: "Yes", icon:"\u004c", key:"Y" },
+  { text: "Yes", icon:"\u004c", key:"L" },
   { text: "No", icon:"\u004d", key:"N" },
 
   { text: "Me", icon:"\u003f", key:"E" },
@@ -122,12 +122,28 @@ var team1_score = 0, team2_score = 0;
 var team1_numbersP = 0, team2_numbersP = 0;
 var mvps = [[],[]];
 
-var factions_6 = ["Valgie","Lianiu","Nanbat", "Orgono","Queena","Frosts","Merlin","Palmer"];
-var factions_7 = ["Flaming","Dolfall","Volgauf","Lornar","Starmod","Assault","Stacker","Eobard"];
-var factions_hues_6 = ["#BF1ADA","#DD23BB","#316BE8","#2BE528","#BF1ADA","#DD23BB","#316BE8","#2BE528"];
-var factions_hues_7 = ["#E59529","#E0EA13","#EA3D13","#E0EA13","#E59529","#E0EA13","#EA3D13","#E0EA13"];
-var factions_hues_ships_6 = [280,300,180,120,280,300,180,120];
-var factions_hues_ships_7 = [30,60,0,60,30,60,0,60];
+var factions_6 = [
+  "Valgie","Lianiu","Nanbat", "Orgono","Queena","Frosts","Merlin","Palmer"
+];
+var factions_7 = [
+  "Flaming","Dolfall","Volgauf","Lornar","Starmod","Assault","Stacker","Eobard"
+];
+var factions_hues_6 = [
+  "#BF1ADA","#DD23BB","#316BE8","#2BE528",
+  "#BF1ADA","#DD23BB","#316BE8","#2BE528"
+];
+var factions_hues_7 = [
+  "#E59529","#E0EA13","#EA3D13","#E0EA13",
+  "#E59529","#E0EA13","#EA3D13","#E0EA13"
+];
+var factions_hues_ships_6 = [
+  280,300,180,120,
+  280,300,180,120
+];
+var factions_hues_ships_7 = [
+  30,60,0,60,
+  30,60,0,60
+];
 /*
 Valgie : purple
 Nolkit : pink
