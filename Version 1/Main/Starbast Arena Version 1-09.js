@@ -99,7 +99,7 @@ this.options = {
   boucing_lasers: false,
   map_name: map_name[~~(Math.random()*map_name.length)],
   vocabulary: mod_vocabulary,
-  max_players: 60,
+  max_players: 30,
   release_crystal:true,
   weapons_store: false,
   friendly_colors:2,
@@ -114,7 +114,7 @@ var aliensKills = 150, shipsKills = 25;
 var Team1_AliensKills = 0, Team1_ShipsKills = 0;
 var Team2_AliensKills = 0, Team2_ShipsKills = 0;
 var winner = 0;
-var alienKillsIfPlayer = 5, shipKillsIfPlayer = 2;
+var alienKillsIfPlayer = 20, shipKillsIfPlayer = 2;
 
 var team1_name = factionOne, team2_name = factionTwo;
 var team1_id = 0, team2_id = 1;
@@ -341,7 +341,6 @@ var team_assign = function(ship) {
   }
 }
 
-
 function determineMVPS(ships) {
   if (ships.length === 0) {
     return [[],[]];
@@ -368,19 +367,19 @@ function determineMVPS(ships) {
 function updateScoreboard(game) {
   mvps = determineMVPS(game.ships);
   // set mvp players with badges
-  scoreboard.components[0].id = mvps[0][0];
-  scoreboard.components[2].id = mvps[0][1];
-  scoreboard.components[4].id = mvps[0][2];
-  scoreboard.components[6].id = mvps[1][0];
-  scoreboard.components[8].id = mvps[1][1];
-  scoreboard.components[10].id = mvps[1][2];
+  scoreboard.components[1].id = mvps[0][0];
+  scoreboard.components[3].id = mvps[0][1];
+  scoreboard.components[5].id = mvps[0][2];
+  scoreboard.components[7].id = mvps[1][0];
+  scoreboard.components[9].id = mvps[1][1];
+  scoreboard.components[11].id = mvps[1][2];
   // set player scores
-  scoreboard.components[1].value = game.findShip(mvps[0][0]) ? game.findShip(mvps[0][0]).score.toString().padStart(5,"0") : "";
-  scoreboard.components[3].value = game.findShip(mvps[0][1]) ? game.findShip(mvps[0][1]).score.toString().padStart(5,"0") : "";
-  scoreboard.components[5].value = game.findShip(mvps[0][2]) ? game.findShip(mvps[0][2]).score.toString().padStart(5,"0") : "";
-  scoreboard.components[7].value = game.findShip(mvps[1][0]) ? game.findShip(mvps[1][0]).score.toString().padStart(5,"0") : "";
-  scoreboard.components[9].value = game.findShip(mvps[1][1]) ? game.findShip(mvps[1][1]).score.toString().padStart(5,"0") : "";
-  scoreboard.components[11].value = game.findShip(mvps[1][2]) ? game.findShip(mvps[1][2]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[0].value = game.findShip(mvps[0][0]) ? game.findShip(mvps[0][0]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[2].value = game.findShip(mvps[0][1]) ? game.findShip(mvps[0][1]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[4].value = game.findShip(mvps[0][2]) ? game.findShip(mvps[0][2]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[6].value = game.findShip(mvps[1][0]) ? game.findShip(mvps[1][0]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[8].value = game.findShip(mvps[1][1]) ? game.findShip(mvps[1][1]).score.toString().padStart(5,"0") : "";
+  scoreboard.components[10].value = game.findShip(mvps[1][2]) ? game.findShip(mvps[1][2]).score.toString().padStart(5,"0") : "";
   
   for (let ship of game.ships) {
     ship.setUIComponent(scoreboard);
@@ -413,23 +412,23 @@ var scoreboardACT = function(game) {
 var scoreboard = {
   id: "scoreboard",
   components: [
-    { type: "player",position:[2.5,15,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,14,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,15,65,10],id:"",color:"#CDE",align:"left"},
 
-    { type: "player",position:[2.5,25,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,24,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,25,65,10],id:"",color:"#CDE",align:"left"},
 
-    { type: "player",position:[2.5,35,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,34,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,35,65,10],id:"",color:"#CDE",align:"left"},
 
-    { type: "player",position:[2.5,65,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,64,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,65,65,10],id:"",color:"#CDE",align:"left"},
 
-    { type: "player",position:[2.5,75,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72,74,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,75,65,10],id:"",color:"#CDE",align:"left"},
 
-    { type: "player",position:[2.5,85,65,10],id:"",color:"#CDE"},
     { type: "text",position:[72.5,84,25,12],value: "",color:"#CDE",align:"right"},
+    { type: "player",position:[2.5,85,65,10],id:"",color:"#CDE",align:"left"},
 
     { type: "box",position:[0,1,100,10],stroke:" ",fill:" ",width:15},
     { type: "text",position:[30,-3,35,20],value: " ",color:"#FFFFFF"},
@@ -469,7 +468,6 @@ var shipInit = function(game) {
     }
   }
 }
-
 
 var hideComponentTimer = function(ship, value) {
     timerShips.components[0].value = value;
