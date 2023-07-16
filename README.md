@@ -1,21 +1,37 @@
-<h1>Starblast Arena</h1>
-<br>
-Starblast Arena is a starblast mod with a custom ship tree currently composed of 12 custom tier 6 ships.
-This mod uses a custom scoreboard and UIs.
-In this mod, players will have to kill a certain amount of aliens and players to win the game. 
-Players will be able to choose a ship when spawning or respawning in game. They'll have 30 seconds to choose their ship after being randomly teleported.
-Some features and easter-eggs are hidden in the mode.
-<br>
-You can find the current version code here: https://github.com/W0lfan/Starblast-Arena/blob/main/Version%201/Main/Starbast%20Arena%20Version%201-09.js. 
-<br>
-<br>
-<h2><u>Copyright, claims & credits</u></h2>
-All right first goes to Neuronality for providing the Mod editor and the Ship editor. Neuronality owns ships's properties.<br>
-Modifying this code and publishing it as your own is not allowed (except if I, Wolfan, or Neuronality allows it). I, Wolfan, claim full idea, mod and code since I had the idea first and coded the main part of this mod. Wolfan owns this mod.
-<br>
-Other credits goes to:<br>
-  - Nova, Serendibite, Megalodon for their ships.<br>
-  - AlbieMorisson for his help on the leaderboard.<br>
-  - Glitch for his help, art and suggestions.<br>
-  - Lotus and Bhpsngum for the errors fiding and other modding related stuff.<br>
-  - Wolfan for the mod idea, code, main ships.<br>
+# Starblast Arena: Team Fights
+## About
+The Starblast Arena is an exciting mode in Starblast where players engage in team-based battles against each other. Currently, each match can accommodate up to 12 players. This mode utilizes vanilla ships, providing a level playing field for all participants.
+
+One key feature of the Starblast Arena is ship lock customization. When a player chooses a ship to use in battle, they will be unable to select that same ship again, unless the round count reaches 7 or more. This adds an element of strategy and variety to the gameplay, as players must carefully consider their ship choices throughout the match.
+
+
+## What's new?
+In this enhanced version of the Starblast Arena, we have made **improvements** to enhance code **readability** and added detailed comments throughout to provide a better understanding of its functionality.
+
+We have also revamped some of the user interfaces (UI) to improve the overall user experience. Additionally, the code now supports a wide range of custom parameters, allowing for greater flexibility and customization.
+
+
+## How I can customize the mode
+You can modify certain game parameters in the Starblast Arena to customize your gameplay experience. Here are the available parameters and their descriptions:
+```js
+game.custom.InitialTime = 10; // The time before the ship selection phase starts
+game.custom.StartingTime = 15; // The time before the round starts
+game.custom.MapReducing = 15; // The time before the map size reduces
+
+// In the game.custom._p.Inner
+MaximumRounds // The number of rounds played in a single game. Note that the current code may not support a high number of rounds, as the end scoreboard may not fit all the elements.
+AutoLock // Set to true or false. If true, players are forced to choose a team; if false, players have the option to choose or not choose a team.
+Spectating // Set to true or false. If true, spectators are allowed to observe the rounds.
+ShipLock // Set to true or false. If true, chosen ships are locked in subsequent rounds and can only be selected again after 7 plays.
+```
+
+
+## Contact
+Please note that the information provided here is based on the existing version of the Starblast Arena. For any future updates or changes, it's recommended to consult the [official Starblast Arena server](https://discord.gg/Q5RTE3GF9Y ).
+
+
+### Special thanks
+- Naf, *game coding*
+- Glitch & Koromgo, *ideas*
+- All mod contributors, *game contributions*
+- All initial players
