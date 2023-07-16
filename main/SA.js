@@ -228,6 +228,13 @@ game.custom._p = {
 };
 let s = [601, 602, 603, 604, 605, 606, 607, 608];
 let _s = ["A-Fighter", "Scorpion", "Marauder", "Condor", "A-Speedster", "Rock-Tower", "O-Defender", "Barracuda"];
+const Mode = {
+    Creator : "Naf",
+    Version : "1.0.0",
+};
+
+
+
 var terminal = game.modding.terminal;
 var color_echo = function(message, color, style, background) {
   if (!color) {
@@ -247,14 +254,14 @@ function InitEcho() {
     color_echo(`Made by ${Mode.Creator}\n`,'grey','i');
     color_echo(`Game parameters -`,'grey','');
     color_echo(`Rounds : ${game.custom._p.Inner.MaximumRounds}
-    Team lock : ${game.custom._p.Inner.AutoLock}
-    Ship lock : ${game.custom._p.Inner.ShipLock}
-    Spectating : ${game.custom._p.Inner.Spectating}\n`,'red','g');
+Team lock : ${game.custom._p.Inner.AutoLock}
+Ship lock : ${game.custom._p.Inner.ShipLock}
+Spectating : ${game.custom._p.Inner.Spectating}\n`,'red','g');
     color_echo(`Important infos -`,'grey','');
     color_echo(`This modding console will be used by the mod in order to print 
-    important game informations. Please do not end this terminal while the mod
-    is running.
-    `,'white','');
+important game informations. Please do not end this terminal while the mod
+is running.
+`,'white','');
 };
 InitEcho()
 
@@ -306,10 +313,7 @@ this.options = {
     speed_mod: 1.2,
     lives: 5
 };
-const Mode = {
-    Creator : "Naf",
-    Version : "1.0.0",
-};
+
 
 
 
@@ -1782,7 +1786,6 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
-
 
 
 
