@@ -164,16 +164,56 @@ game.custom._p = {
         }
     },
     Functions: {
-        Positions: function(c = 6) {
-            var b = 0;
-            b = c % 2 === 0 ? 6 : 5;
-            var a = [];
-            for (let d = 0; d < b + (-(c % 2) + 1); d++) a.push(-10 * b + (5 * b - 10 + 10 * (b % 2)) * d + ((-10 * b + (5 * b - 10 + 10 * (b % 2)) * d) > 0 ? -10 : ((-10 * b + (5 * b - 10 + 10 * (b % 2)) * d) === 0 ? 0 : 10)));
-            c % 2 === 0 && a.splice(Math.round(a.length / 2 - 1), 1);
-            var f = [2, 2, 1, 1, 0, 0];
-            for (let e = 1; e < f[c - 1] + 1; e++) a.splice(0, 1), a.splice(a.length - 1, 1);
-            return a;
+        Positions : function(c = 6) {
+            // Ensure that c is within the range of 1 to 6
+            c = Math.min(Math.max(c, 1), 6);
+            // Initialize an empty array to store the positions of the objects
+            let positions = [];
+        
+            if (c === 1) {
+                positions = [
+                    { x: 0, y: 0 }
+                ];
+            } else if (c === 2) {
+                positions = [
+                    { x: -7.5, y: 0 },
+                    { x: 7.5, y: 0 }
+                ];
+            } else if (c === 3) {
+                positions = [
+                    { x: -7.5, y: 0 },
+                    { x: 0, y: 15 },
+                    { x: 7.5, y: 0 }
+                ];
+            } else if (c === 4) {
+                positions = [
+                    { x: -15, y: 0 },
+                    { x: 0, y: 0 },
+                    { x: 0, y: 15 },
+                    { x: 15, y: 0 }
+                ];
+            } else if (c === 5) {
+                positions = [
+                    { x: -15, y: 0 },
+                    { x: 0, y: 0 },
+                    { x: 15, y: 0 },
+                    { x: -7.5, y: 15 },
+                    { x: 7.5, y: 15 }
+                ];
+            } else if (c === 6) {
+                positions = [
+                    { x: -15, y: 0 },
+                    { x: 0, y: 0 },
+                    { x: 15, y: 0 },
+                    { x: -7.5, y: 15 },
+                    { x: 7.5, y: 15 },
+                    { x: 0, y: 30 }
+                ];
+            }
+            return positions;
         },
+        
+        
 
         // Map reduction
         Reduction: function(a = 3) {
@@ -711,7 +751,20 @@ let InnerEndRound = function(game) {
             ]
         }, ship);
         if (ship.custom._p.Stats.Inner.ShipInfos.Last.length >= s.length) {
-            ship.custom._p.Stats.Inner.ShipInfos.Last.splice(0,1);
+            // Check if the array has at least one element
+            if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
+                // Splice the first element
+                ship.custom._p.Stats.Inner.ShipInfos.Last.splice(0, 1);
+
+                // Check if there are more elements left after splicing the first one
+                if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
+                    // Generate a random index between 0 and the array length (exclusive)
+                    const randomIndex = Math.floor(Math.random() * ship.custom._p.Stats.Inner.ShipInfos.Last.length);
+
+                    // Splice the random element
+                    ship.custom._p.Stats.Inner.ShipInfos.Last.splice(randomIndex, 1);
+                }
+            }
         }
     }
     game.custom._p.Global.Phase = 0; // Returning to the waiting for players phase
@@ -1169,8 +1222,10 @@ var tick = function(game) {
                                     ship.custom.ship_check = RandomShip;
 
                                     ship.set({
-                                        y: ship.team === 1 ? 200 : -200,
-                                        x: PositionRendering[a[ship.team] - 1],
+                                        y: ship.team === 1 ? 
+                                            200 + PositionRendering[a[ship.team] - 1].y : 
+                                            -200 - PositionRendering[a[ship.team] - 1].y,
+                                        x: PositionRendering[a[ship.team] - 1].x,
                                         shield: 1000,
                                         generator: 1000,
                                         // Correct angle to face each-others
@@ -1321,7 +1376,7 @@ var tick = function(game) {
                         ship.set({
                             idle: false,
                             collider: true,
-                            y: ship.team === 1 ? 200 : -200,
+                            y: ship.y,
                             x: ship.x,
                             shield: 1000,
                             generator: 1000,
