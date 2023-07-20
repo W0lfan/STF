@@ -16,6 +16,9 @@ game.custom._p = {
         
         // Max amount of players
         MaximumPlayers: 12,
+
+        // Allow players to pick gems even if their cargo is full
+        GemGathering : true,
         
         // Autolock
         AutoLock : true,
@@ -1148,6 +1151,12 @@ var tick = function(game) {
                     }
                 }
             }
+            for (let ship of game.ships) {
+                let max_cargo = Math.round(ship.type/100) ** 2 * 20;
+                if (ship.crystals === max_cargo && game.custom._p.Inner.GemGathering === true) {
+                    ship.set({crystals : ship.crystals - 1});
+                }
+            }
         }
 
         /*
@@ -1786,7 +1795,3 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
-
-
-
-
