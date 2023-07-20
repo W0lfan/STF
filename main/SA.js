@@ -302,7 +302,7 @@ var color_echo = function(message, color, style, background) {
 };
 
 function InitEcho() {
-    color_echo(`The Starblast Arena - V. ${Mode.Version}`,'red','g');
+    color_echo(`Starblast Team Fights- V. ${Mode.Version}`,'red','g');
     color_echo(`Made by ${Mode.Creator}\n`,'grey','i');
     color_echo(`Game parameters -`,'grey','');
     color_echo(`Rounds : ${game.custom._p.Inner.MaximumRounds}
@@ -360,7 +360,7 @@ this.options = {
     friendly_colors: 2,
     max_players: 20,
     asteroids_strength: 1000000,
-    map_name: "The Starblast Arena",
+    map_name: "Starblast Team Fights",
     vocabulary: Vocabulary.Mod,
     reset_tree: true,
     speed_mod: 1.2,
@@ -569,12 +569,7 @@ let GenerateEndMessage = function(game) {
             id: "RoundPannelWinner",
             position: [Center + 30, NoOposition + 5, 40, 10],
             visible: true,
-            components: [{
-                    type: "box",
-                    position: [2.5, 50, 20, 40],
-                    fill: W[i] == game.custom._p.InnerTeams[1].Color.name ? game.custom._p.InnerTeams[1].Color.hex : (W[i] == game.custom._p.InnerTeams[2].Color.name ? game.custom._p.InnerTeams[2].Color.hex : "rgba(255,255,255,0.4)")
-                },
-
+            components: [
                 {
                     type: "text",
                     position: [0, 0, 25, 40],
@@ -1775,3 +1770,7 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
+
+
+
+
