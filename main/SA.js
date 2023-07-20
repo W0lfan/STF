@@ -1,6 +1,8 @@
 game.custom.InitialTime = 10;
 game.custom.StartingTime = 15;
-game.custom.MapReducing = 15;
+game.custom.MapReducing = 5;
+game.custom.ClosingTime = 10;
+game.custom.LastTime = 30;
 
 game.custom.value_wait_count = game.custom.InitialTime;
 game.custom.FinalWinner="";
@@ -78,7 +80,7 @@ game.custom._p = {
     Global: {
         Seconds: 0,
         Phase: 0,
-        LastPhase: 30,
+        LastPhase: game.custom.LastTime,
         MoreInfos: "Waiting for players"
     },
     Map: {
@@ -508,100 +510,13 @@ let GenWinner = function(n = game.custom._p.Inner.MaximumRounds, y = false) {
 
 
 
-let GenerateEndScoreboard = function(game) {
-    let P = [
-        game.custom._p.InnerTeams[1].Points.Global,
-        game.custom._p.InnerTeams[2].Points.Global
-    ];
-    let M = [{
-            Wins: 0,
-            Loss: 0,
-            Total: 0
-        },
-        {
-            Wins: 0,
-            Loss: 0,
-            Total: 0
-        }
-    ];
+let GenerateEndMessage = function(game) {
     let E = GenWinner();
     let Winner = E[0];
     game.custom.FinalWinner = Winner;
     let W = E[1];
     let NoOposition = 20;
     let Center = 15;
-    for (let i = 0; i < game.custom._p.Inner.MaximumRounds; i++) {
-        for (let ship of game.ships) {
-            Sync({
-                id: "RoundPannel" + i,
-                position: [Center + 20, NoOposition + 20 + i * 5, 20, 10],
-                visible: true,
-                components: [{
-                        type: "box",
-                        position: [5, 0, 20, 40],
-                        fill: "rgba(255,255,255,0.2)"
-                    },
-                    {
-                        type: "text",
-                        position: [0, 0, 25, 40],
-                        value: `#${i+1}`,
-                        color: "#CDE"
-                    },
-                ]
-            }, ship);
-            Sync({
-                id: "RoundPannelPoints" + i,
-                position: [Center + 26, NoOposition + 20 + i * 5, 20, 10],
-                visible: true,
-                components: [{
-                        type: "box",
-                        position: [0, 0, 20, 40],
-                        fill: "rgba(255,255,255,0.1)",
-                        stroke: game.custom._p.InnerTeams[1].Color.hex,
-                        width: 5
-                    },
-                    {
-                        type: "text",
-                        position: [-2, 0, 25, 40],
-                        value: `${P[0][i].points}`,
-                        color: "#CDE",
-                    },
-                    {
-                        type: "box",
-                        position: [25, 0, 20, 40],
-                        fill: "rgba(255,255,255,0.1)",
-                        stroke: game.custom._p.InnerTeams[2].Color.hex,
-                        width: 5
-                    },
-                    {
-                        type: "text",
-                        position: [23, 0, 25, 40],
-                        value: `${P[1][i].points}`,
-                        color: "#CDE",
-                    },
-                ]
-            }, ship);
-            let f;
-            Sync({
-                id: "RoundPannelWinner" + i,
-                position: [Center + 40, NoOposition + 20 + i * 5, 40, 10],
-                visible: true,
-                components: [{
-                        type: "box",
-                        position: [5, 0, 20, 40],
-                    fill: W[i] == game.custom._p.InnerTeams[1].Color.name ? game.custom._p.InnerTeams[1].Color.hex : (W[i] == game.custom._p.InnerTeams[2].Color.name ? game.custom._p.InnerTeams[2].Color.hex : "rgba(255,255,255,0.4)")
-                    },
-                    {
-                        type: "text",
-                        position: [6, 0, 25, 40],
-                        value: `${W[i]}`,
-                        color: "#CDE",
-                        align: "left"
-                    },
-                ]
-            }, ship);
-        }
-    }
     for (let ship of game.ships) {
         Sync({
             id: "RoundPannelWinner",
@@ -796,7 +711,7 @@ let InnerEndRound = function(game) {
             ]
         }, ship);
         if (ship.custom._p.Stats.Inner.ShipInfos.Last.length >= s.length) {
-            ship.custom._p.Stats.Inner.ShipInfos.Last = [];
+            ship.custom._p.Stats.Inner.ShipInfos.Last.splice(0,1);
         }
     }
     game.custom._p.Global.Phase = 0; // Returning to the waiting for players phase
@@ -812,7 +727,7 @@ let InnerEndRound = function(game) {
             and the game generates the end scoreboard.
 
         */
-        game.custom._p.Global.Seconds += 30;
+        game.custom._p.Global.Seconds += game.custom.ClosingTime;
         game.custom._p.Global.Phase = 10;
         game.custom._p.Global.MoreInfos = "Closing game";
         for (let ship of game.ships) {
@@ -830,7 +745,7 @@ let InnerEndRound = function(game) {
             ship.custom._p.Stats.Inner.Waiting = false;
             ship.custom._p.Stats.Inner.Spectator = true;
             ship.custom.countedThisRound = false;
-            GenerateEndScoreboard(game);
+            GenerateEndMessage(game);
         }
     }
 };
@@ -1481,16 +1396,18 @@ var tick = function(game) {
                     // Actualizing the red barrier on the radar
                     Radar.components[0].position = RadarPos[game.custom._p.Map.Reducing - 2];
                     for (let ship of game.ships) ship.setUIComponent(Radar);
+                    color_echo(`Map reduction : ${game.custom._p.Map.MaxReducing - game.custom._p.Map.Reducing }`,'grey');
                 } 
 
-                // If the amount of reducing has reached the maximum amount of reducing 
-                else {
+                // If the amount of reducing has reached the maximum amount of reducing
+                echo(game.custom._p.Map.MaxReducing - game.custom._p.Map.Reducing === 0) 
+                if (game.custom._p.Map.MaxReducing - game.custom._p.Map.Reducing === 0) {
                     // Setting the last round phase
-                    game.custom._p.Global.Phase = 3;
                     game.custom._p.Global.MoreInfos = "Ending round";
 
                     // Setting the seconds to the last phase time (deathmatch until the round ends)
                     game.custom._p.Global.Seconds = game.custom._p.Global.LastPhase;
+                    game.custom._p.Global.Phase = 3;
 
                 }
             } 
@@ -1517,14 +1434,15 @@ var tick = function(game) {
                     if (ship.custom._p.Stats.Inner.Team != -1) {
                         ship.gameover({
                             "Game ended": [`${game.custom.FinalWinner} won!`],
+                            "Game rounds" : [game.custom._p.Inner.MaximumRounds],
                             "Your team": [ship.team === 0 ?  game.custom._p.InnerTeams[1].Color.name : game.custom._p.InnerTeams[2].Color.name],
+                            "Your team won" : [`${game.custom._p.InnerTeams[ship.team + 1].Points.All} rounds`],
                             " ": " ",
                             "Kills": [ship.custom._p.Stats.Kills.Total],
                             "Deaths ": [ship.custom._p.Stats.Deaths.Total],
-                            "K/D ~": [`${Math.round(ship.custom._p.Stats.Kills.Total / ship.custom._p.Stats.Deaths.Total)} / ${Math.round(ship.custom._p.Stats.Deaths.Total / ship.custom._p.Stats.Kills.Total)}`],
+                            "K/D ~": [Math.round(ship.custom._p.Stats.Kills.Total / ship.custom._p.Stats.Deaths.Total)],
                             " ": " ",
-                            "Team Rounds": [game.custom._p.InnerTeams[ship.team + 1].Points.All],
-                            "Played Rounds": [ship.custom.playedRounds],
+                            "You played": [`${ship.custom.playedRounds}`],
                             " ": " ",
                             "A mod brought to you by": "Naf, Glitch, Korom",
                         })
@@ -1796,7 +1714,3 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
-
-
-
-
