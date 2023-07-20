@@ -1,8 +1,15 @@
-game.custom.InitialTime = 10;
+/*
+
+  For all informations, see the link below
+  https://w0lfan.github.io/arena/
+
+*/
+
+game.custom.InitialTime = 20;
 game.custom.StartingTime = 15;
-game.custom.MapReducing = 5;
-game.custom.ClosingTime = 10;
+game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
+game.custom.ClosingTime = 10;
 
 game.custom.value_wait_count = game.custom.InitialTime;
 game.custom.FinalWinner="";
@@ -1223,8 +1230,8 @@ var tick = function(game) {
 
                                     ship.set({
                                         y: ship.team === 1 ? 
-                                            200 + PositionRendering[a[ship.team] - 1].y : 
-                                            -200 - PositionRendering[a[ship.team] - 1].y,
+                                            200 - PositionRendering[a[ship.team] - 1].y : 
+                                            -200 + PositionRendering[a[ship.team] - 1].y,
                                         x: PositionRendering[a[ship.team] - 1].x,
                                         shield: 1000,
                                         generator: 1000,
@@ -1376,7 +1383,6 @@ var tick = function(game) {
                         ship.set({
                             idle: false,
                             collider: true,
-                            y: ship.y,
                             x: ship.x,
                             shield: 1000,
                             generator: 1000,
