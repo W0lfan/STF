@@ -259,6 +259,7 @@ function InitEcho() {
     color_echo(`Rounds : ${game.custom._p.Inner.MaximumRounds}
 Team lock : ${game.custom._p.Inner.AutoLock}
 Ship lock : ${game.custom._p.Inner.ShipLock}
+Gem Gathering : ${game.custom._p.Inner.GemGathering}
 Spectating : ${game.custom._p.Inner.Spectating}\n`,'red','g');
     color_echo(`Important infos -`,'grey','');
     color_echo(`This modding console will be used by the mod in order to print 
@@ -1795,3 +1796,7 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
+
+
+
+
