@@ -21,7 +21,7 @@ game.custom._p = {
         MAX : 12,
 
         // Max amount of rounds, infinite in progress
-        MaximumRounds: 7,
+        MaximumRounds: 10,
         
         // Max amount of players
         MaximumPlayers: 12,
@@ -214,7 +214,7 @@ game.custom._p = {
                     { x: 15, y: 0 },
                     { x: -7.5, y: 15 },
                     { x: 7.5, y: 15 },
-                    { x: 0, y: 30 }
+                    { x: 0, y: 15 + 7.5 }
                 ];
             }
             return positions;
@@ -1225,8 +1225,8 @@ var tick = function(game) {
 
                                     ship.set({
                                         y: ship.team === 1 ? 
-                                            200 - PositionRendering[a[ship.team] - 1].y : 
-                                            -200 + PositionRendering[a[ship.team] - 1].y,
+                                            195 - PositionRendering[a[ship.team] - 1].y : 
+                                            -195 + PositionRendering[a[ship.team] - 1].y,
                                         x: PositionRendering[a[ship.team] - 1].x,
                                         shield: 1000,
                                         generator: 1000,
