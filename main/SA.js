@@ -1749,7 +1749,7 @@ this.event = function(event, game) {
 
               if (ship.custom._p.Stats.Inner.Waiting === true) game.custom._p.InnerTeams[team + 1].Players.InnerReady--;
               game.custom._p.InnerTeams[team + 1].Players.InnerPresent--;
-              if (Phase === 1 && ship.custom._p.Stats.Inner.Waiting === true && ship.type >= 600 ) {
+              if (Phase === 1 && ship.type >= 600 ) {
                   for (let ship of game.ships) {
                     SetSpectate(ship);
                     Unsync(s, ship);
@@ -1762,7 +1762,7 @@ this.event = function(event, game) {
                   game.custom._p.InnerTeams[2].Players.InnerReady = 0;
                   return;
               }
-              if (game.custom._p.Global.Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
+              if (Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
                 ship.custom.countedThisRound = false;
                 ActualizePoints(game);
               } 
