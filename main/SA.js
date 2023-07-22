@@ -10,6 +10,7 @@ game.custom.StartingTime = 15;
 game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
 game.custom.ClosingTime = 10;
+game.custom.UnLock = 2;
 
 game.custom.value_wait_count = game.custom.InitialTime;
 game.custom.FinalWinner="";
@@ -543,8 +544,8 @@ let GenWinner = function(n = game.custom._p.Inner.MaximumRounds, y = false) {
         */
 
         let Winner;
-        if (M[0].Wins > M[1].Wins || M[0].Total > M[1].Total) Winner = game.custom._p.InnerTeams[1].Color.name;
-        else if (M[0].Wins < M[1].Wins || M[0].Total < M[1].Total) Winner = game.custom._p.InnerTeams[2].Color.name;
+        if (M[0].Wins > M[1].Wins) Winner = game.custom._p.InnerTeams[1].Color.name;
+        else if (M[0].Wins < M[1].Wins) Winner = game.custom._p.InnerTeams[2].Color.name;
         else Winner = "None";
         if (!y) {
             return [Winner, W];
@@ -755,16 +756,12 @@ let InnerEndRound = function(game) {
         if (ship.custom._p.Stats.Inner.ShipInfos.Last.length >= s.length) {
             // Check if the array has at least one element
             if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
-                // Splice the first element
                 ship.custom._p.Stats.Inner.ShipInfos.Last.splice(0, 1);
-
-                // Check if there are more elements left after splicing the first one
-                if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
-                    // Generate a random index between 0 and the array length (exclusive)
-                    const randomIndex = Math.floor(Math.random() * ship.custom._p.Stats.Inner.ShipInfos.Last.length);
-
-                    // Splice the random element
-                    ship.custom._p.Stats.Inner.ShipInfos.Last.splice(randomIndex, 1);
+                for (let i = 0; i < game.custom.UnLock ; i++) {
+                    if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * ship.custom._p.Stats.Inner.ShipInfos.Last.length);
+                        ship.custom._p.Stats.Inner.ShipInfos.Last.splice(randomIndex, 1);
+                        }
                 }
             }
         }
@@ -1225,8 +1222,8 @@ var tick = function(game) {
 
                                     ship.set({
                                         y: ship.team === 1 ? 
-                                            195 - PositionRendering[a[ship.team] - 1].y : 
-                                            -195 + PositionRendering[a[ship.team] - 1].y,
+                                            210 - PositionRendering[a[ship.team] - 1].y : 
+                                            -210 + PositionRendering[a[ship.team] - 1].y,
                                         x: PositionRendering[a[ship.team] - 1].x,
                                         shield: 1000,
                                         generator: 1000,
@@ -1716,7 +1713,8 @@ this.event = function(event, game) {
               if (game.custom._p.Global.Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
                 ship.custom.countedThisRound = false;
                 ActualizePoints(game);
-              } else if (game.custom._p.Global.Phase === 1 && ship.custom._p.Stats.Inner.Waiting) {
+              } 
+              if (game.custom._p.Global.Phase === 1 && ship.custom._p.Stats.Inner.Waiting) {
                   for (let ship of game.ships) {
                     SetSpectate(ship);
                     Unsync( s, ship);
@@ -1770,7 +1768,3 @@ this.tick = function(game) {
     internals_init();
     this.tick(game);
 };
-
-
-
-
