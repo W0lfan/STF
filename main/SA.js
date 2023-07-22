@@ -10,6 +10,7 @@ game.custom.StartingTime = 15;
 game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
 game.custom.ClosingTime = 10;
+
 game.custom.UnLock = 2;
 
 game.custom.value_wait_count = game.custom.InitialTime;
@@ -22,7 +23,8 @@ game.custom._p = {
         MAX : 12,
 
         // Max amount of rounds, infinite in progress
-        MaximumRounds: 10,
+        MaximumRounds: 4,
+        MaximumRows : 3,
         
         // Max amount of players
         MaximumPlayers: 12,
@@ -41,6 +43,7 @@ game.custom._p = {
         
         // Initial Round
         Round: 0,
+        Row : 0,
         
         // Game Round Count
         AmountRound: 0,
@@ -126,52 +129,55 @@ game.custom._p = {
             "9999999999999999999999999999999\n" +
             "9999999999999999999999999999999"
     },
-    InnerTeams: {
-        1: {
-            Color: {
-                hue: 180,
-                name: "Blue",
-                hex: ["rgba(0, 88, 191, 0.4)"],
-                lighter: ["rgba(0, 56, 255, 0.8)"],
-                leader : "Lucina",
-                superlighter: ["rgba(39, 166, 245, 0.05 )"]
-
-            },
-            Players: {
-                InnerLeft: 0,
-                InnerPresent: 0,
-                InnerPlaying: 0,
-                InnerReady: 0
-            },
-            Points: {
-                Global: [],
-                ActualRound: 0,
-                All: 0,
+    InnerTeams: {},
+    Functions: {
+        ResetTeam : function() {
+            game.custom._p.InnerTeams = {
+                1: {
+                    Color: {
+                        hue: 180,
+                        name: "Blue",
+                        hex: ["rgba(0, 88, 191, 0.4)"],
+                        lighter: ["rgba(0, 56, 255, 0.8)"],
+                        leader : "Lucina",
+                        superlighter: ["rgba(39, 166, 245, 0.05 )"]
+        
+                    },
+                    Players: {
+                        InnerLeft: 0,
+                        InnerPresent: 0,
+                        InnerPlaying: 0,
+                        InnerReady: 0
+                    },
+                    Points: {
+                        Global: [],
+                        ActualRound: 0,
+                        All: 0,
+                    }
+                },
+                2: {
+                    Color: {
+                        hue: 330,
+                        name: "Purple",
+                        hex: ["rgba(182, 0, 196, 0.4)"],
+                        lighter: ["rgba(217, 0, 235, 0.8)"],
+                        leader: "Kan",
+                        superlighter: ["rgba(224, 0, 190, 0.05)"]
+                    },
+                    Players: {
+                        InnerLeft: 0,
+                        InnerPresent: 0,
+                        InnerPlaying: 0,
+                        InnerReady: 0
+                    },
+                    Points: {
+                        Global: [],
+                        ActualRound: 0,
+                        All: 0
+                    }
+                }
             }
         },
-        2: {
-            Color: {
-                hue: 0,
-                name: "Red",
-                hex: ["rgba(197, 0, 0, 0.4)"],
-                lighter: ["rgba(235, 0, 0, 0.8)"],
-                leader: "Zoltar",
-                superlighter: ["rgba(255, 0, 0, 0.05)"]
-            },
-            Players: {
-                InnerLeft: 0,
-                InnerPresent: 0,
-                InnerPlaying: 0,
-                InnerReady: 0
-            },
-            Points: {
-                Global: [],
-                ActualRound: 0,
-                All: 0
-            }
-        }
-    },
-    Functions: {
         Positions : function(c = 6) {
             // Ensure that c is within the range of 1 to 6
             c = Math.min(Math.max(c, 1), 6);
@@ -279,6 +285,9 @@ game.custom._p = {
         }
     }
 };
+
+game.custom._p.Functions.ResetTeam();
+
 let s = [601, 602, 603, 604, 605, 606, 607, 608];
 let _s = ["A-Fighter", "Scorpion", "Marauder", "Condor", "A-Speedster", "Rock-Tower", "O-Defender", "Barracuda"];
 const Mode = {
@@ -306,7 +315,9 @@ function InitEcho() {
     color_echo(`Starblast Team Fights- V. ${Mode.Version}`,'red','g');
     color_echo(`Made by ${Mode.Creator}\n`,'grey','i');
     color_echo(`Game parameters -`,'grey','');
-    color_echo(`Rounds : ${game.custom._p.Inner.MaximumRounds}
+color_echo(
+`Rounds : ${game.custom._p.Inner.MaximumRounds}
+Rows : ${game.custom._p.Inner.MaximumRows}
 Team lock : ${game.custom._p.Inner.AutoLock}
 Ship lock : ${game.custom._p.Inner.ShipLock}
 Gem Gathering : ${game.custom._p.Inner.GemGathering}
@@ -781,11 +792,18 @@ let InnerEndRound = function(game) {
         */
         game.custom._p.Global.Seconds += game.custom.ClosingTime;
         game.custom._p.Global.Phase = 10;
-        game.custom._p.Global.MoreInfos = "Closing game";
+        game.custom._p.Inner.Row++;
+        if (game.custom._p.Inner.Row < game.custom._p.Inner.MaximumRows) {
+            game.custom._p.Global.MoreInfos = "Starting a new row";
+        } else {
+            game.custom._p.Global.MoreInfos = "Ending game";
+        }
+        let E = GenWinner();
+        let Winner = E[0];
+        game.custom.FinalWinner = Winner;
         for (let ship of game.ships) {
             Unsync(s, ship);
-            Unsync(["Points", "Timer", "WaitersCount","Lobby"], ship);
-
+            Unsync(["Points", "Timer", "WaitersCount","Lobby","Rounds"], ship);
             ship.set({
                 x: 0,
                 y: 0,
@@ -797,7 +815,7 @@ let InnerEndRound = function(game) {
             ship.custom._p.Stats.Inner.Waiting = false;
             ship.custom._p.Stats.Inner.Spectator = true;
             ship.custom.countedThisRound = false;
-            GenerateEndMessage(game);
+
         }
     }
 };
@@ -1069,24 +1087,26 @@ var tick = function(game) {
                 } else {
                   Sentencing = `Next : round ${game.custom._p.Inner.Round != 0 ? game.custom._p.Inner.Round + 1: 0} of ${game.custom._p.Inner.MaximumRounds}`;
                 }
-                Sync({
-                    id: `Rounds`,
-                    position: [82.5, 29, 15, 25],
-                    visible: true,
-                    components: [{
-                            type: "text",
-                            position: [20, 50, 60, 20],
-                            value: Sentencing,
-                            color: "#CDE"
-                        },
-                        {
-                            type: "text",
-                            position: [5, 65, 90, 20],
-                            value: `Leading team: ${W[0]}`,
-                            color: c
-                        }
-                    ]
-                }, ship);
+                if (game.custom._p.Global.Phase < 10) {
+                    Sync({
+                        id: `Rounds`,
+                        position: [82.5, 29, 15, 25],
+                        visible: true,
+                        components: [{
+                                type: "text",
+                                position: [20, 50, 60, 20],
+                                value: Sentencing,
+                                color: "#CDE"
+                            },
+                            {
+                                type: "text",
+                                position: [5, 65, 90, 20],
+                                value: `Leading team: ${W[0]}`,
+                                color: c
+                            }
+                        ]
+                    }, ship);
+                }
             }
         }
 
@@ -1320,17 +1340,20 @@ var tick = function(game) {
                         game.custom._p.InnerTeams[1].Points.ActualRound = 0;
                         game.custom._p.InnerTeams[2].Points.ActualRound = 0;
                         for (let ship of game.ships) { 
-                            Sync({
-                            id: `Rounds`,
-                            position: [82.5, 27, 15, 25],
-                            visible: true,
-                            components: [{
-                                    type: "text",
-                                    position: [20, 50, 60, 20],
-                                    value: `Round ${game.custom._p.Inner.Round} of ${game.custom._p.Inner.MaximumRounds}`,
-                                    color: "#CDE"
-                                }]
-                            },ship);
+                            if (game.custom._p.Global.Phase < 10) {
+                                Sync({
+                                    id: `Rounds`,
+                                    position: [82.5, 27, 15, 25],
+                                    visible: true,
+                                    components: [{
+                                            type: "text",
+                                            position: [20, 50, 60, 20],
+                                            value: `Round ${game.custom._p.Inner.Round} of ${game.custom._p.Inner.MaximumRounds}`,
+                                            color: "#CDE"
+                                        }]
+                                },ship);
+                            }
+
                             Unsync(["Lobby", "WaitersCount"], ship);
                         };
                     }
@@ -1485,22 +1508,36 @@ var tick = function(game) {
             else if (game.custom._p.Global.Phase === 10) {
                 for (let ship of game.ships) {
                     if (ship.custom._p.Stats.Inner.Team != -1) {
-                        ship.gameover({
+                        let intermission = {
                             "Game ended": [`${game.custom.FinalWinner} won!`],
                             "Game rounds" : [game.custom._p.Inner.MaximumRounds],
+                            "Game row" : [game.custom._p.Inner.MaximumRows],
                             "Your team": [ship.team === 0 ?  game.custom._p.InnerTeams[1].Color.name : game.custom._p.InnerTeams[2].Color.name],
-                            "Your team won" : [`${game.custom._p.InnerTeams[ship.team + 1].Points.All} rounds`],
+                            "Your team won" : [`${game.custom._p.InnerTeams[ship.team + 1].Points.All} round${game.custom._p.InnerTeams[ship.team + 1].Points.All>1?"s":""}`],
                             " ": " ",
                             "Kills": [ship.custom._p.Stats.Kills.Total],
                             "Deaths ": [ship.custom._p.Stats.Deaths.Total],
                             "K/D ~": [Math.round(ship.custom._p.Stats.Kills.Total / ship.custom._p.Stats.Deaths.Total)],
                             " ": " ",
-                            "You played": [`${ship.custom.playedRounds}`],
+                            "You played": [`${ship.custom.playedRounds} round${ship.custom.playedRounds>1?"s":""}`],
                             " ": " ",
                             "A mod brought to you by": "Naf, Glitch, Korom",
-                        })
+                        }
+                        if (game.custom._p.Inner.Row >= game.custom._p.Inner.MaximumRows) {
+                            ship.gameover(intermission);
+                            return;
+                        } else {
+                            ship.intermission(intermission);
+                            game.custom._p.Functions.Ship.Init(ship);
+                            game.custom._p.Global.Phase = 0;
+                            game.custom._p.Inner.Round = 0;
+                            game.custom._p.Inner.AmountRound = 0;
+                            game.custom._p.Inner.Round = 0;
+                            game.custom._p.Global.MoreInfos = "Waiting for players";
+                            game.custom._p.Functions.ResetTeam();
+                        }
                     } else {
-                        ship.gameover({
+                        ship.intermission({
                             "Game ended": "",
                             "":"",
                             "Thanks for joining!":""
@@ -1631,9 +1668,12 @@ this.event = function(event, game) {
                         hue: game.custom._p.InnerTeams[Number(n)].Color.hue
                     });
                     game.custom._p.InnerTeams[Number(n)].Players.InnerPresent += 1;
-                    ship.instructorSays("Welcome, fighter, to the Team duels!.\nIf you want to take part in a fight, use the 'Lobby' button (to get in or out a round).\nGood luck and enjoy your fights!", n === 1 ? game.custom._p.InnerTeams[1].Color.leader : game.custom._p.InnerTeams[2].Color.leader);
-                    OkHide.components[0].fill = game.custom._p.InnerTeams[n].Color.hex;
-                    ship.setUIComponent(OkHide);
+                    if (!ship.custom.ShipInstructor) {
+                        ship.instructorSays("Welcome, fighter, to the Team duels!.\nIf you want to take part in a fight, use the 'Lobby' button (to get in or out a round).\nGood luck and enjoy your fights!", n === 1 ? game.custom._p.InnerTeams[1].Color.leader : game.custom._p.InnerTeams[2].Color.leader);
+                        ship.custom.ShipInstructor = true;
+                        OkHide.components[0].fill = game.custom._p.InnerTeams[n].Color.hex;
+                        ship.setUIComponent(OkHide);
+                    }
                     Sync(Lobby, ship);
                 }
             } 
@@ -1709,21 +1749,24 @@ this.event = function(event, game) {
 
               if (ship.custom._p.Stats.Inner.Waiting === true) game.custom._p.InnerTeams[team + 1].Players.InnerReady--;
               game.custom._p.InnerTeams[team + 1].Players.InnerPresent--;
-
-              if (game.custom._p.Global.Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
-                ship.custom.countedThisRound = false;
-                ActualizePoints(game);
-              } 
-              if (game.custom._p.Global.Phase === 1 && ship.custom._p.Stats.Inner.Waiting) {
+              if (Phase === 1 && ship.custom._p.Stats.Inner.Waiting === true && ship.type >= 600 ) {
                   for (let ship of game.ships) {
                     SetSpectate(ship);
-                    Unsync( s, ship);
+                    Unsync(s, ship);
                     Sync(Lobby, ship);
                   }
                   game.custom._p.Global.Phase = 0; // Returning to the waiting for players phase
                   game.custom._p.Global.Seconds = 0; // 0 seconds, init
                   game.setCustomMap(game.custom._p.Map.Pattern); // Reseting the map to its original pattern
+                  game.custom._p.InnerTeams[1].Players.InnerReady = 0;
+                  game.custom._p.InnerTeams[2].Players.InnerReady = 0;
+                  return;
               }
+              if (game.custom._p.Global.Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
+                ship.custom.countedThisRound = false;
+                ActualizePoints(game);
+              } 
+
             }
             break;
     }
