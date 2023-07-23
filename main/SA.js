@@ -1695,7 +1695,7 @@ this.event = function(event, game) {
             } 
             
             else if (component === "Lobby") {
-                if (Phase === 0 && ship.alive && ship.custom._p.Stats.Inner.Died === false && ship.custom._p.Stats.Inner.Team != -1) {
+                if (Phase === 0 && ship.alive && ship.custom._p.Stats.Inner.Team != -1) {
                     let p = ship.custom._p.Stats.Inner.Waiting;
                     U(ship, p);
                     ship.custom._p.Stats.Inner.Waiting = !p;
