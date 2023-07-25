@@ -11,10 +11,15 @@ game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
 game.custom.ClosingTime = 10;
 
+game.custom.AllowSwitch = false;
+
 game.custom.UnLock = 2;
+game.custom.ShipTeamLock = 1;
+game.custom.AsteroidPush = "9";
 
 game.custom.value_wait_count = game.custom.InitialTime;
 game.custom.FinalWinner="";
+game.custom.ShipCount = [];
 
 game.custom._p = {
     Inner: {
@@ -45,8 +50,7 @@ game.custom._p = {
         Round: 0,
         Row : 0,
         
-        // Game Round Count
-        AmountRound: 0,
+
         
         Ships: [
             // Starting ship, spectator ship:
@@ -70,6 +74,8 @@ game.custom._p = {
             '{"name":"O-Defender","level":6,"model":7,"size":2.2,"specs":{"shield":{"capacity":[400,550],"reload":[10,13]},"generator":{"capacity":[70,100],"reload":[25,40]},"ship":{"mass":500,"speed":[70,80],"rotation":[30,40],"acceleration":[60,80]}},"bodies":{"main":{"section_segments":8,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0],"y":[-90,-88,0,90,91],"z":[0,0,0,0,0]},"width":[5,6,25,10,20],"height":[2,10,40,20,20],"texture":[63,1,10],"propeller":true,"laser":{"damage":[35,60],"rate":2,"type":2,"speed":[130,180],"number":1,"angle":0,"error":0}},"side":{"section_segments":10,"offset":{"x":50,"y":0,"z":0},"position":{"x":[-40,-5,15,25,20,0,-50],"y":[-100,-70,-40,-10,20,50,90],"z":[0,0,0,0,0,0,0]},"width":[5,20,20,20,20,20,5],"height":[15,25,30,30,30,25,0],"texture":[0,1,2,3,4,63]},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-60,"z":18},"position":{"x":[0,0,0,0,0,0,0],"y":[-10,0,20,30,40],"z":[0,0,0,0,0]},"width":[0,5,10,10,0],"height":[0,5,10,12,0],"texture":[9]},"top_propulsor":{"section_segments":15,"offset":{"x":0,"y":0,"z":10},"position":{"x":[0,0,0,0],"y":[80,95,100,90],"z":[0,0,0,0]},"width":[5,20,10,0],"height":[5,15,5,0],"propeller":true,"texture":[1,63,12]},"bottom_propulsor":{"section_segments":15,"offset":{"x":0,"y":0,"z":-10},"position":{"x":[0,0,0,0],"y":[80,95,100,90],"z":[0,0,0,0]},"width":[5,20,10,0],"height":[5,15,5,0],"propeller":true,"texture":[1,63,12]}},"wings":{"join":{"offset":{"x":0,"y":20,"z":0},"length":[80,0],"width":[130,50],"angle":[-1],"position":[0,-30],"texture":[8],"bump":{"position":-20,"size":15}}},"typespec":{"name":"O-Defender","level":6,"model":7,"code":607,"specs":{"shield":{"capacity":[400,550],"reload":[10,13]},"generator":{"capacity":[70,100],"reload":[25,40]},"ship":{"mass":500,"speed":[70,80],"rotation":[30,40],"acceleration":[60,80]}},"shape":[4.409,4.448,4.372,4.204,4.119,4.136,4.174,4.107,4.066,4.094,4.073,4.141,4.16,4.062,4.015,3.966,3.83,3.76,3.742,3.591,3.502,3.494,3.575,4.291,4.422,4.409,4.422,4.291,3.575,3.494,3.502,3.591,3.742,3.76,3.83,3.966,4.015,4.062,4.16,4.141,4.073,4.094,4.066,4.107,4.174,4.136,4.119,4.204,4.372,4.448],"lasers":[{"x":0,"y":-3.96,"z":0,"angle":0,"damage":[35,60],"rate":2,"type":2,"speed":[130,180],"number":1,"spread":0,"error":0,"recoil":0}],"radius":4.448}}',
             /* Barracuda */
             '{"name":"Barracuda","level":6,"model":8,"size":2.4,"specs":{"shield":{"capacity":[300,400],"reload":[8,12]},"generator":{"capacity":[100,150],"reload":[8,14]},"ship":{"mass":675,"speed":[70,90],"rotation":[30,45],"acceleration":[130,150],"dash":{"rate":2,"burst_speed":[160,200],"speed":[120,150],"acceleration":[70,70],"initial_energy":[50,75],"energy":[20,30]}}},"bodies":{"body":{"section_segments":12,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-90,-100,-60,-10,0,20,50,80,100,90],"z":[0,0,0,0,0,0,0,0,0,0,0]},"width":[0,5,20,25,35,40,40,35,30,0],"height":[0,5,40,45,40,60,70,60,30,0],"texture":[10,2,10,2,3,13,13,63,12],"propeller":true},"front":{"section_segments":8,"offset":{"x":0,"y":-20,"z":0},"position":{"x":[0,0,0,0,0],"y":[-90,-85,-70,-60,-20],"z":[0,0,0,0,0]},"width":[0,40,45,10,12],"height":[0,15,18,8,12],"texture":[8,63,4,4,4],"propeller":true},"propeller":{"section_segments":10,"offset":{"x":40,"y":40,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-20,-15,0,10,20,25,30,40,70,60],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[0,10,15,15,15,10,10,20,15,0],"height":[0,10,15,15,15,10,10,18,8,0],"texture":[4,4,10,3,3,63,4,63,12],"propeller":true},"sides":{"section_segments":6,"angle":90,"offset":{"x":0,"y":0,"z":0},"position":{"x":[0,0,0,0,0,0,0,0,0,0],"y":[-80,-75,-60,-50,-10,10,50,60,75,80],"z":[0,0,0,0,0,0,0,0,0,0]},"width":[0,30,35,10,12,12,10,35,30,0],"height":[0,10,12,8,12,12,8,12,10,0],"texture":[4,63,4,4,4,4,4,63,4]},"cockpit":{"section_segments":12,"offset":{"x":0,"y":-20,"z":30},"position":{"x":[0,0,0,0,0,0,0,0],"y":[-50,-20,0,10,30,50],"z":[0,0,0,0,0,0]},"width":[0,12,18,20,15,0],"height":[0,20,22,24,20,0],"texture":[9]}},"wings":{"top":{"doubleside":true,"offset":{"x":0,"y":20,"z":15},"length":[70],"width":[70,30],"angle":[90],"position":[0,30],"texture":[63],"bump":{"position":10,"size":30}},"top2":{"doubleside":true,"offset":{"x":0,"y":51,"z":5},"length":[70],"width":[50,20],"angle":[90],"position":[0,60],"texture":[63],"bump":{"position":10,"size":30}}},"typespec":{"name":"Barracuda","level":6,"model":8,"code":608,"specs":{"shield":{"capacity":[300,400],"reload":[8,12]},"generator":{"capacity":[100,150],"reload":[8,14]},"ship":{"mass":675,"speed":[70,90],"rotation":[30,45],"acceleration":[130,150],"dash":{"rate":2,"burst_speed":[160,200],"speed":[120,150],"acceleration":[70,70],"initial_energy":[50,75],"energy":[20,30]}}},"shape":[5.28,5.25,5.332,5.393,4.944,1.997,1.745,1.556,1.435,3.587,3.81,3.779,3.838,3.84,3.779,3.81,3.587,3.205,3.571,3.9,5.132,5.888,5.835,5.551,4.886,5.808,4.886,5.551,5.835,5.888,5.132,3.9,3.571,3.205,3.587,3.81,3.779,3.838,3.84,3.779,3.81,3.587,1.435,1.556,1.745,1.997,4.944,5.393,5.332,5.25],"lasers":[],"radius":5.888}}',
+            /* H-Mercury */
+            '{"name":"H-Mercury","level":6,"model":9,"size":2,"specs":{"shield":{"capacity":[250,350],"reload":[6,8]},"generator":{"capacity":[100,150],"reload":[45,60]},"ship":{"mass":500,"speed":[75,95],"rotation":[50,60],"acceleration":[55,90]}},"bodies":{"main":{"section_segments":8,"offset":{"x":0,"y":0,"z":20},"position":{"x":[0,0,0,0,0,0,0,0,0],"y":[-65,-70,-60,-40,0,50,110,100],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,10,20,30,25,10,0],"height":[1,5,10,15,25,20,10,0],"texture":[6,4,4,63,11,63,12],"propeller":true,"laser":{"damage":[5,8],"rate":8,"type":1,"speed":[100,150],"number":1,"error":0}},"cockpit":{"section_segments":8,"offset":{"x":0,"y":-20,"z":35},"position":{"x":[0,0,0,0,0,0,0],"y":[-20,-10,0,15,25],"z":[0,0,0,0,0]},"width":[0,10,12,10,5],"height":[0,10,13,12,5],"texture":[9,9,4,4],"propeller":false},"arms":{"section_segments":8,"offset":{"x":60,"y":0,"z":-10},"position":{"x":[0,0,0,5,10,0,0,-10],"y":[-85,-70,-80,-30,0,30,100,90],"z":[0,0,0,0,0,0,0,0]},"width":[1,5,6,15,15,15,10,0],"height":[1,5,6,20,30,25,10,0],"texture":[6,4,4,4,4,4,12],"angle":1,"propeller":true,"laser":{"damage":[3,5],"rate":4,"type":1,"speed":[150,200],"number":1,"error":0}},"canon":{"section_segments":12,"offset":{"x":100,"y":27,"z":5},"position":{"x":[0,0,0,0,0,0,0],"y":[-50,-45,-20,0,20,30,40],"z":[0,0,0,0,0,0,0]},"width":[0,5,7,7,3,5,0],"height":[0,5,15,15,3,5,0],"angle":3,"laser":{"damage":[5,9],"rate":1,"type":1,"speed":[150,200],"number":1,"error":0},"propeller":false,"texture":[6,4,10,4,4,4]}},"wings":{"main":{"offset":{"x":0,"y":-15,"z":20},"length":[60,40],"width":[60,30,20],"angle":[-20,10],"position":[30,50,30],"texture":[11,11],"bump":{"position":30,"size":10}},"font":{"length":[60],"width":[20,15],"angle":[-10,20],"position":[-20,-40],"texture":[63],"bump":{"position":30,"size":10},"offset":{"x":0,"y":0,"z":0}},"font2":{"offset":{"x":0,"y":40,"z":8},"length":[60],"width":[20,15],"angle":[-10,20],"position":[20,40],"texture":[63],"bump":{"position":30,"size":10}}},"typespec":{"name":"H-Mercury","level":6,"model":9,"code":609,"specs":{"shield":{"capacity":[250,350],"reload":[6,8]},"generator":{"capacity":[100,150],"reload":[45,60]},"ship":{"mass":500,"speed":[75,95],"rotation":[50,60],"acceleration":[55,90]}},"shape":[2.806,2.807,2.354,2.037,1.822,4.151,4.081,3.789,3.595,3.471,3.406,4.17,4.202,4.284,4.413,4.508,4.834,4.883,4.011,4.534,4.917,4.734,3.583,3.454,4.418,4.409,4.418,3.454,3.583,4.734,4.917,4.534,4.011,4.883,4.834,4.508,4.413,4.284,4.202,4.17,3.406,3.471,3.595,3.789,4.081,4.151,1.822,2.037,2.354,2.807],"lasers":[{"x":0,"y":-2.8,"z":0.8,"angle":0,"damage":[5,8],"rate":8,"type":1,"speed":[100,150],"number":1,"spread":0,"error":0,"recoil":0},{"x":2.341,"y":-3.399,"z":-0.4,"angle":1,"damage":[3,5],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-2.341,"y":-3.399,"z":-0.4,"angle":-1,"damage":[3,5],"rate":4,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":3.895,"y":-0.917,"z":0.2,"angle":3,"damage":[5,9],"rate":1,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0},{"x":-3.895,"y":-0.917,"z":0.2,"angle":-3,"damage":[5,9],"rate":1,"type":1,"speed":[150,200],"number":1,"spread":0,"error":0,"recoil":0}],"radius":4.917}}',
 
             // Admin ship:
             /* Admin */
@@ -97,7 +103,7 @@ game.custom._p = {
     Map: {
         MaxReducing: 8,
         TimeReducing: game.custom.MapReducing,
-        Reducing: 2,
+        Reducing: 3,
         Pattern: "9999999999999999999999999999999\n" +
             "9999999999999999999999999999999\n" +
             "99                           99\n" +
@@ -221,7 +227,7 @@ game.custom._p = {
                     { x: 15, y: 0 },
                     { x: -7.5, y: 15 },
                     { x: 7.5, y: 15 },
-                    { x: 0, y: 15 + 7.5 }
+                    { x: 0, y: 15 + 8 }
                 ];
             }
             return positions;
@@ -230,7 +236,7 @@ game.custom._p = {
         
 
         // Map reduction
-        Reduction: function(a = 3) {
+        Reduction : function(a = 3) {
             var b = [];
             let _m = 30; // Map size
             for (let c = 0; c < _m + 1; c++) {
@@ -238,6 +244,13 @@ game.custom._p = {
                 b.push("\n");
             }
             return b.join("");
+        },
+  
+
+        InitShipCount : function() {
+            let ships=game.custom._p.Inner.Ships.length-1;
+            game.custom.ShipCount=[[],[]];
+            for(let i=0;i<2;i++) for(let j=0;j<ships;j++) game.custom.ShipCount[i].push(0);
         },
 
         // Random number
@@ -286,10 +299,17 @@ game.custom._p = {
     }
 };
 
-game.custom._p.Functions.ResetTeam();
 
-let s = [601, 602, 603, 604, 605, 606, 607, 608];
-let _s = ["A-Fighter", "Scorpion", "Marauder", "Condor", "A-Speedster", "Rock-Tower", "O-Defender", "Barracuda"];
+
+
+
+game.custom._p.Functions.ResetTeam();
+game.custom._p.Functions.InitShipCount();
+
+let s = [601,602,603,604,605,606,607,608,609];
+
+let _s = ["A-Fighter", "Scorpion", "Marauder", "Condor", "A-Speedster", "Rock-Tower", "O-Defender", "Barracuda","H-Mercury"];
+
 const Mode = {
     Creator : "Naf",
     Version : "1.0.0",
@@ -437,7 +457,30 @@ let Lobby = {
         }
     ]
 };
-
+let Switch = {
+    id:"Switch",
+    position:[4,29,13,5],
+    clickable: true,
+    visible: true,
+    components: [
+      { type:"box",position:[0,0,100,100],fill:"rgba(213, 245, 39, 0.25)"},
+      { type: "text",
+        position: [0,10,50,50],
+        color: "#FFF",
+        value: "←"
+      },
+      { type: "text",
+        position: [0,31,50,50],
+        color: "#FFF",
+        value: "→"
+      },
+      { type: "text",
+        position: [35,21,50,50],
+        color: "#FFF",
+        value: "Switch Team"
+      },
+    ]
+  }
 var WaitersCount = {
                 id: "WaitersCount",
                 position: [42.5, 85, 20, 5],
@@ -472,7 +515,7 @@ var WaitersCount = {
                     value: `)`,
                     color: "#CDE"
                 }, 
-                ]
+        ]
 };
 
 
@@ -678,36 +721,38 @@ let Radar = {
 
 
 
-let InnerEndRound = function(game) {
+let InnerEndRound = function(game,addPoints = true) {
     /*
 
         This function aims to end the active round. 
 
     */
-    for (let i = 1; i < 3; i++) { // From team 1 to 2
-        /*
-
-            Generating an object gathering all informations for the teams: amount of points and if the 
-            team won or not.
-
-        */
-        let m = {
-            points: game.custom._p.InnerTeams[i].Points.ActualRound,
-            won: null
-        };
-
-        const team1Points = game.custom._p.InnerTeams[i].Points.ActualRound;
-        const team2Points = game.custom._p.InnerTeams[(i) % 2 + 1].Points.ActualRound;
-        
-        
-        if (team1Points > team2Points) {
-            m.won = true;
-            game.custom._p.InnerTeams[i].Points.All++;
-        } else {
-            m.won = false;
+    if (addPoints) {
+        for (let i = 1; i < 3; i++) { // From team 1 to 2
+            /*
+    
+                Generating an object gathering all informations for the teams: amount of points and if the 
+                team won or not.
+    
+            */
+            let m = {
+                points: game.custom._p.InnerTeams[i].Points.ActualRound,
+                won: null
+            };
+    
+            const team1Points = game.custom._p.InnerTeams[i].Points.ActualRound;
+            const team2Points = game.custom._p.InnerTeams[(i) % 2 + 1].Points.ActualRound;
+            
+            
+            if (team1Points > team2Points) {
+                m.won = true;
+                game.custom._p.InnerTeams[i].Points.All++;
+            } else {
+                m.won = false;
+            }
+            
+            game.custom._p.InnerTeams[i].Points.Global.push(m);
         }
-        
-        game.custom._p.InnerTeams[i].Points.Global.push(m);
     }
 
     /*
@@ -719,10 +764,10 @@ let InnerEndRound = function(game) {
     game.custom._p.InnerTeams[2].Points.ActualRound = 0; // Current round = 0
     game.custom._p.InnerTeams[1].Players.InnerReady = 0; // No players are ready to play
     game.custom._p.InnerTeams[2].Players.InnerReady = 0; // No players are ready to play
-    game.custom._p.Inner.AmountRound = 0;
+    game.custom._p.Functions.InitShipCount();
     game.custom._p.Global.Seconds = 0;
     game.custom._p.Global.MoreInfos = "Waiting for players";
-    game.custom._p.Map.Reducing = 2;
+    game.custom._p.Map.Reducing = 3;
     game.custom.Rnd_Points = 2;
     Radar.components[0].position = RadarPos[0];
     for (let ship of game.ships) {
@@ -743,6 +788,7 @@ let InnerEndRound = function(game) {
         ship.setUIComponent(Radar);
         ship.custom._p.Stats.Inner.Waiting = false;
         ship.custom._p.Stats.Inner.Spectator = true;
+        ship.custom.ship_check = 0;
         Sync(Lobby, ship);
         Unsync(['Points',"Timer"], ship);
         Unsync(["601", "602", "603", "604", "605", "606", "607", "608"], ship);
@@ -764,7 +810,7 @@ let InnerEndRound = function(game) {
                 },
             ]
         }, ship);
-        if (ship.custom._p.Stats.Inner.ShipInfos.Last.length >= s.length) {
+        if (ship.custom._p.Stats.Inner.ShipInfos.Last.length >= s.length && addPoints) {
             // Check if the array has at least one element
             if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
                 ship.custom._p.Stats.Inner.ShipInfos.Last.splice(0, 1);
@@ -772,7 +818,7 @@ let InnerEndRound = function(game) {
                     if (ship.custom._p.Stats.Inner.ShipInfos.Last.length > 0) {
                         const randomIndex = Math.floor(Math.random() * ship.custom._p.Stats.Inner.ShipInfos.Last.length);
                         ship.custom._p.Stats.Inner.ShipInfos.Last.splice(randomIndex, 1);
-                        }
+                    }
                 }
             }
         }
@@ -803,7 +849,7 @@ let InnerEndRound = function(game) {
         game.custom.FinalWinner = Winner;
         for (let ship of game.ships) {
             Unsync(s, ship);
-            Unsync(["Points", "Timer", "WaitersCount","Lobby","Rounds"], ship);
+            Unsync(["Points", "Timer", "WaitersCount","Lobby","Rounds","Switch"], ship);
             ship.set({
                 x: 0,
                 y: 0,
@@ -930,10 +976,64 @@ let Scoreboard = function(game) {
                 }, )
             })
         })
+        game.setUIComponent(scoreboard);
     }
-    game.setUIComponent(scoreboard);
 };
 
+
+function CreateShipSync(ship, active = false) {
+    if (game.custom._p.Global.Phase <= 1 || active) {
+        let pushed = 0;
+        let push = 0;
+        let init = 0;
+        let OffSet = 15;
+        for (let i = 0; i < s.length; i++) {
+            if (i>s.length/2 && !pushed) {
+                pushed = 1;
+                push = 15;
+                OffSet = 20;
+                init = 0;
+            }
+            init+=9;
+            Sync({
+                id: `${s[i]}`,
+                position: [init + OffSet, 65 + push, 8, 14],
+                clickable: true,
+                shortcut: `${i+1}`,
+                visible: true,
+                components: [{
+                        type: "box",
+                        position: [0, 0, 100, 100],
+                        fill: 
+                            game.custom._p.Inner.ShipLock === true ? 
+                            ((ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ?  "rgba(82, 81, 81, 0.66)" : game.custom._p.InnerTeams[ship.team + 1].Color.hex)
+                            : game.custom._p.InnerTeams[ship.team + 1].Color.hex,
+                        stroke: "#CDE",
+                        width: 2
+                    },
+                    {
+                        type: "text",
+                        position: [20, 15, 60, 20],
+                        value: _s[i],
+                        color: "#CDE"
+                    },
+
+                    {
+                        type: "text",
+                        position: [20, 30, 60, 50],
+                        value: game.custom._p.Inner.ShipLock === true ? (
+                            (ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ? `[✖]` : `[${i+1}]`) :
+                            `[${i+1}]`
+                            ,
+                        color: "rgba(255,255,255,0.4)"
+                    },
+
+                ]
+            }, ship);
+        }
+    }
+
+}
 
 let OkHide = {
     id: "OkHide",
@@ -1034,7 +1134,6 @@ var tick = function(game) {
 
 
             if (game.custom._p.Global.Phase === 0) { 
-
                 // If the ship is well initialized and has a team between 1 and 2
                 if (ship.custom.Init && ship.custom._p.Stats.Inner.Team != -1) {
                     // Constantly showing the amount of players ready to play
@@ -1124,7 +1223,6 @@ var tick = function(game) {
                 ) 
                 && game.custom.Rnd_Points >= 2) {
                 InnerEndRound(game);
-                echo('ENDING ROUND');
             }
             if (game.custom._p.InnerTeams[1].Points.Global.length >= game.custom._p.Inner.Round && game.custom._p.InnerTeams[2].Points.Global.length >= game.custom._p.Inner.Round) {
                 let W = GenWinner(game.custom._p.Inner.Round, true);
@@ -1195,26 +1293,30 @@ var tick = function(game) {
                         in order to understand the max amount of players for this round.
                         There are two teams, so the amount is multiplicated by 2.
                     */
-                    let MaxPlayRnd = Math.min(teamOneReady, teamTwoReady) * 2;
 
-                    if (MaxPlayRnd > game.custom._p.Inner.MAX) MaxPlayRnd = game.custom._p.Inner.MAX;
-
-                    game.custom.Rnd_Points = MaxPlayRnd;
 
                     function PlayingShips() {
-                        let WaitingUsers = [
-                            [],
-                            []
-                        ];
+                        let WaitingUsers = [[],[]];
+
                         for (let ship of game.ships) {
                             // If the player is waiting
                             if (ship.custom._p.Stats.Inner.Waiting) {
                                 // The game add it to the waiting list
+                                Unsync(["Lobby","Switch"],ship);
                                 WaitingUsers[ship.team].push(ship);
                             }
                         }
+
+                        // We get each waiting players for each team
                         const WaitersTeamOne = WaitingUsers[0];
                         const WaitersTeamTwo = WaitingUsers[1];
+
+                        // Get the minimum amount of players who wants to duel using each teams
+                        let MaxPlayRnd = Math.min(WaitersTeamOne.length, WaitersTeamTwo.length) * 2;
+
+                        if (MaxPlayRnd > game.custom._p.Inner.MAX) MaxPlayRnd = game.custom._p.Inner.MAX;
+    
+                        game.custom.Rnd_Points = MaxPlayRnd;
 
                         // Randomly sorting each player
                         WaitersTeamOne.sort((a, b) => 0.5 - Math.random());
@@ -1223,14 +1325,18 @@ var tick = function(game) {
                         echo('Converting the all-list of "I wish to play" players: see console.');
                         console.log(WaitingUsers);
 
+                        // We get the position rendering for the 
                         let PositionRendering = game.custom._p.Functions.Positions(MaxPlayRnd / 2);
+
+                        // Definition of each waiters per team (nb)
                         let a = [
                             MaxPlayRnd / 2,
                             MaxPlayRnd / 2
                         ];
                         
-
+                        // For each teams
                         for (let i = 0; i < 2; i++) {
+                            // We get the waiting team
                             for (let ship of WaitingUsers[i]) {
                                 // If the ship actually waits, exists, and is in a proper team
                                 if (ship.custom._p.Stats.Inner.Waiting && a[ship.team] != 0 && ship) {
@@ -1238,7 +1344,10 @@ var tick = function(game) {
                                     // Selecting a random ship in the list of the non-used ships of the player
                                     let RandomShip = generateRandom(s[0], s[s.length - 1], ship.custom._p.Stats.Inner.ShipInfos.Last);
 
+                                    // For unclicking purposes
                                     ship.custom.ship_check = RandomShip;
+                                    game.custom.ShipCount[ship.team][RandomShip - 601]++;
+
 
                                     ship.set({
                                         y: ship.team === 1 ? 
@@ -1256,59 +1365,31 @@ var tick = function(game) {
                                         type: RandomShip,
                                         stats: 66666666
                                     });
-                                    a[ship.team]--;
 
+                                    // Reducing : -1 player to fix
+                                    a[ship.team]--;
+                                    CreateShipSync(ship);
                                     ship.custom.countedThisRound = true;
                                     echo('Check: team N°' + ship.team + " now has " + a[ship.team] + " slot left to complete.")
 
-                                    for (let i = 0; i < s.length; i++) {
-                                        let Stats = [
-                                            JSON.parse(game.custom._p.Inner.Ships[i + 1]).specs.shield.capacity[1],
-                                            JSON.parse(game.custom._p.Inner.Ships[i + 1]).specs.generator.capacity[1],
-                                            JSON.parse(game.custom._p.Inner.Ships[i + 1]).specs.ship.speed[1],
-                                        ];
-                                        Sync({
-                                            id: `${s[i]}`,
-                                            position: [8 + i * 9, 80, 8, 14],
-                                            clickable: true,
-                                            shortcut: `${i+1}`,
-                                            visible: true,
-                                            components: [{
-                                                    type: "box",
-                                                    position: [0, 0, 100, 100],
-                                                    fill: 
-                                                        game.custom._p.Inner.ShipLock === true ? 
-                                                        (ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) ?  "rgba(82, 81, 81, 0.66)" : game.custom._p.InnerTeams[ship.team + 1].Color.hex)
-                                                        : game.custom._p.InnerTeams[ship.team + 1].Color.hex,
-                                                    stroke: "#CDE",
-                                                    width: 2
-                                                },
-                                                {
-                                                    type: "text",
-                                                    position: [20, 15, 60, 20],
-                                                    value: _s[i],
-                                                    color: "#CDE"
-                                                },
-                                                {
-                                                    type: "text",
-                                                    position: [5, 50, 90, 80],
-                                                    value: `🛡${Stats[0]}  🗲${Stats[1]}  💨${Stats[2]}`,
-                                                    color: "rgba(255,255,255,1)"
-                                                },
-
-                                                {
-                                                    type: "text",
-                                                    position: [20, 30, 60, 50],
-                                                    value: game.custom._p.Inner.ShipLock === true ? (
-                                                        ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) ? `[✖]` : `[${i+1}]`) :
-                                                        `[${i+1}]`
-                                                        ,
-                                                    color: "rgba(255,255,255,0.4)"
-                                                },
-
-                                            ]
-                                        }, ship);
+                                    // Checking for (X) vs (X-1)
+                                    let P = [0,0];
+                                    // For each ship, we check if they are waiting (ship > 600)
+                                    for (let ship of game.ships) {
+                                        if (ship.type > 600) {
+                                            // If so, we add +1 to the team count
+                                            P[ship.team]++;
+                                        }
                                     }
+                                    // If team counts aren't equal, this means the game is about to be a (X) vs (X-1)
+                                    if (P[0]!=P[1]) {
+                                        // We fix it by ending the round directly and preventing the calculation of winners
+                                        game.custom._p.Inner.Round--;
+                                        InnerEndRound(game, false);
+                                        // We end the function
+                                        return;
+                                    }
+                                    
                                 } else if (ship.custom._p.Stats.Inner.Waiting && a[ship.team] === 0) {
                                     if (ship.type < 600) {
                                         ship.custom._p.Stats.Inner.Waiting = false;
@@ -1354,7 +1435,7 @@ var tick = function(game) {
                                 },ship);
                             }
 
-                            Unsync(["Lobby", "WaitersCount"], ship);
+                            Unsync(["Lobby", "WaitersCount","Switch"], ship);
                         };
                     }
                 }
@@ -1365,7 +1446,7 @@ var tick = function(game) {
         TimerRoundStart(game);
 
         // Timer : if the global timing is >= 1 
-        if (game.custom._p.Global.Seconds >= 1) {
+        if (game.custom._p.Global.Seconds > 1) {
             game.custom._p.Global.Seconds--;
             for (let ship of game.ships) {
                 Sync({
@@ -1389,7 +1470,7 @@ var tick = function(game) {
             }
         } 
         // Else, if it reaches 0
-        else if (game.custom._p.Global.Seconds < 1) {
+        else  {
             // If the game is in the "waiting to fight" phase:
             if (game.custom._p.Global.Phase === 1) {
                 for (let ship of game.ships) {
@@ -1531,7 +1612,6 @@ var tick = function(game) {
                             game.custom._p.Functions.Ship.Init(ship);
                             game.custom._p.Global.Phase = 0;
                             game.custom._p.Inner.Round = 0;
-                            game.custom._p.Inner.AmountRound = 0;
                             game.custom._p.Inner.Round = 0;
                             game.custom._p.Global.MoreInfos = "Waiting for players";
                             game.custom._p.Functions.ResetTeam();
@@ -1628,6 +1708,9 @@ function SetSpectate(ship) {
         x: 0,
         y: 0,
         type: 101,
+        stats:11111111,
+        idle : false,
+        gems : 0,
         collider:false
     });
     ship.custom._p.Stats.Inner.Died = false;
@@ -1675,13 +1758,25 @@ this.event = function(event, game) {
                         ship.setUIComponent(OkHide);
                     }
                     Sync(Lobby, ship);
+                    if (game.custom.AllowSwitch) {
+                        Sync(Switch, ship);
+                    }
                 }
             } 
             
             else if (component.includes('6') && ship.type != Number(component)) {
+                let type = Number(component) - 600;
+                console.log(game.custom.ShipCount[ship.team][type - 1] < game.custom.ShipTeamLock)
+                console.log(game.custom.ShipCount)
                 if (
                     game.custom._p.Inner.ShipLock === false ||
-                    (game.custom._p.Inner.ShipLock === true && ship.custom._p.Stats.Inner.ShipInfos.Last.includes(Number(component)) !== true)) {
+                        (   game.custom._p.Inner.ShipLock === true && 
+                            ship.custom._p.Stats.Inner.ShipInfos.Last.includes(Number(component)) !== true && 
+                            game.custom.ShipCount[ship.team][type - 1] < game.custom.ShipTeamLock
+                        )
+                    ) {
+                        game.custom.ShipCount[ship.team][ship.type - 601]--;
+                        game.custom.ShipCount[ship.team][type - 1]++;
                         ship.custom.ship_check = Number(component);
                         ship.set({
                             type: ship.custom.ship_check,
@@ -1690,6 +1785,11 @@ this.event = function(event, game) {
                             generator: 0,
                             shield: 1000
                         });
+                        for (let s of game.ships) {
+                            if (s.type > 600 && ship.custom._p.Stats.Inner.Waiting === true) {
+                                CreateShipSync(s);
+                            }
+                        }
                 }
 
             } 
@@ -1702,6 +1802,21 @@ this.event = function(event, game) {
                     game.custom._p.InnerTeams[ship.team + 1].Players.InnerReady += p ? -1 : 1;
                 }
             } 
+            else if (component === "Switch") {
+                if (Phase === 0 && ship.alive && ship.custom._p.Stats.Inner.Team != -1 && game.custom.AllowSwitch) {
+                    game.custom._p.InnerTeams[Number(n)].Players.InnerPresent--;
+                    if (ship.custom._p.Stats.Inner.Waiting === true) {
+                        game.custom._p.InnerTeams[ship.team + 1].Players.InnerReady--;
+                    }
+                    ship.custom._p.Stats.Inner.Waiting = false;
+                    SetSpectate(ship);
+                    ship.set({
+                        team : (ship.team + 1) % 2,
+                        hue : game.custom._p.InnerTeams[((ship.team + 1) % 2 + 1)].Color.hue
+                    });
+                    color_echo(`${ship.name} switched team (now, ${game.custom._p.InnerTeams[((ship.team + 1) % 2 + 1)].Color.name})`,"grey")
+                }
+            }
             
             else if (component === "OkHide") {
                 ship.hideInstructor();
@@ -1757,9 +1872,8 @@ this.event = function(event, game) {
                   }
                   game.custom._p.Global.Phase = 0; // Returning to the waiting for players phase
                   game.custom._p.Global.Seconds = 0; // 0 seconds, init
-                  game.setCustomMap(game.custom._p.Map.Pattern); // Reseting the map to its original pattern
-                  game.custom._p.InnerTeams[1].Players.InnerReady = 0;
-                  game.custom._p.InnerTeams[2].Players.InnerReady = 0;
+                  game.custom._p.Inner.Round--;
+                  InnerEndRound(game, false);
                   return;
               }
               if (Phase >= 1 && ship.type >= 600 && ship.custom._p.Stats.Inner.Waiting === true && ship.custom.countedThisRound) {
