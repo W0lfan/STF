@@ -983,7 +983,6 @@ let Scoreboard = function(game) {
 
 function CreateShipSync(ship) {
     if (game.custom._p.Global.Phase <= 1) {
-        console.log(`${ship.name} synced`)
         let pushed = 0;
         let push = 0;
         let init = 0;
