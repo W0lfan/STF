@@ -5,7 +5,7 @@
 
 */
 
-game.custom.InitialTime = 20;
+game.custom.InitialTime = 1;
 game.custom.StartingTime = 15;
 game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
@@ -981,8 +981,9 @@ let Scoreboard = function(game) {
 };
 
 
-function CreateShipSync(ship, active = false) {
-    if (game.custom._p.Global.Phase <= 1 || active) {
+function CreateShipSync(ship) {
+    if (game.custom._p.Global.Phase <= 1) {
+        console.log(`${ship.name} synced`)
         let pushed = 0;
         let push = 0;
         let init = 0;
@@ -995,44 +996,43 @@ function CreateShipSync(ship, active = false) {
                 init = 0;
             }
             init+=9;
-            Sync({
-                id: `${s[i]}`,
-                position: [init + OffSet, 65 + push, 8, 14],
-                clickable: true,
-                shortcut: `${i+1}`,
-                visible: true,
-                components: [{
-                        type: "box",
-                        position: [0, 0, 100, 100],
-                        fill: 
-                            game.custom._p.Inner.ShipLock === true ? 
-                            ((ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ?  "rgba(82, 81, 81, 0.66)" : game.custom._p.InnerTeams[ship.team + 1].Color.hex)
-                            : game.custom._p.InnerTeams[ship.team + 1].Color.hex,
-                        stroke: "#CDE",
-                        width: 2
-                    },
-                    {
-                        type: "text",
-                        position: [20, 15, 60, 20],
-                        value: _s[i],
-                        color: "#CDE"
-                    },
-
-                    {
-                        type: "text",
-                        position: [20, 30, 60, 50],
-                        value: game.custom._p.Inner.ShipLock === true ? (
-                            (ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ? `[✖]` : `[${i+1}]`) :
-                            `[${i+1}]`
-                            ,
-                        color: "rgba(255,255,255,0.4)"
-                    },
-
-                ]
-            }, ship);
-        }
+                Sync({
+                    id: `${s[i]}`,
+                    position: [init + OffSet, 65 + push, 8, 14],
+                    clickable: true,
+                    shortcut: `${i+1}`,
+                    visible: true,
+                    components: [{
+                            type: "box",
+                            position: [0, 0, 100, 100],
+                            fill: 
+                                game.custom._p.Inner.ShipLock === true ? 
+                                ((ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ?  "rgba(82, 81, 81, 0.66)" : game.custom._p.InnerTeams[ship.team + 1].Color.hex)
+                                : game.custom._p.InnerTeams[ship.team + 1].Color.hex,
+                            stroke: "#CDE",
+                            width: 2
+                        },
+                        {
+                            type: "text",
+                            position: [20, 15, 60, 20],
+                            value: _s[i],
+                            color: "#CDE"
+                        },
+        
+                        {
+                            type: "text",
+                            position: [20, 30, 60, 50],
+                            value: game.custom._p.Inner.ShipLock === true ? (
+                                (ship.custom._p.Stats.Inner.ShipInfos.Last.includes(s[i]) || game.custom.ShipCount[ship.team][i] >= game.custom.ShipTeamLock) ? `[✖]` : `[${i+1}]`) :
+                                `[${i+1}]`
+                                ,
+                            color: "rgba(255,255,255,0.4)"
+                        },
+        
+                    ]
+                }, ship);
+            }
     }
-
 }
 
 let OkHide = {
@@ -1072,6 +1072,9 @@ var tick = function(game) {
 
         // If the phase is still the waiting for players to duel phase
         for (let ship of game.ships) {
+            if (ship.type > 600 && ship.custom._p.Stats.Inner.Waiting === true) {
+                CreateShipSync(ship);
+            }
             ship.setUIComponent(Radar);
             if (ship.custom.Init != true) {
                 ship.custom.ship_check = 0;
@@ -1368,7 +1371,6 @@ var tick = function(game) {
 
                                     // Reducing : -1 player to fix
                                     a[ship.team]--;
-                                    CreateShipSync(ship);
                                     ship.custom.countedThisRound = true;
                                     echo('Check: team N°' + ship.team + " now has " + a[ship.team] + " slot left to complete.")
 
@@ -1400,6 +1402,7 @@ var tick = function(game) {
                         }
                     }
                     PlayingShips();
+
 
                     /*
                     
@@ -1493,7 +1496,7 @@ var tick = function(game) {
 
                         // Hiding the ships components
                         Unsync(s, ship);
-
+                        CreateShipSync(ship);
                         // Adding 1 to the played rounds of the ship
                         ship.custom.playedRounds++;
                     }
@@ -1766,8 +1769,6 @@ this.event = function(event, game) {
             
             else if (component.includes('6') && ship.type != Number(component)) {
                 let type = Number(component) - 600;
-                console.log(game.custom.ShipCount[ship.team][type - 1] < game.custom.ShipTeamLock)
-                console.log(game.custom.ShipCount)
                 if (
                     game.custom._p.Inner.ShipLock === false ||
                         (   game.custom._p.Inner.ShipLock === true && 
@@ -1785,11 +1786,6 @@ this.event = function(event, game) {
                             generator: 0,
                             shield: 1000
                         });
-                        for (let s of game.ships) {
-                            if (s.type > 600 && ship.custom._p.Stats.Inner.Waiting === true) {
-                                CreateShipSync(s);
-                            }
-                        }
                 }
 
             } 
