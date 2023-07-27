@@ -5,7 +5,7 @@
 
 */
 
-game.custom.InitialTime = 1;
+game.custom.InitialTime = 20;
 game.custom.StartingTime = 15;
 game.custom.MapReducing = 15;
 game.custom.LastTime = 30;
@@ -28,7 +28,7 @@ game.custom._p = {
         MAX : 12,
 
         // Max amount of rounds, infinite in progress
-        MaximumRounds: 4,
+        MaximumRounds: 5,
         MaximumRows : 3,
         
         // Max amount of players
@@ -1071,8 +1071,10 @@ var tick = function(game) {
 
         // If the phase is still the waiting for players to duel phase
         for (let ship of game.ships) {
-            if (ship.type > 600 && ship.custom._p.Stats.Inner.Waiting === true) {
+            if (ship.type > 600 && ship.custom._p.Stats.Inner.Waiting === true && game.custom._p.Global.Phase === 1) {
                 CreateShipSync(ship);
+            } else {
+                Unsync(["601","602","603","604","605","606","607","608","609"], ship);
             }
             ship.setUIComponent(Radar);
             if (ship.custom.Init != true) {
