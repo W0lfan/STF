@@ -6,7 +6,7 @@ const STF = {
 
 const parameters = {
     timing: {
-        pre_round: 1,
+        pre_round: 20,
         ship_selection: 20,
         map_reduction: 20,
         round_draw: 30,
