@@ -31,6 +31,9 @@ const parameters = {
 
         // Beta
         random_assignation: false
+    },
+    instructor  : {
+        quote : "Welcome, fighter, to STF!\nIf you want to take part in a fight, use the 'Lobby' button.\nGood luck and enjoy your fights!"
     }
 }
 
@@ -824,7 +827,7 @@ let end_running = function(game, addPoints = true) {
     game.custom.core.teams[2].score.active = 0; // Current round = 0
     game.custom.core.teams[1].metrics.ready = 0; // No players are ready to play
     game.custom.core.teams[2].metrics.ready = 0; // No players are ready to play
-    ResetShipCount()
+    ResetShipCount();
     game.custom.core.sessionData.seconds = 0;
     game.custom.core.sessionData.status = "Waiting for players";
     game.custom.core.map.reduction_state = 3;
@@ -963,7 +966,7 @@ let Scoreboard = function(game) {
             fill: "rgba(255,255,255,1)"
         }, {
             type: "box",
-            position: [0, 0, 49, 10],
+            position: [0, 0, 51, 10],
             fill: game.custom.core.teams[1].datas.superlighter,
         }, {
             type: "box",
@@ -1093,6 +1096,19 @@ let OkHide = {
 };
 
 var tick = function(game) {
+    if (game.step % 30 === 0) {
+        for (let ship of game.ships) {
+            if (ship.type > 600 && ship.custom.core.Stats.Inner.Waiting === true && game.custom.core.sessionData.state === 1) {
+                ShipsRender(ship);
+                ship.custom.ship_ui_displayed = true;
+            } else if (game.custom.core.sessionData.state > 1 || game.custom.core.sessionData.state === 0 ) {
+                if (ship.custom.ship_ui_displayed) {
+                    hideUI(["601", "602", "603", "604", "605", "606", "607", "608", "609"], ship);
+                    ship.custom.ship_ui_displayed = false;
+                }
+            }
+        }
+    }
     if (game.step % 15 === 0) {
         /*
             Always update the scoreboard in order to track score count.
@@ -1101,11 +1117,7 @@ var tick = function(game) {
 
         // If the phase is still the waiting for players to duel phase
         for (let ship of game.ships) {
-            if (ship.type > 600 && ship.custom.core.Stats.Inner.Waiting === true && game.custom.core.sessionData.state === 1) {
-                ShipsRender(ship);
-            } else if (game.custom.core.sessionData.state > 1 || game.custom.core.sessionData.state===0 ) {
-                hideUI(["601", "602", "603", "604", "605", "606", "607", "608", "609"], ship);
-            }
+
             ship.setUIComponent(Radar);
             if (ship.custom.Init != true) {
                 ship.custom.ship_check = 0;
@@ -1405,11 +1417,10 @@ var tick = function(game) {
                                     type: RandomShip,
                                     stats: 66666666
                                 });
-                                ShipsRender(ship);
                                 // Reducing : -1 player to fix
                                 a[ship.team]--;
                                 ship.custom.countedThisRound = true;
-                                echo('Check: team N°' + ship.team + " now has " + a[ship.team] + " slot left to complete.")
+                                color_echo('Check: team ' + ship.team + " now has " + a[ship.team] + " slot left to complete.","orange")
 
 
                             } else if (ship.custom.core.Stats.Inner.Waiting && a[ship.team] === 0) {
@@ -1421,16 +1432,16 @@ var tick = function(game) {
                         }
                     }
                     // Checking for (X) vs (X-1)
-                    let P = [0, 0];
+                    let Check = [0, 0];
                     // For each ship, we check if they are waiting (ship > 600)
                     for (let ship of game.ships) {
                         if (ship.type > 600) {
                             // If so, we add +1 to the team count
-                            P[ship.team]++;
+                            Check[ship.team]++;
                         }
                     }
                     // If team counts aren't equal, this means the game is about to be a (X) vs (X-1)
-                    if (P[0] != P[1]) {
+                    if (Check[0] != Check[1]) {
                         // We fix it by ending the round directly and preventing the calculation of winners
                         game.custom.core.config.Round--;
                         end_running(game, false);
@@ -1684,7 +1695,8 @@ var tick = function(game) {
 
 };
 
-let LobbyRendering = function(ship, p) {
+let LobbyRendering = function(ship) {
+    const status = ship.custom.core.Stats.Inner.Waiting;
     ship.setUIComponent({
         id: "Lobby",
         position: [37.5, 75, 25, 10],
@@ -1695,7 +1707,8 @@ let LobbyRendering = function(ship, p) {
                 type: "box",
                 position: [0, 0, 100, 100],
                 fill: "rgba(151, 151, 151, 0.2)",
-                stroke: p ? "rgba(249, 0, 0, 0.8)" : "rgba(0, 249, 2, 0.8)",
+                // If status = false ==> show red
+                stroke: !status ? "rgba(249, 0, 0, 0.8)" : "rgba(0, 249, 2, 0.8)",
                 width: 4
             },
             {
@@ -1708,13 +1721,15 @@ let LobbyRendering = function(ship, p) {
             {
                 type: "text",
                 position: [0, 14.5, 40, 35],
-                value: p ? "PLAY" : "LEAVE",
+                // If status = false ==> show PLAY
+                value: !status ? "PLAY" : "LEAVE",
                 color: "#CDE"
             },
             {
                 type: "text",
                 position: [5, 40, 80, 60],
-                value: p ? "Press this button to enter fights" : "Press this button to leave fights",
+                // If status = false ==> show PLAY
+                value: !status ? "Press this button to enter fights" : "Press this button to leave fights",
                 color: "#CDE"
             },
             {
@@ -1770,66 +1785,71 @@ function SetSpectate(ship) {
     ship.custom.core.Stats.Inner.Spectator = true;
     ship.custom.core.Stats.Inner.Waiting = false;
     ship.custom.countedThisRound = false;
-
 }
 
 this.event = function(event, game) {
     let ship = event.ship;
-    let killer = event.killer;
+
+    const killer = event.killer;
     let component = event.id;
+    
     const Phase = game.custom.core.sessionData.state;
-    const MaxPlayers = game.custom.core.config.max_players;
+    const __PARAMETERS__ = parameters.play;
 
     switch (event.name) {
         case "ui_component_clicked":
             if (component.includes("Team")) {
-                let n = Number(component.replace('Team', ''));
-                n++;
-                let Condition = false;
-                if (parameters.play.auto_lock === true) {
-                    if (game.custom.core.teams[n].metrics.presence <= game.custom.core.teams[(n) % 2 + 1].metrics.presence) {
-                        Condition = true;
+                console.log('clicked on component')
+                const team_index = Number(component.replace('Team', '')) + 1;
+                const team_datas = game.custom.core.teams[team_index];
+                const opposite = team_index % 2 + 1;
+                console.log(team_datas)
+
+                let check_lock = false;
+                if (__PARAMETERS__.auto_lock === true) {
+                    if (team_datas.metrics.presence <= game.custom.core.teams[opposite].metrics.presence) {
+                        check_lock = true;
                     }
                 } else {
-                    Condition = true;
+                    check_lock = true;
                 }
-                if (Condition) {
-                    ship.custom.core.Stats.Inner.Team = Number(n) - 1;
-
-                    hideUI(["Team0", "Team1"], ship);
+                if (check_lock) {
+                    ship.custom.core.Stats.Inner.Team = team_index - 1;
                     ship.set({
                         collider: false,
                         idle: false,
-                        team: Number(n) - 1,
-                        hue: game.custom.core.teams[Number(n)].datas.hue
+                        team: team_index - 1,
+                        hue: team_datas.datas.hue
                     });
-                    game.custom.core.teams[Number(n)].metrics.presence += 1;
-                    if (!ship.custom.ShipInstructor) {
-                        ship.instructorSays("Welcome, fighter, to STF!\nIf you want to take part in a fight, use the 'Lobby' button.\nGood luck and enjoy your fights!", n === 1 ? game.custom.core.teams[1].datas.leader : game.custom.core.teams[2].datas.leader);
-                        ship.custom.ShipInstructor = true;
-                        OkHide.components[0].fill = game.custom.core.teams[n].datas.hex;
-                        ship.setUIComponent(OkHide);
-                    }
+                    game.custom.core.teams[team_index].metrics.presence += 1;
                     renderUI(Lobby, ship);
+                    hideUI(["Team0", "Team1"], ship);
                     if (parameters.play.team_switch) {
                         renderUI(Switch, ship);
                     }
+
+                    if (!ship.custom.ShipInstructor) {
+                        ship.instructorSays(parameters.instructor.quote, team_datas.datas.leader);
+                        OkHide.components[0].fill = team_datas.datas.hex;
+                        ship.setUIComponent(OkHide);
+                        ship.custom.ShipInstructor = true;
+                    }
                 }
             } else if (component.includes('6') && ship.type != Number(component)) {
-                let type = Number(component) - 601;
+                const type = Number(component);
                 if (
-                    parameters.play.ship_lock.allow_lock === false ||
+                    __PARAMETERS__.ship_lock.allow_lock === false ||
                     (
-                        parameters.play.ship_lock.allow_lock === true &&
-                        ship.custom.core.Stats.Inner.ShipInfos.Last.includes(Number(component)) !== true &&
-                        game.custom.ShipCount[ship.team][type] < parameters.play.ship_lock.team_limit
+                        __PARAMETERS__.ship_lock.allow_lock === true &&
+                        ship.custom.core.Stats.Inner.ShipInfos.Last.includes(type) !== true &&
+                        game.custom.ShipCount[ship.team][type - 601] < __PARAMETERS__.ship_lock.team_limit
                     )
                 ) {
                     game.custom.ShipCount[ship.team][ship.type - 601]--;
-                    game.custom.ShipCount[ship.team][type]++;
-                    ship.custom.ship_check = Number(component);
+                    game.custom.ShipCount[ship.team][type - 601]++;
+                    ship.custom.ship_check = type;
                     ship.set({
-                        type: Number(component),
+                        type: type,
                         stats: 66666666,
                         crystals: 500,
                         generator: 0,
@@ -1839,25 +1859,26 @@ this.event = function(event, game) {
 
             } else if (component === "Lobby") {
                 if (Phase === 0 && ship.alive && ship.custom.core.Stats.Inner.Team != -1) {
-                    let p = ship.custom.core.Stats.Inner.Waiting;
-                    LobbyRendering(ship, p);
-                    ship.custom.core.Stats.Inner.Waiting = !p;
-                    game.custom.core.teams[ship.team + 1].metrics.ready += p ? -1 : 1;
+                    const status = ship.custom.core.Stats.Inner.Waiting;
+                    ship.custom.core.Stats.Inner.Waiting = !status;
+                    LobbyRendering(ship);
+                    game.custom.core.teams[ship.team + 1].metrics.ready += status ? -1 : 1;
                 }
             } else if (component === "Switch") {
-                if (Phase === 0 && ship.alive === true && ship.custom.core.Stats.Inner.Team != -1 && parameters.play.team_switch === true) {
+                if (Phase === 0 && ship.alive === true && ship.custom.core.Stats.Inner.Team != -1 && __PARAMETERS__.team_switch === true) {
+                    const opposite = ship.team % 2 + 1;
                     game.custom.core.teams[ship.team + 1].metrics.presence--;
                     if (ship.custom.core.Stats.Inner.Waiting === true) {
                         game.custom.core.teams[ship.team + 1].metrics.ready--;
                     }
                     ship.custom.core.Stats.Inner.Waiting = false;
                     SetSpectate(ship);
-                    ship.custom.core.Stats.Inner.Team = (ship.team + 1) % 2;
+                    ship.custom.core.Stats.Inner.Team = opposite;
                     ship.set({
-                        team: (ship.team + 1) % 2,
-                        hue: game.custom.core.teams[((ship.team + 1) % 2 + 1)].datas.hue
+                        team: opposite,
+                        hue: game.custom.core.teams[(opposite + 1)].datas.hue
                     });
-                    color_echo(`${ship.name} switched team (now, ${game.custom.core.teams[((ship.team + 1) % 2 + 1)].datas.name})`, "grey")
+                    color_echo(`${ship.name} switched team (now, ${game.custom.core.teams[(opposite + 1)].datas.name})`, "grey")
                 }
             } else if (component === "OkHide") {
                 ship.hideInstructor();
@@ -1893,7 +1914,7 @@ this.event = function(event, game) {
             break;
         case "ship_spawned":
             SetSpectate(ship);
-            if (game.custom.core.sessionData.state > 1 && parameters.play.spectating === false) {
+            if (game.custom.core.sessionData.state > 1 && __PARAMETERS__.spectating === false) {
                 ship.set({
                     idle: true
                 });
@@ -1930,39 +1951,21 @@ this.event = function(event, game) {
 
 
 // Ship disconnecting code
-var internals_init = function() {
-    if (game.custom.internals_init) {
-        return;
-    }
-    const modding = game.modding;
-    const internals = Object.values(modding).find(val => val && typeof val.shipDisconnected === "function");
-    if (!internals) {
-        modding.terminal.error("Error: modding internals object not found");
-        return;
-    }
-    if (!internals.shipDisconnected.old) {
-        function shipDisconnected({
-            id
-        } = {}) {
-            if (modding.context.event && id) {
-                var ship = game.findShip(id);
-                if (ship) {
-                    modding.context.event({
-                        name: "ship_disconnected",
-                        ship
-                    }, game);
-                }
-            }
-            return shipDisconnected.old.apply(this, arguments);
-        }
-        shipDisconnected.old = internals.shipDisconnected;
-        internals.shipDisconnected = shipDisconnected;
-    }
-    game.custom.internals_init = true;
-};
+var internals_init=function(){if(game.custom.internals_init)return;let n=game.modding,i=Object.values(n).find(n=>n&&"function"==typeof n.shipDisconnected);if(!i){n.terminal.error("Error: modding internals object not found");return}if(!i.shipDisconnected.old){function t({id:i}={}){if(n.context.event&&i){var e=game.findShip(i);e&&n.context.event({name:"ship_disconnected",ship:e},game)}return t.old.apply(this,arguments)}t.old=i.shipDisconnected,i.shipDisconnected=t}game.custom.internals_init=!0};this.tick=function(n){this.tick=tick,internals_init(),this.tick(n)};
 
-this.tick = function(game) {
-    this.tick = tick;
-    internals_init();
-    this.tick(game);
-};
+
+game.setObject({
+    id: "qr",
+    type: {
+      id: "qr",
+      obj: "https://starblast.data.neuronality.com/mods/objects/plane.obj",
+      emissive: "https://raw.githubusercontent.com/W0lfan/STF/main/ressources/About.png",
+      diffuse: "https://raw.githubusercontent.com/W0lfan/STF/main/ressources/About.png",
+      emissiveColor: 0xFFFFFF,
+      shininess : 1,
+      transparent: true
+    },
+    position: {x: 0, y: -20, z: -50},
+    rotation: {x:  Math.PI, y: 0, z: 0},
+    scale: {x: 50, y: 30, z: 20}
+  });
