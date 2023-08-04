@@ -1154,6 +1154,19 @@ let OkHide = {
 };
 
 var tick = function(game) {
+    if (game.step % 30 === 0) {
+        for (let ship of game.ships) {
+            if (ship.type > 600 && ship.custom.core.Stats.Inner.Waiting === true && game.custom.core.sessionData.state === 1) {
+                ShipsRender(ship);
+                ship.custom.ship_ui_displayed = true;
+            } else if (game.custom.core.sessionData.state > 1 || game.custom.core.sessionData.state === 0 ) {
+                if (ship.custom.ship_ui_displayed) {
+                    hideUI(["601", "602", "603", "604", "605", "606", "607", "608", "609"], ship);
+                    ship.custom.ship_ui_displayed = false;
+                }
+            }
+        }
+    }
     if (game.step % 15 === 0) {
         /*
             Always update the scoreboard in order to track score count.
@@ -1162,11 +1175,6 @@ var tick = function(game) {
 
         // If the phase is still the waiting for players to duel phase
         for (let ship of game.ships) {
-            if (ship.type > 600 && ship.custom.core.Stats.Inner.Waiting === true && game.custom.core.sessionData.state === 1) {
-                ShipsRender(ship);
-            } else if (game.custom.core.sessionData.state > 1 || game.custom.core.sessionData.state===0 ) {
-                hideUI(["601", "602", "603", "604", "605", "606", "607", "608", "609"], ship);
-            }
             ship.setUIComponent(Radar);
             if (ship.custom.Init != true) {
                 ship.custom.ship_check = 0;
