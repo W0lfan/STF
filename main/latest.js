@@ -1,6 +1,6 @@
 const STF = {
     Creator: "Naf",
-    Version: "1.0.0",
+    Version: "1.0.5",
     Website : "https://w0lfan.github.io/arena/"
 };
 
@@ -10,7 +10,8 @@ const parameters = {
         ship_selection: 20,
         map_reduction: 20,
         round_draw: 30,
-        cycle_close: 10
+        cycle_close: 10,
+        ship_countdown : 2
     },
     config: {
         cycle: 2,
@@ -334,6 +335,10 @@ game.custom.core = {
                     idle: true
                 });
                 ship.custom.playedRounds = 0;
+                ship.custom.shipTime = {
+                    running : false,
+                    time : parameters.timing.ship_countdown
+                }
                 ship.custom.core = {
                     Stats: {
                         Kills: {
@@ -640,94 +645,59 @@ var WaitersCount = {
 
 
 // Winner generation
-let GenWinner = function(n = parameters.config.round, y = false) {
+const generateWinner = function(n = parameters.config.round, includeWins = false) {
     /*
-        We first check if the amount of points per team (generated during the game)
-        is equal to the number of rounds played
+        First, we check if the points per team (generated during the game)
+        match the number of rounds played.
     */
-    if (game.custom.core.teams[1].score.summary.length >= game.custom.core.config.Round && game.custom.core.teams[2].score.summary.length >= game.custom.core.config.Round) {
-
+    if (
+        game.custom.core.teams[1].score.summary.length >= game.custom.core.config.Round &&
+        game.custom.core.teams[2].score.summary.length >= game.custom.core.config.Round
+    ) {
         // Gathering all the points
-        let P = [
-            game.custom.core.teams[1].score.summary,
-            game.custom.core.teams[2].score.summary
-        ];
+        const team1Scores = game.custom.core.teams[1].score.summary;
+        const team2Scores = game.custom.core.teams[2].score.summary;
 
         // An object per team
-        let M = [{
-                Wins: 0,
-                Loss: 0,
-                Total: 0
-            },
-            {
-                Wins: 0,
-                Loss: 0,
-                Total: 0
-            }
+        const teamMetrics = [
+            { Wins: 0, Loss: 0, Total: 0 },
+            { Wins: 0, Loss: 0, Total: 0 }
         ];
-        let W = [];
-        for (let i = 0; i < 2; i++) { // i < 2 because of 2 teams only
-            for (let k = 0; k < n; k++) { // n is the max amount of rounds
+        const roundWinners = [];
+        
+        for (let i = 0; i < 2; i++) { // Iterate through the two teams
+            for (let k = 0; k < n; k++) { // n is the maximum number of rounds
 
-                /*
-
-                    This part of the function allows the code to understand the properties 
-                    of each object of the rounds won or lost by the teams.
-
-                    The code checks if the team won the k round (from 0 to max rounds - 1).
-                    If so, M[team_id].Wins = M[team_id].Wins + 1.
-                    Otherwise, M[team_id].Loss = M[team_id].Loss + 1.
-                    Then, the amounf of points won in each round is added the M[team_id].Total (points).
-
-                */
-
-                if (P[i][k].won) M[i].Wins++;
-                else M[i].Loss++;
-                M[i].Total += P[i][k].score;
+                // Update team metrics based on each round's outcome
+                if (team1Scores[k].won) teamMetrics[i].Wins++;
+                else teamMetrics[i].Loss++;
+                teamMetrics[i].Total += team1Scores[k].score;
             }
         }
+        
         for (let i = 0; i < n; i++) {
-
-            /*
-
-                This part of the function allows the code to understand who won each round, with the teams name.
-                The code check if the points of any team is higher than the other one.
-                If so, the highest team wins the round and it's name is added to the W variable. 
-                If there is equality or no win, the W variable gets a "None" win.
-
-            */
-
-            const winningTeam = P[0][i].score > P[1][i].score ?
+            // Determine the winning team for each round
+            const winningTeam = team1Scores[i].score > team2Scores[i].score ?
                 game.custom.core.teams[1].datas.name :
                 game.custom.core.teams[2].datas.name;
-            W.push(winningTeam || "None");
+            roundWinners.push(winningTeam || "No team");
         }
-
-        /*
-
-            Once we gathered all the informations of each win/loss and the total points of the rounds, 
-            we try to see who is the winner.
-            In order to achieve this, we see if any team has more points or wins than the other one.
-            If so, the winner is stored in the Winner variable.
-            Otherwise, there is "None" winner.
-
-            If the aim of function is not to gather the amount of wins but only the winner name,
-            y will be stated as false. Otherwise, if y = true, the function will return the amount 
-            of wins of each team.
-
-        */
-
-        let Winner;
-        if (M[0].Wins > M[1].Wins) Winner = game.custom.core.teams[1].datas.name;
-        else if (M[0].Wins < M[1].Wins) Winner = game.custom.core.teams[2].datas.name;
-        else Winner = "None";
-        if (!y) {
-            return [Winner, W];
-        } else if (y) {
-            return [Winner, [M[0].Wins, M[1].Wins]];
+        
+        // Determine the overall winner
+        let winner;
+        if (teamMetrics[0].Wins > teamMetrics[1].Wins) winner = game.custom.core.teams[1].datas.name;
+        else if (teamMetrics[0].Wins < teamMetrics[1].Wins) winner = game.custom.core.teams[2].datas.name;
+        else winner = "No team";
+        
+        // Return results based on the includeWins parameter
+        if (!includeWins) {
+            return [winner, roundWinners];
+        } else {
+            return [winner, [teamMetrics[0].Wins, teamMetrics[1].Wins]];
         }
     }
 };
+
 
 
 
@@ -888,7 +858,7 @@ let end_running = function(game, addPoints = true) {
         } else {
             game.custom.core.sessionData.status = "Ending game";
         }
-        let E = GenWinner();
+        let E = generateWinner();
         let Winner = E[0];
         game.custom.FinalWinner = Winner;
         for (let ship of game.ships) {
@@ -1119,7 +1089,6 @@ var tick = function(game) {
 
         // If the phase is still the waiting for players to duel phase
         for (let ship of game.ships) {
-
             ship.setUIComponent(Radar);
             if (ship.custom.Init != true) {
                 ship.custom.ship_check = 0;
@@ -1188,12 +1157,12 @@ var tick = function(game) {
                     // Note : remake the WaitersCount board UI
                     const ReadyOne = game.custom.core.teams[1].metrics.ready;
                     const ReadyTwo = game.custom.core.teams[2].metrics.ready;
-                    const Estimaton = Math.min(ReadyOne, ReadyTwo);
+                    const Estimation = Math.min(ReadyOne, ReadyTwo);
                     let Estimating = "";
-                    if (Estimaton === 0) {
+                    if (Estimation === 0) {
                         Estimating = ""
                     } else {
-                        Estimating = `Next round is estimated to be a ${Estimaton}vs${Estimaton}`;
+                        Estimating = `Next round is excpected to be a ${Estimation}vs${Estimation}`;
                     }
                     ship.setUIComponent({
                         id: "WaitersCount",
@@ -1216,9 +1185,9 @@ var tick = function(game) {
 
         */
         if (game.custom.core.teams[1].score.summary.length >= game.custom.core.config.Round && game.custom.core.teams[2].score.summary.length >= game.custom.core.config.Round) {
-            let W = GenWinner(game.custom.core.config.Round, true);
+            let W = generateWinner(game.custom.core.config.Round, true);
             let c = "";
-            if (W[0] === "None") {
+            if (W[0] === "No team") {
                 c = "#CDE";
             } else {
                 if (W[0] === game.custom.core.teams[1].datas.name) {
@@ -1280,9 +1249,9 @@ var tick = function(game) {
                 end_running(game);
             }
             if (game.custom.core.teams[1].score.summary.length >= game.custom.core.config.Round && game.custom.core.teams[2].score.summary.length >= game.custom.core.config.Round) {
-                let W = GenWinner(game.custom.core.config.Round, true);
+                let W = generateWinner(game.custom.core.config.Round, true);
                 let c = "";
-                if (W[0] === "None") {
+                if (W[0] === "No team") {
                     c = "#CDE";
                 } else {
                     if (W[0] === game.custom.core.teams[1].datas.name) {
@@ -1502,6 +1471,18 @@ var tick = function(game) {
         }
     }
     if (game.step % 60 === 0) {
+            for (let ship of game.ships) {
+                if (ship.custom.shipTime.running === true) {
+                    if (ship.custom.shipTime.time >= 1) {
+                        TimerShipSelection.components[0].value = `${ship.custom.shipTime.time}s`;
+                        ship.setUIComponent(TimerShipSelection);
+                        ship.custom.shipTime.time--;
+                    } else {
+                        ship.setUIComponent({id:"TimerShipSelection",visible:false});
+                        ship.custom.shipTime.running = false;
+                    }
+                }
+            }
         // Timer to wait until the round starts
         TimerRoundStart(game);
 
@@ -1700,7 +1681,6 @@ var tick = function(game) {
             }
         }
     }
-
 };
 
 let LobbyRendering = function(ship) {
@@ -1778,7 +1758,18 @@ function ActualizePoints(game) {
         }, ship);
     }
 }
-
+let TimerShipSelection = {
+    id: "TimerShipSelection",
+    position: [32, 15, 50, 5],
+    visible: true,
+    components: [{
+            type: "text",
+            position: [5, 0, 60, 60],
+            value: "",
+            color: "#CDE"
+        }
+    ]
+};
 function SetSpectate(ship) {
     ship.set({
         x: 0,
@@ -1850,7 +1841,7 @@ this.event = function(event, game) {
                     }
                 }
                 
-            } else if (component.includes('6') && ship.type != Number(component)) {
+            } else if (component.includes('6') && ship.type != Number(component) && !ship.custom.shipTime.running) {
                 const type = Number(component);
                 if (
                     __PARAMETERS__.ship_lock.allow_lock === false ||
@@ -1870,6 +1861,8 @@ this.event = function(event, game) {
                         generator: 0,
                         shield: 1000
                     });
+                    ship.custom.shipTime.running = true;
+                    ship.custom.shipTime.time = parameters.timing.ship_countdown;
                 }
 
             } else if (component === "Lobby") {
